@@ -11,8 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import eu.matoosh.attendance.ui.theme.AttendanceTheme
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import eu.matoosh.attendance.compose.AttendanceNavHost
+import eu.matoosh.attendance.viewmodels.LoginViewModel
+import androidx.activity.viewModels
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +31,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    AttendanceNavHost(
+                        navController = navController,
+                        loginViewModel = loginViewModel
+                    )
                 }
             }
         }

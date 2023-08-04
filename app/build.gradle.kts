@@ -65,8 +65,13 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.retrofit2)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.runtime.livedata)
     kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)

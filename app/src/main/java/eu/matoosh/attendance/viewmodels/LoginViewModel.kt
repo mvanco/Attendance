@@ -3,6 +3,8 @@ package eu.matoosh.attendance.viewmodels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,15 +24,20 @@ sealed interface LoginUiState {
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repo: LoginRepository): ViewModel() {
-    var loginUiState: LoginUiState by mutableStateOf(LoginUiState.Idle)
-        private set
+    private val _loginUiState = MutableLiveData<LoginUiState>()
+    val loginUiState : LiveData<LoginUiState> get() = _loginUiState
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            loginUiState = LoginUiState.Loading
-            loginUiState = try {
+            _loginUiState.value = LoginUiState.Loading
+            _loginUiState.value = try {
                 val session = repo.login(username, password)
-                LoginUiState.Success(session.token, session.validity)
+                if (session.token != "N/A") {
+                    LoginUiState.Success(session.token, session.validity)
+                }
+                else {
+                    LoginUiState.Error
+                }
             } catch (e: IOException) {
                 LoginUiState.Error
             } catch (e: HttpException) {

@@ -6,10 +6,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface IceAppService {
-
+    @FormUrlEncoded
     @POST("rest/ice/login")
     suspend fun login(
         @Field("username") username: String,
