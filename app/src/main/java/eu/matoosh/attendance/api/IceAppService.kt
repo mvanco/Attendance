@@ -1,8 +1,12 @@
 package eu.matoosh.attendance.api
 
-/**
- * Used to connect to the Unsplash API to fetch photos
- *//*
+import eu.matoosh.attendance.repo.LoginResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Field
+import retrofit2.http.POST
 
 interface IceAppService {
 
@@ -16,7 +20,7 @@ interface IceAppService {
         private const val BASE_URL = "https://matoosh.eu/"
 
         fun create(): IceAppService {
-            val logger = HttpLoggingInterceptor().apply { level = Level.BASIC }
+            val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)
@@ -30,4 +34,4 @@ interface IceAppService {
                 .create(IceAppService::class.java)
         }
     }
-}*/
+}
