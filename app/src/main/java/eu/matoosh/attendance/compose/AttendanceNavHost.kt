@@ -16,6 +16,7 @@ fun AttendanceNavHost(
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginUiState = loginViewModel.loginUiState.observeAsState(LoginUiState.Idle)
+
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
 
