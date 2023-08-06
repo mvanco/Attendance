@@ -93,7 +93,7 @@ class BookViewModel @Inject constructor(
                 when (val response = repo.check(token!!, selectedUser!!)) {
                     is RepoCheckResponse.Success -> {
                         val newBookUiState = async(Dispatchers.Default) { loadUsersInternal() }
-                        val delayJob = launch(Dispatchers.Default) { delay(3000) }
+                        val delayJob = launch(Dispatchers.Default) { delay(1500) }
                         delayJob.join()
                         _bookUiState.value = newBookUiState.await()
                     }

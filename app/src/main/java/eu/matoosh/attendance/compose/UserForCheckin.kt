@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun UserForCheckin(
@@ -20,16 +21,23 @@ fun UserForCheckin(
 ) {
     Box(
         modifier = Modifier
-            .background(Color.Gray)
-            .clickable(onClick = onClick)
-            .padding(16.dp)
+            .background(Color.White)
+            .padding(4.dp)
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.body1,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxSize().padding(8.dp)
-        )
+        Box(
+            modifier = Modifier
+                .background(Color.Gray)
+                .clickable(onClick = onClick)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = text,
+                fontSize = 22.sp,
+                style = MaterialTheme.typography.body1,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxSize().padding(8.dp)
+            )
+        }
     }
 }

@@ -55,7 +55,7 @@ fun LoginForm(loginViewModel: LoginViewModel) {
             onClick = { loginViewModel.login(username, password) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
+                .height(60.dp)
                 .padding(8.dp)
         ) {
             Text(text = "Přihlásit")

@@ -18,10 +18,10 @@ fun LoginScreen(
 
     when (loginUiState.value) {
         is LoginUiState.Error -> {
-            Text("Failure in LoginScreen")
+            Message("Nastala chyba při přihlašování. :(")
         }
         is LoginUiState.Finished -> {
-            Text("LoginScreen has finished")
+            Message("Admin je úspěšně přihlášen.")
         }
         is LoginUiState.Idle -> {
             LoginForm(loginViewModel)
