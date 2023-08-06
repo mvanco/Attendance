@@ -46,7 +46,7 @@ class BookRepository @Inject constructor(
 
 
     suspend fun check(token: String, user: User): RepoCheckResponse {
-        val response = service.check(token, user.id)
+        val response = service.check(token, user.id.toString())
         return if (response.error == null) {
             if (response.result != null && response.result == "Success" && response.order != null) {
                 RepoCheckResponse.Success(response.order)

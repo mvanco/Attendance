@@ -24,25 +24,35 @@ sealed interface LoginUiState {
     data class Error(val message: String) : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
+    object Finished : LoginUiState
 }
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repo: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val repo: LoginRepository,
+    private val sessionManager: SessionManager
+) : ViewModel() {
     private val _loginUiState = MutableLiveData<LoginUiState>()
-    val loginUiState = _loginUiState.asImmutable()
+    val loginUiState: LiveData<LoginUiState>
+        get() = _loginUiState
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
             _loginUiState.value = LoginUiState.Loading
-            _loginUiState.value = try {
+            try {
                 when (val response = repo.login(username, password)) {
-                    is RepoLoginResponse.Success -> LoginUiState.Success(
-                        response.token,
-                        response.validity
-                    )
-
-                    is RepoLoginResponse.Error -> LoginUiState.Error(response.message)
+                    is RepoLoginResponse.Success -> {
+                        sessionManager.token = response.token
+                        sessionManager.validity = response.validity
+                        _loginUiState.value = LoginUiState.Success(
+                            response.token,
+                            response.validity
+                        )
+                    }
+                    is RepoLoginResponse.Error -> {
+                        _loginUiState.value = LoginUiState.Error(response.message)
+                    }
                 }
             } catch (e: IOException) {
                 LoginUiState.Error("IOException")
@@ -50,5 +60,9 @@ class LoginViewModel @Inject constructor(private val repo: LoginRepository) : Vi
                 LoginUiState.Error("HttpException")
             }
         }
+    }
+
+    fun finish() {
+        _loginUiState.value = LoginUiState.Finished
     }
 }

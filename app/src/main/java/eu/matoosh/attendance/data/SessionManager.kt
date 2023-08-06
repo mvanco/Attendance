@@ -6,4 +6,5 @@ import javax.inject.Singleton
 @Singleton
 class SessionManager @Inject constructor() {
     var token: String? = null
+    var validity: String? = null
 }

@@ -3,6 +3,7 @@ package eu.matoosh.attendance
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,13 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import eu.matoosh.attendance.ui.theme.AttendanceTheme
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import eu.matoosh.attendance.compose.AttendanceNavHost
+import eu.matoosh.attendance.compose.AppNavHost
+import eu.matoosh.attendance.viewmodels.BookViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
-import androidx.activity.viewModels
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val bookViewModel: BookViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +34,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    AttendanceNavHost(
+                    AppNavHost(
                         navController = navController,
+                        bookViewModel = bookViewModel,
                         loginViewModel = loginViewModel
                     )
                 }
@@ -42,18 +45,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AttendanceTheme {
-        Greeting("Android")
+        Text("Android")
     }
 }

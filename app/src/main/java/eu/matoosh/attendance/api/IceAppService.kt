@@ -16,9 +16,9 @@ data class ApiLoginResponse(
 )
 
 data class ApiUser(
-    @field:SerializedName("credit") val credit: String?,
+    @field:SerializedName("credit") val credit: Int?,
     @field:SerializedName("email") val email: String?,
-    @field:SerializedName("id") val id: String?,
+    @field:SerializedName("id") val id: Int?,
     @field:SerializedName("username") val username: String?
 )
 
