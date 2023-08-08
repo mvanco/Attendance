@@ -1,20 +1,16 @@
 package eu.matoosh.attendance.compose
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.compose.runtime.collectAsState
+import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState
 import eu.matoosh.attendance.viewmodels.BookViewModel
 
 @Composable
 fun SheetScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
     bookViewModel: BookViewModel
 ) {
-    val bookUiState = bookViewModel.bookUiState.observeAsState(BookUiState.Loading)
+    val bookUiState = bookViewModel.bookUiState.collectAsState()
 
     when (val state = bookUiState.value) {
         is BookUiState.Idle -> {
@@ -22,7 +18,8 @@ fun SheetScreen(
                 bookViewModel = bookViewModel,
                 onUserClick = {
                     bookViewModel.selectUser(it.username)
-                })
+                },
+                bookUiState = bookUiState.value)
         }
         is BookUiState.Confirmation -> {
             Confirmation(
@@ -33,7 +30,12 @@ fun SheetScreen(
             )
         }
         is BookUiState.Error -> {
-            Text("Failure in SheetScreen")
+            if (state.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
+                Message("Momentálně neprobíhá žádné bruslení.")
+            }
+            else {
+                Message("Nastala chyba při načítání uživatelů. :(")
+            }
         }
         BookUiState.Init -> {
         }

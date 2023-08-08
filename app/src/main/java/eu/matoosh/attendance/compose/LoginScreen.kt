@@ -1,20 +1,18 @@
 package eu.matoosh.attendance.compose
 
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import eu.matoosh.attendance.viewmodels.LoginViewModel
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
-import eu.matoosh.attendance.viewmodels.BookViewModel
 import eu.matoosh.attendance.viewmodels.LoginUiState
+import eu.matoosh.attendance.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    loginViewModel: LoginViewModel,
-    bookViewModel: BookViewModel,
+    loginViewModel: LoginViewModel
 ) {
-    val loginUiState = loginViewModel.loginUiState.observeAsState(LoginUiState.Idle)
+    val loginUiState = loginViewModel.loginUiState.collectAsState()
 
     when (loginUiState.value) {
         is LoginUiState.Error -> {
@@ -30,9 +28,10 @@ fun LoginScreen(
             Message("Přihlašuji...")
         }
         is LoginUiState.Success -> {
-            loginViewModel.finish()
-            bookViewModel.loadUsers()
-            navController.navigate("attendance_sheet")
+            LaunchedEffect(key1 = true) {
+                navController.navigate("attendance_sheet")
+            }
         }
+        is LoginUiState.None -> {}
     }
 }

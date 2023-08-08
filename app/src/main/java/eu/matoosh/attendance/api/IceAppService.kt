@@ -24,18 +24,21 @@ data class ApiUser(
 
 data class ApiBookResponse(
     @field:SerializedName("unchecked_list") val uncheckedList: List<ApiUser>?,
-    @field:SerializedName("error") val error: String?
+    @field:SerializedName("error") val error: String?,
+    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiCheckResponse(
     @field:SerializedName("order") val order: Int?,
     @field:SerializedName("result") val result: String?,
-    @field:SerializedName("error") val error: String?
+    @field:SerializedName("error") val error: String?,
+    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiUncheckResponse(
     @field:SerializedName("result") val result: String?,
-    @field:SerializedName("error") val error: String?
+    @field:SerializedName("error") val error: String?,
+    @field:SerializedName("error_code") val errorCode: String?
 )
 
 interface IceAppService {

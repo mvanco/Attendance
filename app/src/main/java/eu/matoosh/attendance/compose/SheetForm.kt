@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookUiState
@@ -17,10 +16,11 @@ import eu.matoosh.attendance.viewmodels.BookViewModel
 @Composable
 fun SheetForm(
     modifier: Modifier = Modifier,
-    bookViewModel: BookViewModel = hiltViewModel(),
-    onUserClick: (User) -> Unit
+    bookViewModel: BookViewModel,
+    onUserClick: (User) -> Unit,
+    bookUiState: BookUiState
 ) {
-    val users = (bookViewModel.bookUiState.value as? BookUiState.Idle)?.users ?: emptyList()
+    val users = (bookUiState as? BookUiState.Idle)?.users ?: emptyList()
 
     if (users.isEmpty()) {
         Message(text = "Všichni účastníci byli odbaveni. :)")
