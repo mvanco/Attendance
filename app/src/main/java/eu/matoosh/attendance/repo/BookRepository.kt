@@ -48,7 +48,12 @@ class BookRepository @Inject constructor(
             if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL.serverField) {
                 RepoBookResponse.Error(response.error ?: "Unknown message", RepoBookErrorCode.MISSING_RENTAL)
             }
-            RepoBookResponse.Error(response.error ?: "Unknown error", RepoBookErrorCode.UNKNOWN_ERROR)
+            else {
+                RepoBookResponse.Error(
+                    response.error ?: "Unknown error",
+                    RepoBookErrorCode.UNKNOWN_ERROR
+                )
+            }
         }
     }
 

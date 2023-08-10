@@ -2,36 +2,35 @@ package eu.matoosh.attendance.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
-    loginViewModel: LoginViewModel
+    loginUiState: State<LoginUiState>,
+    onLoginClick: (String, String) -> Unit,
+    onSuccess: () -> Unit
 ) {
-    val loginUiState = loginViewModel.loginUiState.collectAsState()
-
     when (loginUiState.value) {
         is LoginUiState.Error -> {
             Message("Nastala chyba při přihlašování. :(")
         }
-        is LoginUiState.Finished -> {
-            Message("Admin je úspěšně přihlášen.")
-        }
         is LoginUiState.Idle -> {
-            LoginForm(loginViewModel)
+            LoginForm(onLoginClick)
         }
         is LoginUiState.Loading -> {
             Message("Přihlašuji...")
         }
         is LoginUiState.Success -> {
-            LaunchedEffect(key1 = true) {
-                navController.navigate("attendance_sheet")
-            }
+            onSuccess()
         }
-        is LoginUiState.None -> {}
+        is LoginUiState.Logged -> {
+            Message("Admin je úspěšně přihlášen.")
+        }
     }
 }

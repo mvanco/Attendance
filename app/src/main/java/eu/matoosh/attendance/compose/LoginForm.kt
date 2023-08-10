@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 
 @Composable
-fun LoginForm(loginViewModel: LoginViewModel) {
+fun LoginForm(
+    onClick: (String, String) -> Unit
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -52,7 +54,7 @@ fun LoginForm(loginViewModel: LoginViewModel) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { loginViewModel.login(username, password) },
+            onClick = { onClick(username, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)

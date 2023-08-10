@@ -1,36 +1,38 @@
 package eu.matoosh.attendance.compose
 
+import android.icu.text.UnicodeSetIterator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState
 import eu.matoosh.attendance.viewmodels.BookViewModel
 
 @Composable
 fun SheetScreen(
-    bookViewModel: BookViewModel
+    bookUiState: BookUiState,
+    onUserClick: (User) -> Unit,
+    onCheckSelectedUser: () -> Unit
 ) {
-    val bookUiState = bookViewModel.bookUiState.collectAsState()
-
-    when (val state = bookUiState.value) {
+    when (bookUiState) {
         is BookUiState.Idle -> {
             SheetForm(
-                bookViewModel = bookViewModel,
+                users = bookUiState.users,
                 onUserClick = {
-                    bookViewModel.selectUser(it.username)
+                    onUserClick(it)
                 },
-                bookUiState = bookUiState.value)
+            )
         }
         is BookUiState.Confirmation -> {
             Confirmation(
-                state.user,
+                bookUiState.user,
                 onConfirmed = {
-                    bookViewModel.checkSelectedUser()
+                    onCheckSelectedUser()
                 }
             )
         }
         is BookUiState.Error -> {
-            if (state.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
+            if (bookUiState.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
                 Message("Momentálně neprobíhá žádné bruslení.")
             }
             else {

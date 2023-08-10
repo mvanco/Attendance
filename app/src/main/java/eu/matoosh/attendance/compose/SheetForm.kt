@@ -16,12 +16,9 @@ import eu.matoosh.attendance.viewmodels.BookViewModel
 @Composable
 fun SheetForm(
     modifier: Modifier = Modifier,
-    bookViewModel: BookViewModel,
-    onUserClick: (User) -> Unit,
-    bookUiState: BookUiState
+    users: List<User>,
+    onUserClick: (User) -> Unit
 ) {
-    val users = (bookUiState as? BookUiState.Idle)?.users ?: emptyList()
-
     if (users.isEmpty()) {
         Message(text = "Všichni účastníci byli odbaveni. :)")
     }

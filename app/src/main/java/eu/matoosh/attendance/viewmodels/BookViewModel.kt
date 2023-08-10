@@ -53,7 +53,7 @@ class BookViewModel @Inject constructor(
         loadUsers()
     }
 
-    private fun loadUsers() {
+    fun loadUsers() {
         viewModelScope.launch {
             _bookUiState.value = loadUsersInternal()
         }

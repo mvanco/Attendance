@@ -1,5 +1,7 @@
 package eu.matoosh.attendance.viewmodels
 
+import android.util.Log
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,13 @@ import java.io.IOException
 import javax.inject.Inject
 
 
+@Stable
 sealed interface LoginUiState {
     data class Success(val token: String, val validity: String) : LoginUiState
     data class Error(val message: String) : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
-    object Finished : LoginUiState
-    object None : LoginUiState
+    object Logged : LoginUiState
 }
 
 
@@ -33,6 +35,10 @@ class LoginViewModel @Inject constructor(
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
     val loginUiState: StateFlow<LoginUiState>
         get() = _loginUiState
+
+    init {
+        Log.d("LoginViewModel", "LoginViewModel initiaized")
+    }
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -59,8 +65,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun finish() {
+        _loginUiState.value = LoginUiState.Logged
     }
-
 }
