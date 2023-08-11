@@ -5,7 +5,6 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.LoginRepository
 import eu.matoosh.attendance.repo.RepoLoginResponse
@@ -19,11 +18,14 @@ import javax.inject.Inject
 
 @Stable
 sealed interface LoginUiState {
-    data class Success(val token: String, val validity: String) : LoginUiState
     data class Error(val message: String) : LoginUiState
+    object Success : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
-    object Logged : LoginUiState
+
+    companion object {
+        const val SUCCESS_STATE_DURATION = 1000L
+    }
 }
 
 
@@ -48,10 +50,7 @@ class LoginViewModel @Inject constructor(
                     is RepoLoginResponse.Success -> {
                         sessionManager.token = response.token
                         sessionManager.validity = response.validity
-                        _loginUiState.value = LoginUiState.Success(
-                            response.token,
-                            response.validity
-                        )
+                        _loginUiState.value = LoginUiState.Success
                     }
                     is RepoLoginResponse.Error -> {
                         _loginUiState.value = LoginUiState.Error(response.message)
@@ -63,9 +62,5 @@ class LoginViewModel @Inject constructor(
                 LoginUiState.Error("HttpException")
             }
         }
-    }
-
-    fun finish() {
-        _loginUiState.value = LoginUiState.Logged
     }
 }

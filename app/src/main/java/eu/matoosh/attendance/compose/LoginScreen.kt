@@ -3,12 +3,8 @@ package eu.matoosh.attendance.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import eu.matoosh.attendance.viewmodels.LoginUiState
-import eu.matoosh.attendance.viewmodels.LoginViewModel
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(
@@ -27,10 +23,11 @@ fun LoginScreen(
             Message("Přihlašuji...")
         }
         is LoginUiState.Success -> {
-            onSuccess()
-        }
-        is LoginUiState.Logged -> {
             Message("Admin je úspěšně přihlášen.")
+            LaunchedEffect(Unit) {
+                delay(LoginUiState.SUCCESS_STATE_DURATION)
+                onSuccess()
+            }
         }
     }
 }
