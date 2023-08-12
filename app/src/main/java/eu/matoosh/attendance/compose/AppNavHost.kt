@@ -22,7 +22,7 @@ fun AppNavHost() {
                 },
                 shouldLogout = shouldLogout,
                 onShouldLogoutChange = {
-                    shouldLogout = false
+                    shouldLogout = it
                 },
                 currentRoute = navController.currentDestination?.route
             )

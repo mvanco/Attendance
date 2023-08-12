@@ -14,7 +14,7 @@ fun LoginScreen(
     onSuccess: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel(),
     shouldLogout: Boolean = false,
-    onShouldLogoutChange: () -> Unit,
+    onShouldLogoutChange: (Boolean) -> Unit,
     currentRoute: String?
 ) {
     val loginUiState by loginViewModel.loginUiState.collectAsState()
@@ -29,7 +29,7 @@ fun LoginScreen(
     LaunchedEffect(shouldLogout, currentRoute) {
         if (shouldLogout && currentRoute == "login") {
             loginViewModel.logout()
-            onShouldLogoutChange()
+            onShouldLogoutChange(false)
         }
     }
 }
