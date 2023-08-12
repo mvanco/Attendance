@@ -13,6 +13,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -41,8 +42,7 @@ class BookViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _bookUiState = MutableStateFlow<BookUiState>(BookUiState.Loading)
-    val bookUiState: StateFlow<BookUiState>
-        get() = _bookUiState
+    val bookUiState: StateFlow<BookUiState> = _bookUiState.asStateFlow()
 
     private val token: String?
         get() = sessionManager.token
@@ -53,7 +53,7 @@ class BookViewModel @Inject constructor(
         loadUsers()
     }
 
-    fun loadUsers() {
+    private fun loadUsers() {
         viewModelScope.launch {
             _bookUiState.value = loadUsersInternal()
         }

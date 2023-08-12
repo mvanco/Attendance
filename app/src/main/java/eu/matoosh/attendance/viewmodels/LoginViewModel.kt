@@ -10,6 +10,7 @@ import eu.matoosh.attendance.repo.LoginRepository
 import eu.matoosh.attendance.repo.RepoLoginResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -35,8 +36,7 @@ class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
-    val loginUiState: StateFlow<LoginUiState>
-        get() = _loginUiState
+    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
 
     init {
         Log.d("LoginViewModel", "LoginViewModel initiaized")
@@ -62,5 +62,11 @@ class LoginViewModel @Inject constructor(
                 LoginUiState.Error("HttpException")
             }
         }
+    }
+
+    fun logout() {
+        sessionManager.token = ""
+        sessionManager.validity = ""
+        _loginUiState.value = LoginUiState.Idle
     }
 }

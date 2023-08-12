@@ -1,12 +1,29 @@
 package eu.matoosh.attendance.compose
 
-import android.icu.text.UnicodeSetIterator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState
 import eu.matoosh.attendance.viewmodels.BookViewModel
+
+@Composable
+fun SheetScreen(
+    bookViewModel: BookViewModel = hiltViewModel()
+) {
+    val bookUiState by bookViewModel.bookUiState.collectAsState()
+    SheetScreen(
+        bookUiState,
+        onUserClick = {
+            bookViewModel.selectUser(it.username)
+        },
+        onCheckSelectedUser = {
+            bookViewModel.checkSelectedUser()
+        }
+    )
+}
 
 @Composable
 fun SheetScreen(
