@@ -9,13 +9,17 @@ import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import kotlinx.coroutines.delay
 
+/**
+ * Login screen that takes username and password and log user storing obtained token into
+ * SessionManager.
+ * @param onSuccess What should be performed after user is sucessfully logged in.
+ * @param loginViewModel View model linked directly to this screen providing business logic and
+ * connection to REST service.
+ */
 @Composable
 fun LoginScreen(
     onSuccess: () -> Unit,
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    shouldLogout: Boolean = false,
-    onShouldLogoutChange: (Boolean) -> Unit,
-    currentRoute: String?
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginUiState by loginViewModel.loginUiState.collectAsState()
     LoginScreen(
@@ -25,13 +29,6 @@ fun LoginScreen(
                 username, password -> loginViewModel.login(username, password)
         }
     )
-
-    LaunchedEffect(shouldLogout, currentRoute) {
-        if (shouldLogout && currentRoute == "login") {
-            loginViewModel.logout()
-            onShouldLogoutChange(false)
-        }
-    }
 }
 
 @Composable
