@@ -15,12 +15,24 @@ fun SheetScreen(
 ) {
     val bookUiState by bookViewModel.bookUiState.collectAsState()
     SheetScreen(
-        bookUiState,
+        bookUiState = bookUiState,
         onUserClick = {
             bookViewModel.selectUser(it.username)
         },
         onCheckSelectedUser = {
             bookViewModel.checkSelectedUser()
+        },
+        onCheckUnknownUser = {
+            bookViewModel.checkUnknownUser()
+        },
+        onAddManuallyClick = { username, password ->
+            bookViewModel.checkUserManually(username, password)
+        },
+        onManualCancelled = {
+            bookViewModel.cancel()
+        },
+        onConfirmationCancelled = {
+            bookViewModel.cancel()
         }
     )
 }
@@ -29,6 +41,10 @@ fun SheetScreen(
 fun SheetScreen(
     bookUiState: BookUiState,
     onUserClick: (User) -> Unit,
+    onAddManuallyClick: (String, String) -> Unit,
+    onCheckUnknownUser: () -> Unit,
+    onManualCancelled: () -> Unit,
+    onConfirmationCancelled: () -> Unit,
     onCheckSelectedUser: () -> Unit
 ) {
     when (bookUiState) {
@@ -36,7 +52,12 @@ fun SheetScreen(
             SheetForm(
                 users = bookUiState.users,
                 onUserClick = {
-                    onUserClick(it)
+                    if (it.id == -1) {
+                        onCheckUnknownUser()
+                    }
+                    else {
+                        onUserClick(it)
+                    }
                 },
             )
         }
@@ -45,6 +66,9 @@ fun SheetScreen(
                 bookUiState.user,
                 onConfirmed = {
                     onCheckSelectedUser()
+                },
+                onCancel = {
+                    onConfirmationCancelled()
                 }
             )
         }
@@ -63,6 +87,18 @@ fun SheetScreen(
         }
         BookUiState.Success -> {
             Success()
+        }
+
+        BookUiState.Manual -> {
+            LoginForm(
+                onClick = { username, password ->
+                    onAddManuallyClick(username, password)
+                },
+                showCancelButton = true,
+                onCancel = {
+                    onManualCancelled()
+                }
+            )
         }
     }
 }

@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
-    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
+    val loginUiState = _loginUiState.asStateFlow()
 
     init {
         Log.d("LoginViewModel", "LoginViewModel initiaized")

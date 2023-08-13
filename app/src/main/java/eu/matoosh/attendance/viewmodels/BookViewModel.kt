@@ -1,19 +1,23 @@
 package eu.matoosh.attendance.viewmodels
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.repo.BookRepository
+import eu.matoosh.attendance.repo.LoginRepository
 import eu.matoosh.attendance.repo.RepoBookErrorCode
 import eu.matoosh.attendance.repo.RepoBookResponse
 import eu.matoosh.attendance.repo.RepoCheckResponse
+import eu.matoosh.attendance.repo.RepoLoginResponse
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -31,6 +35,7 @@ sealed interface BookUiState {
     data class Idle(val users: List<User>) : BookUiState
     data class Error(val message: String, val errorCode: BookErrorCode) : BookUiState
     data class Confirmation(val user: User) : BookUiState
+    object Manual : BookUiState
     object Loading : BookUiState
     object Success : BookUiState
     object Init : BookUiState
@@ -38,11 +43,14 @@ sealed interface BookUiState {
 
 @HiltViewModel
 class BookViewModel @Inject constructor(
-    private val repo: BookRepository,
+    private val bookRepo: BookRepository,
+    private val loginRepo: LoginRepository,
     private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _bookUiState = MutableStateFlow<BookUiState>(BookUiState.Loading)
-    val bookUiState: StateFlow<BookUiState> = _bookUiState.asStateFlow()
+    val bookUiState = _bookUiState.asStateFlow()
+
+    private val _users = MutableStateFlow<List<User>>(emptyList())
 
     private val token: String?
         get() = sessionManager.token
@@ -64,7 +72,7 @@ class BookViewModel @Inject constructor(
             return if (token == null) {
                 BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
             } else {
-                when (val response = repo.uncheckedList(token!!)) {
+                when (val response = bookRepo.uncheckedList(token!!)) {
                     is RepoBookResponse.Success -> {
                         viewModelScope.launch {
                             delay(2000)
@@ -76,7 +84,14 @@ class BookViewModel @Inject constructor(
                                 }
                             }
                         }
-                        BookUiState.Idle(response.users)
+                        val screenUsers = if (response.users.isEmpty()) {
+                            emptyList()
+                        }
+                        else {
+                            response.users + User(-1, "Přidat manuálně", "", 0)
+                        }
+                        _users.value = screenUsers
+                        BookUiState.Idle(screenUsers)
                     }
 
                     is RepoBookResponse.Error -> {
@@ -108,14 +123,14 @@ class BookViewModel @Inject constructor(
         }
     }
 
-    fun checkSelectedUser() {
+    fun checkSelectedUser(user: User? = selectedUser) {
         viewModelScope.launch {
             _bookUiState.value = BookUiState.Success
             try {
                 if (token == null) {
                     _bookUiState.value = BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
                 }
-                when (val response = repo.check(token!!, selectedUser!!)) {
+                when (val response = bookRepo.check(token!!, user!!)) {
                     is RepoCheckResponse.Success -> {
                         val newBookUiState = viewModelScope.async { loadUsersInternal() }
                         val delayJob = viewModelScope.launch { delay(1500) }
@@ -136,6 +151,39 @@ class BookViewModel @Inject constructor(
             } catch (e: HttpException) {
                 _bookUiState.value = BookUiState.Error("HttpException", BookErrorCode.SERVER_UNAVAILABLE)
             }
+        }
+    }
+
+    fun checkUnknownUser() {
+        _bookUiState.value = BookUiState.Manual
+    }
+
+    fun checkUserManually(username: String, password: String) {
+        viewModelScope.launch {
+            _bookUiState.value = BookUiState.Loading
+            try {
+                when (val response = loginRepo.login(username, password)) {
+                    is RepoLoginResponse.Success -> {
+                        val userToBeCheckedIn = _users.value.firstOrNull { it.username == username }
+                        checkSelectedUser(userToBeCheckedIn)
+                        return@launch
+                    }
+                    is RepoLoginResponse.Error -> {
+                        _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
+                    }
+                }
+            } catch (e: IOException) {
+                LoginUiState.Error("IOException")
+            } catch (e: HttpException) {
+                LoginUiState.Error("HttpException")
+            }
+        }
+    }
+
+    fun cancel() {
+        viewModelScope.launch {
+            _bookUiState.value = BookUiState.Idle(_users.value)
+            loadUsersInternal() // Starts auto-refresh feature
         }
     }
 }

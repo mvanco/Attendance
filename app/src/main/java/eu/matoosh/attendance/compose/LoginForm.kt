@@ -2,6 +2,7 @@ package eu.matoosh.attendance.compose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,11 +19,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import eu.matoosh.attendance.ui.theme.AttendanceTheme
 
 @Composable
 fun LoginForm(
-    onClick: (String, String) -> Unit
+    onClick: (String, String) -> Unit,
+    showCancelButton: Boolean = false,
+    onCancel: () -> Unit = {}
 ) {
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -52,14 +57,35 @@ fun LoginForm(
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { onClick(username, password) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(8.dp)
-        ) {
-            Text(text = "Přihlásit")
+        Row() {
+            if (showCancelButton) {
+                Button(
+                    onClick = { onCancel() },
+                    modifier = Modifier
+                        .height(60.dp)
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Zrušit")
+                }
+            }
+            Button(
+                onClick = { onClick(username, password) },
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(8.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "Přihlásit")
+            }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LoginFormPreview() {
+    AttendanceTheme {
+        LoginForm(onClick = { _, _ -> }, showCancelButton = true)
     }
 }
