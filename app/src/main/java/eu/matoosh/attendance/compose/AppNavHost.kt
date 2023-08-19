@@ -64,9 +64,11 @@ fun AppNavHost() {
         }
         composable("mode_selection") {
             ModeSelection ( onSelected = { mode ->
-                navController.popBackStack()
                 when (mode) {
-                    Mode.ATTENDANCE -> navController.navigate("attendance_sheet")
+                    Mode.ATTENDANCE -> {
+                        navController.popBackStack()
+                        navController.navigate("attendance_sheet")
+                    }
                     Mode.CONSOLE -> navController.navigate("dashboard_screen?isAdmin=true")
                 }
             })
@@ -91,7 +93,7 @@ fun AppNavHost() {
                         NavigationDrawerItem(
                             label = { Text(text = "Odhlásit") },
                             selected = false,
-                            onClick = { navController.navigateUp() }
+                            onClick = { navController.navigate("login") }
                         )
                     }
                 },
