@@ -93,7 +93,7 @@ fun AppNavHost() {
                         NavigationDrawerItem(
                             label = { Text(text = "Odhlásit") },
                             selected = false,
-                            onClick = { navController.navigate("login") }
+                            onClick = { navController.popBackStack("login", false) }
                         )
                     }
                 },

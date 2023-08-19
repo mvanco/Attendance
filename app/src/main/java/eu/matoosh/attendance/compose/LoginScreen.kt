@@ -26,6 +26,9 @@ fun LoginScreen(
     LoginScreen(
         loginUiState,
         onSuccess = onSuccess,
+        onFailure = {
+                    loginViewModel.logout()
+        },
         onLoginClick = {
                 username, password -> loginViewModel.login(username, password)
         }
@@ -37,11 +40,16 @@ fun LoginScreen(
 fun LoginScreen(
     loginUiState: LoginUiState,
     onLoginClick: (String, String) -> Unit,
-    onSuccess: (String) -> Unit
+    onSuccess: (String) -> Unit,
+    onFailure: () -> Unit
 ) {
     when (loginUiState) {
         is LoginUiState.Error -> {
             Message("Nastala chyba při přihlašování. :(")
+            LaunchedEffect(Unit) {
+                delay(LoginUiState.FAILURE_STATE_DURATION)
+                onFailure()
+            }
         }
         is LoginUiState.Idle -> {
             LoginForm(onLoginClick)

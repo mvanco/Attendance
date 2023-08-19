@@ -25,6 +25,7 @@ sealed interface LoginUiState {
 
     companion object {
         const val SUCCESS_STATE_DURATION = 1000L
+        const val FAILURE_STATE_DURATION = 1000L
     }
 }
 
