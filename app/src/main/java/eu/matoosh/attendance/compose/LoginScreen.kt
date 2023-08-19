@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun LoginScreen(
-    onSuccess: () -> Unit,
+    onSuccess: (String) -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginUiState by loginViewModel.loginUiState.collectAsState()
@@ -35,7 +35,7 @@ fun LoginScreen(
 fun LoginScreen(
     loginUiState: LoginUiState,
     onLoginClick: (String, String) -> Unit,
-    onSuccess: () -> Unit
+    onSuccess: (String) -> Unit
 ) {
     when (loginUiState) {
         is LoginUiState.Error -> {
@@ -51,7 +51,7 @@ fun LoginScreen(
             Message("Admin je úspěšně přihlášen.")
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
-                onSuccess()
+                onSuccess(loginUiState.username)
             }
         }
     }

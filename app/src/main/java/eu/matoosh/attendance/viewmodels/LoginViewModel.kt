@@ -9,7 +9,6 @@ import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.LoginRepository
 import eu.matoosh.attendance.repo.RepoLoginResponse
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @Stable
 sealed interface LoginUiState {
     data class Error(val message: String) : LoginUiState
-    object Success : LoginUiState
+    data class Success(val username: String) : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
 
@@ -48,9 +47,10 @@ class LoginViewModel @Inject constructor(
             try {
                 when (val response = repo.login(username, password)) {
                     is RepoLoginResponse.Success -> {
+                        sessionManager.username = username
                         sessionManager.token = response.token
                         sessionManager.validity = response.validity
-                        _loginUiState.value = LoginUiState.Success
+                        _loginUiState.value = LoginUiState.Success(username)
                     }
                     is RepoLoginResponse.Error -> {
                         _loginUiState.value = LoginUiState.Error(response.message)
