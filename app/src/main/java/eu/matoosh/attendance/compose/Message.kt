@@ -13,10 +13,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun Message(
-    text: String
+    text: String,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,

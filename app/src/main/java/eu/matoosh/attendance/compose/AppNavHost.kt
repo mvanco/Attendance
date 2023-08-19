@@ -1,19 +1,40 @@
 package eu.matoosh.attendance.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
@@ -42,12 +63,13 @@ fun AppNavHost() {
             )
         }
         composable("mode_selection") {
-            ModeSelection {
-                when (it) {
+            ModeSelection ( onSelected = { mode ->
+                navController.popBackStack()
+                when (mode) {
                     Mode.ATTENDANCE -> navController.navigate("attendance_sheet")
                     Mode.CONSOLE -> navController.navigate("dashboard_screen?isAdmin=true")
                 }
-            }
+            })
         }
         composable("attendance_sheet") {
             SheetScreen()
@@ -59,12 +81,72 @@ fun AppNavHost() {
                 defaultValue = false
             })
         ) { backStackEntry ->
-            if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
-                Message(text = "Dashboard screen of admin")
+            val appViewModel = hiltViewModel<AppViewModel>()
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            ModalNavigationDrawer(
+                drawerContent = {
+                    ModalDrawerSheet {
+                        Text("Attendance", fontSize = 26.sp, modifier = Modifier.padding(16.dp))
+                        Divider()
+                        NavigationDrawerItem(
+                            label = { Text(text = "Odhlásit") },
+                            selected = false,
+                            onClick = { navController.navigateUp() }
+                        )
+                    }
+                },
+                drawerState = drawerState
+            ) {
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = "Attendance", color = Color.White) },
+                            navigationIcon = {
+                                val coroutineScope = rememberCoroutineScope()
+                                IconButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            if (drawerState.isOpen) {
+                                                drawerState.close()
+                                            }
+                                            else {
+                                                drawerState.open()
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Menu,
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
+                            }
+                        )
+                    }
+                ) { contentPadding ->
+                    val pagerState = rememberPagerState()
+                    if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
+                        VerticalPager(state = pagerState, pageCount = 3) { page ->
+                            when (page) {
+                                0 -> AdminHome(appViewModel)
+                                1 -> AdminRentals(appViewModel)
+                                2 -> AdminCredits(appViewModel)
+                            }
+                        }
+                    }
+                    else {
+                        VerticalPager(state = pagerState, pageCount = 2) { page ->
+                            when (page) {
+                                0 -> UserHome(appViewModel)
+                                1 -> UserScanner(appViewModel)
+                            }
+                        }
+                    }
+                }
+
             }
-            else {
-                Message(text = "Dashboard screen of user")
-            }
+
         }
     }
 }

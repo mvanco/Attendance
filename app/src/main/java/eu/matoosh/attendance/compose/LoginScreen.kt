@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.compose
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +32,7 @@ fun LoginScreen(
     )
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun LoginScreen(
     loginUiState: LoginUiState,
@@ -48,7 +50,7 @@ fun LoginScreen(
             Message("Přihlašuji...")
         }
         is LoginUiState.Success -> {
-            Message("Admin je úspěšně přihlášen.")
+            Message("${loginUiState.username.capitalize()} je úspěšně přihlášen.")
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess(loginUiState.username)
