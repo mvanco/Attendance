@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.qrcode.renderer)
+
     kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.matoosh.attendance.data.Device
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.LoginRepository
 import eu.matoosh.attendance.repo.RepoLoginResponse
@@ -33,7 +34,8 @@ sealed interface LoginUiState {
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repo: LoginRepository,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val device: Device
 ) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
     val loginUiState = _loginUiState.asStateFlow()

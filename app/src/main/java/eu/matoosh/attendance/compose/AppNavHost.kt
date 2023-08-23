@@ -129,11 +129,12 @@ fun AppNavHost() {
                 ) { contentPadding ->
                     val pagerState = rememberPagerState()
                     if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
-                        VerticalPager(state = pagerState, pageCount = 3) { page ->
+                        VerticalPager(state = pagerState, pageCount = 1) { page ->
                             when (page) {
-                                0 -> AdminHome(appViewModel)
-                                1 -> AdminRentals(appViewModel)
-                                2 -> AdminCredits(appViewModel)
+                                0 -> AdminCredits(
+                                    viewModel = appViewModel,
+                                    onQrDone = {}
+                                )
                             }
                         }
                     }

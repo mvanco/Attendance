@@ -46,7 +46,8 @@ interface IceAppService {
     @POST("rest/ice/login")
     suspend fun login(
         @Field("username") username: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("device_id") deviceId: String
     ): ApiLoginResponse
 
     @FormUrlEncoded
