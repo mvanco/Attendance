@@ -36,18 +36,16 @@ fun ModeSelection(
             onClick = { onSelected(Mode.ATTENDANCE) },
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
         ) {
             Text(text = "Docházková kniha")
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {
                 onSelected(Mode.CONSOLE)
             }, // Use the provided onClick event
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
         ) {
             Text(text = "Konzola")
         }

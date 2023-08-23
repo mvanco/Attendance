@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
+import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -131,10 +132,12 @@ fun AppNavHost() {
                     if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
                         VerticalPager(state = pagerState, pageCount = 1) { page ->
                             when (page) {
-                                0 -> AdminCredits(
-                                    viewModel = appViewModel,
-                                    onQrDone = {}
-                                )
+                                0 -> {
+                                    val adminCreditsViewModel = hiltViewModel<AdminCreditsViewModel>()
+                                    AdminCredits(
+                                        viewModel = adminCreditsViewModel
+                                    )
+                                }
                             }
                         }
                     }
