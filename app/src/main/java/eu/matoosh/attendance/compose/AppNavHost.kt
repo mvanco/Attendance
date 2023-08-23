@@ -33,6 +33,7 @@ import androidx.navigation.navArgument
 import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
+import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -142,10 +143,12 @@ fun AppNavHost() {
                         }
                     }
                     else {
-                        VerticalPager(state = pagerState, pageCount = 2) { page ->
+                        VerticalPager(state = pagerState, pageCount = 1) { page ->
                             when (page) {
-                                0 -> UserHome(appViewModel)
-                                1 -> UserScanner(appViewModel)
+                                0 -> {
+                                    val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
+                                    UserScanner(userScannerViewModel)
+                                }
                             }
                         }
                     }

@@ -73,6 +73,10 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.qrcode.renderer)
+    implementation(libs.camera)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.barcode.scanning)
 
     kapt(libs.hilt.android.compiler)
 
