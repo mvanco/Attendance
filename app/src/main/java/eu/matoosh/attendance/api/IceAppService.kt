@@ -41,6 +41,15 @@ data class ApiUncheckResponse(
     @field:SerializedName("error_code") val errorCode: String?
 )
 
+data class ApiIssueAuthorizationResponse(
+    @field:SerializedName("auth_token") val authToken: String,
+    @field:SerializedName("result") val result: String
+)
+
+data class ApiAddCreditResponse(
+    @field:SerializedName("result") val result: String
+)
+
 interface IceAppService {
     @FormUrlEncoded
     @POST("rest/ice/login")
@@ -68,6 +77,20 @@ interface IceAppService {
     suspend fun uncheck(
         @Field("token") token: String
     ): ApiUncheckResponse
+
+    @FormUrlEncoded
+    @POST("rest/ice/issue_auth")
+    suspend fun issueAuthorization(
+        @Field("token") token: String,
+        @Field("credit") credit: String
+    ): ApiIssueAuthorizationResponse
+
+    @FormUrlEncoded
+    @POST("rest/ice/add_credit")
+    suspend fun addCredit(
+        @Field("token") token: String,
+        @Field("auth_token") authToken: String
+    ): ApiAddCreditResponse
 
     companion object {
         private const val BASE_URL = "https://matoosh.eu/"

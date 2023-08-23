@@ -4,6 +4,8 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.matoosh.attendance.data.SessionManager
+import eu.matoosh.attendance.repo.CreditRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,8 @@ sealed interface AdminCreditsUiState {
 
 @HiltViewModel
 class AdminCreditsViewModel @Inject constructor(
-
+    private val sessionManager: SessionManager,
+    private val creditRepo: CreditRepository
 ) : ViewModel() {
 
     private val _adminCreditsUiState =
@@ -29,8 +32,12 @@ class AdminCreditsViewModel @Inject constructor(
 
     fun showQr(credit: Int) {
         countdownJob = viewModelScope.launch {
+            if (sessionManager.token == null) {
+                return@launch
+            }
+            val response = creditRepo.issueAuthorization(sessionManager.token!!, credit)
             for (counter in 10 downTo 1) {
-                _adminCreditsUiState.value = AdminCreditsUiState.Qr(credit.toString(), counter)
+                _adminCreditsUiState.value = AdminCreditsUiState.Qr(response.authToken, counter)
                 delay(1000)
             }
             _adminCreditsUiState.value = AdminCreditsUiState.Form
