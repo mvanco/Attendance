@@ -26,6 +26,7 @@ class UserScannerViewModel @Inject constructor(
         MutableStateFlow<UserScannerUiState>(UserScannerUiState.Scanner)
     val userScannerUiState = _userScannerUiState.asStateFlow()
 
+
     fun addCredit(authToken: String) {
         viewModelScope.launch {
             if (sessionManager.token == null) {
