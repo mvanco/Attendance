@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.matoosh.attendance.data.User
-import eu.matoosh.attendance.ui.theme.AttendanceTheme
+import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable
 fun Confirmation(
