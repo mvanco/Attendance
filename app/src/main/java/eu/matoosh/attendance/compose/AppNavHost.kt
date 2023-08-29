@@ -12,11 +12,13 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -105,7 +107,11 @@ fun AppNavHost() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text(text = "Attendance", color = Color.White) },
+                            title = { Text(text = "Attendance") },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                titleContentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
                             navigationIcon = {
                                 val coroutineScope = rememberCoroutineScope()
                                 IconButton(
@@ -123,7 +129,7 @@ fun AppNavHost() {
                                     Icon(
                                         imageVector = Icons.Default.Menu,
                                         contentDescription = null,
-                                        tint = Color.White
+                                        tint = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
