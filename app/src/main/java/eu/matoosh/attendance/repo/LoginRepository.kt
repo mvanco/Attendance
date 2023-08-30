@@ -2,6 +2,10 @@ package eu.matoosh.attendance.repo
 
 import eu.matoosh.attendance.api.IceAppService
 import eu.matoosh.attendance.data.Device
+import eu.matoosh.attendance.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed interface RepoLoginResponse {
@@ -11,9 +15,10 @@ sealed interface RepoLoginResponse {
 
 class LoginRepository @Inject constructor(
     private val service: IceAppService,
-    private val device: Device
+    private val device: Device,
+    @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
-    suspend fun login(username: String, password: String): RepoLoginResponse {
+    suspend fun login(username: String, password: String): RepoLoginResponse = withContext(defaultDispatcher) {
         val deviceId = if (username == "admin") {
             "Not protected"
         }
@@ -21,7 +26,7 @@ class LoginRepository @Inject constructor(
             device.androidId
         }
         val response = service.login(username, password, deviceId)
-        return if (response.error == null) {
+        if (response.error == null) {
             if (response.token != null && response.validity != null) {
                 RepoLoginResponse.Success(response.token, response.validity)
             } else {
