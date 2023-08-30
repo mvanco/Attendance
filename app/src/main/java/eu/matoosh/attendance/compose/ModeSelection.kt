@@ -41,7 +41,8 @@ fun ModeSelection(
                 .fillMaxWidth()
         ) {
             Text(
-                stringResource(R.string.action_sheet),
+                text = stringResource(R.string.action_sheet),
+                modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.headlineMedium
             )
         }
@@ -54,7 +55,8 @@ fun ModeSelection(
                 .fillMaxWidth()
         ) {
             Text(
-                stringResource(R.string.action_console),
+                text = stringResource(R.string.action_console),
+                modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.headlineMedium
             )
         }

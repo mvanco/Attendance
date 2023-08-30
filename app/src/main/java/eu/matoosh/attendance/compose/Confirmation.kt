@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,19 +39,18 @@ fun Confirmation(
     ) {
         Text(
             text = user.username,
-            fontSize = 48.sp,
-            modifier = Modifier.padding(16.dp)
+            style = MaterialTheme.typography.headlineLarge,
         )
+        Spacer(modifier = Modifier.size(16.dp))
         Text(
             text = stringResource(id = R.string.text_credit, user.credit),
-            fontSize = 20.sp,
-            modifier = Modifier.padding(16.dp)
+            style = MaterialTheme.typography.titleLarge,
         )
+        Spacer(modifier = Modifier.size(32.dp))
         Row() {
             OutlinedButton(
                 onClick = { onCancel() },
                 modifier = Modifier
-                    .height(50.dp)
                     .weight(1f)
             ) {
                 Text(text = stringResource(R.string.action_cancel))
@@ -60,7 +61,6 @@ fun Confirmation(
                     onConfirmed()
                 }, // Use the provided onClick event
                 modifier = Modifier
-                    .height(50.dp)
                     .weight(1f)
             ) {
                 Text(text = stringResource(id = R.string.action_confirm))

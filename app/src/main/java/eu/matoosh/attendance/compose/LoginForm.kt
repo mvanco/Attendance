@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -48,15 +49,14 @@ fun LoginForm(
             label = { Text(stringResource(R.string.label_user)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
         )
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = password,
             onValueChange = { password = it },
             label = { Text(stringResource(R.string.label_password)) },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -65,18 +65,15 @@ fun LoginForm(
                 OutlinedButton(
                     onClick = { onCancel() },
                     modifier = Modifier
-                        .height(60.dp)
-                        .padding(8.dp)
                         .weight(1f)
                 ) {
                     Text(stringResource(R.string.action_cancel))
                 }
+                Spacer(modifier = Modifier.width(8.dp))
             }
             Button(
                 onClick = { onClick(username, password) },
                 modifier = Modifier
-                    .height(60.dp)
-                    .padding(8.dp)
                     .weight(1f)
             ) {
                 Text(stringResource(R.string.action_login))
