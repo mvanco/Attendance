@@ -82,8 +82,6 @@ fun SheetScreen(
                 Message(stringResource(id = R.string.message_sheet_error))
             }
         }
-        BookUiState.Init -> {
-        }
         BookUiState.Loading -> {
             Message(stringResource(id = R.string.message_sheet_loading))
         }

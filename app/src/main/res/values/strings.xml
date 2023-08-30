@@ -7,7 +7,7 @@
     <string name="action_cancel">Zrušit</string>
     <string name="action_sheet">Docházková kniha</string>
     <string name="action_console">Konzola</string>
-    <string name="action_add_manually">Přidat manuálně</string>
+    <string name="action_add_manually">Přihlásit</string>
     <string name="action_add_credit">Dobít kredit</string>
     <string name="action_done">Hotovo : %1$d</string>
     <string name="action_add_camera_permission">Požádat o přistup k fotoaparátu</string>

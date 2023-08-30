@@ -1,6 +1,5 @@
 package eu.matoosh.attendance.viewmodels
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,12 +11,10 @@ import eu.matoosh.attendance.repo.RepoBookErrorCode
 import eu.matoosh.attendance.repo.RepoBookResponse
 import eu.matoosh.attendance.repo.RepoCheckResponse
 import eu.matoosh.attendance.repo.RepoLoginResponse
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -38,7 +35,6 @@ sealed interface BookUiState {
     object Manual : BookUiState
     object Loading : BookUiState
     object Success : BookUiState
-    object Init : BookUiState
 }
 
 @HiltViewModel
@@ -56,58 +52,61 @@ class BookViewModel @Inject constructor(
         get() = sessionManager.token
 
     private var selectedUser: User? = null
+    private var firstRun = true
 
     init {
-        loadUsers()
-    }
-
-    private fun loadUsers() {
+        bindUsers()
         viewModelScope.launch {
-            _bookUiState.value = loadUsersInternal()
+            _users.collect { userList ->
+                if (_bookUiState.value is BookUiState.Idle || firstRun) {
+                    _bookUiState.value = BookUiState.Idle(userList)
+                    firstRun = false
+                }
+            }
         }
     }
 
-    private suspend fun loadUsersInternal(): BookUiState {
-        try {
-            return if (token == null) {
-                BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
-            } else {
-                when (val response = bookRepo.uncheckedList(token!!)) {
-                    is RepoBookResponse.Success -> {
-                        viewModelScope.launch {
-                            delay(2000)
-                            val currState = _bookUiState.value
-                            if (currState is BookUiState.Idle) {
-                                val newUiState = loadUsersInternal()
-                                if ((newUiState as BookUiState.Idle).users.size != currState.users.size) {
-                                    _bookUiState.value = newUiState
+    private fun bindUsers() {
+        viewModelScope.launch {
+            try {
+                if (token == null) {
+                    _bookUiState.value =
+                        BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
+                }
+                bookRepo.uncheckedListWithUpdates(token!!).collect { response ->
+                    when (response) {
+                        is RepoBookResponse.Success -> {
+                            _users.value = response.users
+                        }
+
+                        is RepoBookResponse.Error -> {
+                            when (response.errorCode) {
+                                RepoBookErrorCode.MISSING_RENTAL -> {
+                                    _bookUiState.value =
+                                        BookUiState.Error(
+                                            response.message,
+                                            BookErrorCode.RENTAL_NOT_FOUND
+                                        )
+                                }
+
+                                else -> {
+                                    _bookUiState.value =
+                                        BookUiState.Error(
+                                            response.message,
+                                            BookErrorCode.UNKNOWN_ERROR
+                                        )
                                 }
                             }
                         }
-                        val screenUsers = if (response.users.isEmpty()) {
-                            emptyList()
-                        }
-                        else {
-                            response.users
-                        }
-                        _users.value = screenUsers
-                        BookUiState.Idle(screenUsers)
-                    }
-
-                    is RepoBookResponse.Error -> {
-                        if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL) {
-                            BookUiState.Error(response.message, BookErrorCode.RENTAL_NOT_FOUND)
-                        }
-                        else {
-                            BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
-                        }
                     }
                 }
+            } catch (e: IOException) {
+                _bookUiState.value =
+                    BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
+            } catch (e: HttpException) {
+                _bookUiState.value =
+                    BookUiState.Error("HttpException", BookErrorCode.SERVER_UNAVAILABLE)
             }
-        } catch (e: IOException) {
-            return BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
-        } catch (e: HttpException) {
-            return BookUiState.Error("HttpException", BookErrorCode.SERVER_UNAVAILABLE)
         }
     }
 
@@ -132,10 +131,8 @@ class BookViewModel @Inject constructor(
                 }
                 when (val response = bookRepo.check(token!!, user!!)) {
                     is RepoCheckResponse.Success -> {
-                        val newBookUiState = viewModelScope.async { loadUsersInternal() }
-                        val delayJob = viewModelScope.launch { delay(1500) }
-                        delayJob.join()
-                        _bookUiState.value = newBookUiState.await()
+                        delay(1500)
+                        _bookUiState.value = BookUiState.Idle(_users.value)
                     }
                     is RepoCheckResponse.Error -> {
                         if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL) {
@@ -183,7 +180,6 @@ class BookViewModel @Inject constructor(
     fun cancel() {
         viewModelScope.launch {
             _bookUiState.value = BookUiState.Idle(_users.value)
-            loadUsersInternal() // Starts auto-refresh feature
         }
     }
 }
