@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +51,7 @@ class BookViewModel @Inject constructor(
     private val token: String?
         get() = sessionManager.token
 
-    private var selectedUser: User? = null
+    private var selectedUser: Int? = null
     private var firstRun = true
 
     init {
@@ -112,33 +113,48 @@ class BookViewModel @Inject constructor(
     fun selectUser(username: String) {
         val users = (_bookUiState.value as? BookUiState.Idle)?.users ?: emptyList()
 
-        selectedUser = users.firstOrNull { it.username == username }
+        val foundUser = users.firstOrNull { it.username == username }
+        selectedUser = foundUser?.id
         if (selectedUser != null) {
-            _bookUiState.value = BookUiState.Confirmation(selectedUser!!)
+            _bookUiState.value = BookUiState.Confirmation(foundUser!!)
         }
         else {
             _bookUiState.value = BookUiState.Error("No user has been selected", BookErrorCode.APP_ERROR)
         }
     }
 
-    fun checkSelectedUser(user: User? = selectedUser) {
+    fun checkSelectedUser(userId: Int? = selectedUser) {
         viewModelScope.launch {
             _bookUiState.value = BookUiState.Success
             try {
                 if (token == null) {
                     _bookUiState.value = BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
+                    return@launch
                 }
-                when (val response = bookRepo.check(token!!, user!!)) {
+                val response = if (userId == null) {
+                    RepoCheckResponse.Success(-1)
+                }
+                else {
+                    bookRepo.check(token!!, userId)
+                }
+                when (response) {
                     is RepoCheckResponse.Success -> {
                         delay(1500)
                         _bookUiState.value = BookUiState.Idle(_users.value)
                     }
                     is RepoCheckResponse.Error -> {
-                        if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL) {
-                            _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.RENTAL_NOT_FOUND)
-                        }
-                        else {
-                            _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
+                        when(response.errorCode) {
+                            RepoBookErrorCode.MISSING_RENTAL -> {
+                                _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.RENTAL_NOT_FOUND)
+                            }
+                            RepoBookErrorCode.DUPLICATE_CHECKIN -> {
+                                Log.d("security-check", "User with order ${response.order} is black passenger.")
+                                delay(1500)
+                                _bookUiState.value = BookUiState.Idle(_users.value)
+                            }
+                            else -> {
+                                _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
+                            }
                         }
                     }
                 }
@@ -160,8 +176,7 @@ class BookViewModel @Inject constructor(
             try {
                 when (val response = loginRepo.login(username, password)) {
                     is RepoLoginResponse.Success -> {
-                        val userToBeCheckedIn = _users.value.firstOrNull { it.username == username }
-                        checkSelectedUser(userToBeCheckedIn)
+                        checkSelectedUser(response.userId)
                         return@launch
                     }
                     is RepoLoginResponse.Error -> {

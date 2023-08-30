@@ -14,6 +14,7 @@ import javax.inject.Inject
 enum class RepoBookErrorCode(val serverField: String?) {
     INCOMPATIBLE_VERSIONS(null),
     MISSING_RENTAL("missing-rental"),
+    DUPLICATE_CHECKIN("duplicate-checkin"),
     UNKNOWN_ERROR(null)
 }
 
@@ -24,7 +25,7 @@ sealed interface RepoBookResponse {
 
 sealed interface RepoCheckResponse {
     data class Success(val order: Int) : RepoCheckResponse
-    data class Error(val message: String, val errorCode: RepoBookErrorCode) : RepoCheckResponse
+    data class Error(val message: String, val errorCode: RepoBookErrorCode, val order: Int? = null) : RepoCheckResponse
 }
 
 sealed interface RepoUncheckResponse {
@@ -120,8 +121,8 @@ class BookRepository @Inject constructor(
     }.flowOn(defaultDispatcher)
 
 
-    suspend fun check(token: String, user: User): RepoCheckResponse = withContext(defaultDispatcher) {
-        val response = service.check(token, user.id.toString())
+    suspend fun check(token: String, userId: Int): RepoCheckResponse = withContext(defaultDispatcher) {
+        val response = service.check(token, userId.toString())
         if (response.errorCode == null) {
             if (response.result != null && response.result == "Success" && response.order != null) {
                 RepoCheckResponse.Success(response.order)
@@ -132,7 +133,15 @@ class BookRepository @Inject constructor(
             if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL.serverField) {
                 RepoCheckResponse.Error(response.error ?: "Unknown message", RepoBookErrorCode.MISSING_RENTAL)
             }
-            RepoCheckResponse.Error(response.error?: "Unknown error", RepoBookErrorCode.UNKNOWN_ERROR)
+            else if (response.errorCode == RepoBookErrorCode.DUPLICATE_CHECKIN.serverField) {
+                RepoCheckResponse.Error(response.error ?: "Unknown message", RepoBookErrorCode.DUPLICATE_CHECKIN, response.order)
+            }
+            else {
+                RepoCheckResponse.Error(
+                    response.error ?: "Unknown error",
+                    RepoBookErrorCode.UNKNOWN_ERROR
+                )
+            }
         }
     }
 }

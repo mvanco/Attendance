@@ -12,6 +12,7 @@ import retrofit2.http.POST
 data class ApiLoginResponse(
     @field:SerializedName("token") val token: String?,
     @field:SerializedName("validity") val validity: String?,
+    @field:SerializedName("user_id") val userId: Int?,
     @field:SerializedName("error") val error: String?
 )
 
