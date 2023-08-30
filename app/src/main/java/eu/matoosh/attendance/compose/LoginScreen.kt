@@ -5,7 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import kotlinx.coroutines.delay
@@ -45,7 +47,7 @@ fun LoginScreen(
 ) {
     when (loginUiState) {
         is LoginUiState.Error -> {
-            Message("Nastala chyba při přihlašování. :(")
+            Message(stringResource(R.string.message_logging_error))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.FAILURE_STATE_DURATION)
                 onFailure()
@@ -55,10 +57,10 @@ fun LoginScreen(
             LoginForm(onLoginClick)
         }
         is LoginUiState.Loading -> {
-            Message("Přihlašuji...")
+            Message(stringResource(id = R.string.message_logging_loading))
         }
         is LoginUiState.Success -> {
-            Message("${loginUiState.username.capitalize()} je úspěšně přihlášen.")
+            Message(stringResource(R.string.message_logging_success, loginUiState.username.capitalize()))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess(loginUiState.username)

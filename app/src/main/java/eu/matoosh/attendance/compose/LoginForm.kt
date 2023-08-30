@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -18,9 +19,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable
@@ -42,7 +45,7 @@ fun LoginForm(
         TextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Uživatel") },
+            label = { Text(stringResource(R.string.label_user)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -50,7 +53,7 @@ fun LoginForm(
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Heslo") },
+            label = { Text(stringResource(R.string.label_password)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -59,14 +62,14 @@ fun LoginForm(
         Spacer(modifier = Modifier.height(16.dp))
         Row() {
             if (showCancelButton) {
-                Button(
+                OutlinedButton(
                     onClick = { onCancel() },
                     modifier = Modifier
                         .height(60.dp)
                         .padding(8.dp)
                         .weight(1f)
                 ) {
-                    Text(text = "Zrušit")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
             Button(
@@ -76,7 +79,7 @@ fun LoginForm(
                     .padding(8.dp)
                     .weight(1f)
             ) {
-                Text(text = "Přihlásit")
+                Text(stringResource(R.string.action_login))
             }
         }
     }

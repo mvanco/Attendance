@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 enum class Mode {
@@ -37,7 +40,10 @@ fun ModeSelection(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Docházková kniha")
+            Text(
+                stringResource(R.string.action_sheet),
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
         Spacer(modifier = Modifier.height(32.dp))
         Button(
@@ -47,7 +53,10 @@ fun ModeSelection(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Konzola")
+            Text(
+                stringResource(R.string.action_console),
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
     }
 }

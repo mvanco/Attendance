@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
@@ -18,13 +17,14 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
@@ -93,10 +94,10 @@ fun AppNavHost() {
             ModalNavigationDrawer(
                 drawerContent = {
                     ModalDrawerSheet {
-                        Text("Attendance", fontSize = 26.sp, modifier = Modifier.padding(16.dp))
+                        Text(stringResource(id = R.string.app_name), fontSize = 26.sp, modifier = Modifier.padding(16.dp))
                         Divider()
                         NavigationDrawerItem(
-                            label = { Text(text = "Odhlásit") },
+                            label = { Text(text = stringResource(R.string.action_logout)) },
                             selected = false,
                             onClick = { navController.popBackStack("login", false) }
                         )
@@ -107,7 +108,7 @@ fun AppNavHost() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text(text = "Attendance") },
+                            title = { Text(text = stringResource(R.string.app_name)) },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimary

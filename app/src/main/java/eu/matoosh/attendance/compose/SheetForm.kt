@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookUiState
@@ -20,9 +21,10 @@ fun SheetForm(
     onUserClick: (User) -> Unit
 ) {
     if (users.isEmpty()) {
-        Message(text = "Všichni účastníci byli odbaveni. :)")
+        Message(text = stringResource(id = R.string.message_sheet_success))
     }
     else {
+        val addManually = User(-1, stringResource(id = R.string.action_add_manually), "", 0)
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = modifier.testTag("attendance_sheet"),
@@ -32,7 +34,7 @@ fun SheetForm(
             )
         ) {
             items(
-                items = users,
+                items = users + addManually,
                 key = { it.id }
             ) { user ->
                 UserForCheckin(

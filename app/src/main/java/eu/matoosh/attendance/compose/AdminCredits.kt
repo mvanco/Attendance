@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -20,10 +21,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lightspark.composeqr.QrCodeView
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsUiState
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 
@@ -63,8 +66,8 @@ fun AdminCredits(
                     modifier = Modifier.size(300.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = onQrDone) {
-                    Text(text = "Hotovo : ${adminCreditsUiState.counter}")
+                OutlinedButton(onClick = onQrDone) {
+                    Text(text = stringResource(id = R.string.action_done, adminCreditsUiState.counter))
                 }
             }
         }
@@ -94,7 +97,7 @@ fun TopUpForm(
         TextField(
             value = credit,
             onValueChange = { credit = it },
-            label = { Text("Kredit") },
+            label = { Text(stringResource(id = R.string.label_credit)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
@@ -106,7 +109,7 @@ fun TopUpForm(
         Button(
             onClick = { onClick(credit) },
         ) {
-            Text(text = "Dobít kredit")
+            Text(text = stringResource(id = R.string.action_add_credit))
         }
     }
 }

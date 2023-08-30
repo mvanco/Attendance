@@ -88,7 +88,7 @@ class BookViewModel @Inject constructor(
                             emptyList()
                         }
                         else {
-                            response.users + User(-1, "Přidat manuálně", "", 0)
+                            response.users
                         }
                         _users.value = screenUsers
                         BookUiState.Idle(screenUsers)

@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Attendance</string>
+
+    <string name="action_login">Přihlásit</string>
+    <string name="action_logout">Odhlásit</string>
+    <string name="action_confirm">Potvrdit</string>
+    <string name="action_cancel">Zrušit</string>
+    <string name="action_sheet">Docházková kniha</string>
+    <string name="action_console">Konzola</string>
+    <string name="action_add_manually">Přidat manuálně</string>
+    <string name="action_add_credit">Dobít kredit</string>
+    <string name="action_done">Hotovo : %1$d</string>
+    <string name="action_add_camera_permission">Požádat o přistup k fotoaparátu</string>
+
+    <string name="label_user">Uživatel</string>
+    <string name="label_password">Heslo</string>
+    <string name="label_credit">Kredit</string>
+
+    <string name="text_checked_in">Hurá, na led!</string>
+    <string name="text_credit">Aktuální zůstatek: %1$dKč</string>
+
+    <string name="message_logging_loading">Přihlašuji...</string>
+    <string name="message_logging_success">%1$s je úspěšně přihlášen.</string>
+    <string name="message_logging_error">Nastala chyba při přihlašování. :(</string>
+
+    <string name="message_sheet_success">Všichni účastníci byli odbaveni. :)</string>
+    <string name="message_sheet_missing">Momentálně neprobíhá žádné bruslení.</string>
+    <string name="message_sheet_loading">Načítám...</string>
+    <string name="message_sheet_error">Nastala chyba při načítání uživatelů. :(</string>
+
+    <string name="message_user_added_credit">Kredit byl úspěšně přidán.</string>
 </resources>

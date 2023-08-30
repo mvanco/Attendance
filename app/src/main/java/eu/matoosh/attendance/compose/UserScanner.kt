@@ -19,9 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.console.UserScannerUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 
@@ -70,14 +72,14 @@ fun UserScanner(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = { permissionLauncher.launch(arrayOf(Manifest.permission.CAMERA)) }) {
-                        Text("Požádat o přistup k fotoaparátu")
+                        Text(stringResource(R.string.action_add_camera_permission))
                     }
                 }
             }
 
         }
         is UserScannerUiState.Success -> {
-            Message(text = "Kredit byl úspěšně přidán.")
+            Message(text = stringResource(id = R.string.message_user_added_credit))
         }
     }
 }

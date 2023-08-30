@@ -3,7 +3,9 @@ package eu.matoosh.attendance.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState
@@ -74,16 +76,16 @@ fun SheetScreen(
         }
         is BookUiState.Error -> {
             if (bookUiState.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
-                Message("Momentálně neprobíhá žádné bruslení.")
+                Message(stringResource(id = R.string.message_sheet_missing))
             }
             else {
-                Message("Nastala chyba při načítání uživatelů. :(")
+                Message(stringResource(id = R.string.message_sheet_error))
             }
         }
         BookUiState.Init -> {
         }
         BookUiState.Loading -> {
-            Message("Načítám...")
+            Message(stringResource(id = R.string.message_sheet_loading))
         }
         BookUiState.Success -> {
             Success()
