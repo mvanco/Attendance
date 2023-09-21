@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.viewmodels.LoginErrorCode
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import kotlinx.coroutines.delay
@@ -47,7 +48,17 @@ fun LoginScreen(
 ) {
     when (loginUiState) {
         is LoginUiState.Error -> {
-            Message(stringResource(R.string.message_logging_error))
+            when(loginUiState.errorCode) {
+                LoginErrorCode.INCORRECT_USERNAME -> {
+                    Message(stringResource(R.string.message_logging_error_incorrect_username))
+                }
+                LoginErrorCode.INCORRECT_PASSWORD -> {
+                    Message(stringResource(R.string.message_logging_error_incorrect_password))
+                }
+                LoginErrorCode.UNKNOWN_ERROR -> {
+                    Message(stringResource(R.string.message_logging_error))
+                }
+            }
             LaunchedEffect(Unit) {
                 delay(LoginUiState.FAILURE_STATE_DURATION)
                 onFailure()

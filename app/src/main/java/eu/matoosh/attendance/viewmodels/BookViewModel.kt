@@ -184,9 +184,9 @@ class BookViewModel @Inject constructor(
                     }
                 }
             } catch (e: IOException) {
-                LoginUiState.Error("IOException")
+                _bookUiState.value = BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
-                LoginUiState.Error("HttpException")
+                _bookUiState.value = BookUiState.Error("HttpException", BookErrorCode.UNKNOWN_ERROR)
             }
         }
     }

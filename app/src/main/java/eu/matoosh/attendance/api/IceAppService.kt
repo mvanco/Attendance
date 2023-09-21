@@ -13,7 +13,8 @@ data class ApiLoginResponse(
     @field:SerializedName("token") val token: String?,
     @field:SerializedName("validity") val validity: String?,
     @field:SerializedName("user_id") val userId: Int?,
-    @field:SerializedName("error") val error: String?
+    @field:SerializedName("error") val error: String?,
+    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiUser(
@@ -97,7 +98,7 @@ interface IceAppService {
         private const val BASE_URL = "https://matoosh.eu/"
 
         fun create(): IceAppService {
-            val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+            val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)

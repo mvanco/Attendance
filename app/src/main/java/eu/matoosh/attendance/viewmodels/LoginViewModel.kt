@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.matoosh.attendance.data.Device
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.LoginRepository
+import eu.matoosh.attendance.repo.RepoLoginErrorCode
 import eu.matoosh.attendance.repo.RepoLoginResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,10 +17,15 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
+enum class LoginErrorCode() {
+    INCORRECT_USERNAME,
+    INCORRECT_PASSWORD,
+    UNKNOWN_ERROR
+}
 
 @Stable
 sealed interface LoginUiState {
-    data class Error(val message: String) : LoginUiState
+    data class Error(val message: String, val errorCode: LoginErrorCode) : LoginUiState
     data class Success(val username: String) : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
@@ -29,7 +35,6 @@ sealed interface LoginUiState {
         const val FAILURE_STATE_DURATION = 1000L
     }
 }
-
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -56,13 +61,20 @@ class LoginViewModel @Inject constructor(
                         _loginUiState.value = LoginUiState.Success(username)
                     }
                     is RepoLoginResponse.Error -> {
-                        _loginUiState.value = LoginUiState.Error(response.message)
+                        val errorCode = when(response.errorCode) {
+                            RepoLoginErrorCode.INCORRECT_USERNAME -> LoginErrorCode.INCORRECT_USERNAME
+                            RepoLoginErrorCode.INCORRECT_PASSWORD -> LoginErrorCode.INCORRECT_PASSWORD
+                            else -> LoginErrorCode.UNKNOWN_ERROR
+                        }
+                        _loginUiState.value = LoginUiState.Error(response.message, errorCode)
                     }
                 }
             } catch (e: IOException) {
-                LoginUiState.Error("IOException")
+                _loginUiState.value = LoginUiState.Error("IOException", LoginErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
-                LoginUiState.Error("HttpException")
+                _loginUiState.value = LoginUiState.Error("HttpException", LoginErrorCode.UNKNOWN_ERROR)
+            } catch (e: Exception) {
+                _loginUiState.value = LoginUiState.Error("Exception", LoginErrorCode.UNKNOWN_ERROR)
             }
         }
     }

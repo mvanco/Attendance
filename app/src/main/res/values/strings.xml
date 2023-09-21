@@ -21,6 +21,8 @@
 
     <string name="message_logging_loading">Přihlašuji...</string>
     <string name="message_logging_success">%1$s je úspěšně přihlášen.</string>
+    <string name="message_logging_error_incorrect_username">Špatné přihlašovací jméno.</string>
+    <string name="message_logging_error_incorrect_password">Špatné heslo.</string>
     <string name="message_logging_error">Nastala chyba při přihlašování. :(</string>
 
     <string name="message_sheet_success">Všichni účastníci byli odbaveni. :)</string>
