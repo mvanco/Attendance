@@ -4,7 +4,6 @@ import eu.matoosh.attendance.api.IceAppService
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -20,17 +19,17 @@ enum class RepoBookErrorCode(val serverField: String?) {
 
 sealed interface RepoBookResponse {
     data class Success(val users: List<User>) : RepoBookResponse
-    data class Error(val message: String, val errorCode: RepoBookErrorCode) : RepoBookResponse
+    data class Error(val error: RepoBookErrorCode) : RepoBookResponse
 }
 
 sealed interface RepoCheckResponse {
     data class Success(val order: Int) : RepoCheckResponse
-    data class Error(val message: String, val errorCode: RepoBookErrorCode, val order: Int? = null) : RepoCheckResponse
+    data class Error(val error: RepoBookErrorCode, val order: Int? = null) : RepoCheckResponse
 }
 
 sealed interface RepoUncheckResponse {
     object Success : RepoUncheckResponse
-    data class Error(val message: String, val errorCode: RepoBookErrorCode) : RepoUncheckResponse
+    data class Error(val error: RepoBookErrorCode) : RepoUncheckResponse
 }
 
 class BookRepository @Inject constructor(
@@ -39,36 +38,21 @@ class BookRepository @Inject constructor(
 ) {
     suspend fun uncheckedList(token: String): RepoBookResponse = withContext(defaultDispatcher) {
         val response = service.uncheckedList(token)
-        if (response.errorCode == null) {
+        if (response.error == null) {
             if (response.uncheckedList != null) {
                 RepoBookResponse.Success(response.uncheckedList.map {
                     if (it.id != null && it.username != null && it.email != null && it.credit != null) {
                         User(it.id, it.username, it.email, it.credit)
                     } else {
-                        return@withContext RepoBookResponse.Error(
-                            "Incompatible API version!",
-                            RepoBookErrorCode.INCOMPATIBLE_VERSIONS
-                        )
+                        return@withContext RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
                     }
                 })
             } else {
-                RepoBookResponse.Error(
-                    "Incompatible API version!",
-                    RepoBookErrorCode.INCOMPATIBLE_VERSIONS
-                )
+                RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
             }
         } else {
-            if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL.serverField) {
-                RepoBookResponse.Error(
-                    response.error ?: "Unknown message",
-                    RepoBookErrorCode.MISSING_RENTAL
-                )
-            } else {
-                RepoBookResponse.Error(
-                    response.error ?: "Unknown error",
-                    RepoBookErrorCode.UNKNOWN_ERROR
-                )
-            }
+            val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
+            RepoBookResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR)
         }
     }
 
@@ -76,14 +60,14 @@ class BookRepository @Inject constructor(
         var shouldFinish = false
         while(!shouldFinish) {
             val response = service.uncheckedList(token)
-            if (response.errorCode == null) {
+            if (response.error == null) {
                 if (response.uncheckedList != null) {
                     val users = response.uncheckedList.map {
                         if (it.id != null && it.username != null && it.email != null && it.credit != null) {
                             User(it.id, it.username, it.email, it.credit)
                         }
                         else {
-                            val error = RepoBookResponse.Error("Incompatible API version!", RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
+                            val error = RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
                             emit(error)
                             shouldFinish = true
                             User(-1, "", "", 0)
@@ -93,27 +77,14 @@ class BookRepository @Inject constructor(
                         emit(RepoBookResponse.Success(users))
                     }
                 } else {
-                    val error = RepoBookResponse.Error(
-                        "Incompatible API version!",
-                        RepoBookErrorCode.INCOMPATIBLE_VERSIONS
-                    )
+                    val error = RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
                     emit(error)
                     shouldFinish = true
                 }
             } else {
-                if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL.serverField) {
-                    val error = RepoBookResponse.Error(
-                        response.error ?: "Unknown message",
-                        RepoBookErrorCode.MISSING_RENTAL
-                    )
-                    emit(error)
-                } else {
-                    val error = RepoBookResponse.Error(
-                        response.error ?: "Unknown error",
-                        RepoBookErrorCode.UNKNOWN_ERROR
-                    )
-                    emit(error)
-                }
+                val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
+                val error = RepoBookResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR)
+                emit(error)
                 shouldFinish = true
             }
             delay(2000)
@@ -123,25 +94,15 @@ class BookRepository @Inject constructor(
 
     suspend fun check(token: String, userId: Int): RepoCheckResponse = withContext(defaultDispatcher) {
         val response = service.check(token, userId.toString())
-        if (response.errorCode == null) {
-            if (response.result != null && response.result == "Success" && response.order != null) {
+        if (response.error == null) {
+            if (response.order != null) {
                 RepoCheckResponse.Success(response.order)
             } else {
-                RepoCheckResponse.Error("Incompatible API version!", RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
+                RepoCheckResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
             }
         } else {
-            if (response.errorCode == RepoBookErrorCode.MISSING_RENTAL.serverField) {
-                RepoCheckResponse.Error(response.error ?: "Unknown message", RepoBookErrorCode.MISSING_RENTAL)
-            }
-            else if (response.errorCode == RepoBookErrorCode.DUPLICATE_CHECKIN.serverField) {
-                RepoCheckResponse.Error(response.error ?: "Unknown message", RepoBookErrorCode.DUPLICATE_CHECKIN, response.order)
-            }
-            else {
-                RepoCheckResponse.Error(
-                    response.error ?: "Unknown error",
-                    RepoBookErrorCode.UNKNOWN_ERROR
-                )
-            }
+            val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
+            RepoCheckResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR, response.order)
         }
     }
 }

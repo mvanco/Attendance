@@ -25,7 +25,7 @@ enum class LoginErrorCode() {
 
 @Stable
 sealed interface LoginUiState {
-    data class Error(val message: String, val errorCode: LoginErrorCode) : LoginUiState
+    data class Error(val errorCode: LoginErrorCode) : LoginUiState
     data class Success(val username: String) : LoginUiState
     object Loading : LoginUiState
     object Idle : LoginUiState
@@ -61,20 +61,20 @@ class LoginViewModel @Inject constructor(
                         _loginUiState.value = LoginUiState.Success(username)
                     }
                     is RepoLoginResponse.Error -> {
-                        val errorCode = when(response.errorCode) {
+                        val errorCode = when(response.error) {
                             RepoLoginErrorCode.INCORRECT_USERNAME -> LoginErrorCode.INCORRECT_USERNAME
                             RepoLoginErrorCode.INCORRECT_PASSWORD -> LoginErrorCode.INCORRECT_PASSWORD
                             else -> LoginErrorCode.UNKNOWN_ERROR
                         }
-                        _loginUiState.value = LoginUiState.Error(response.message, errorCode)
+                        _loginUiState.value = LoginUiState.Error(errorCode)
                     }
                 }
             } catch (e: IOException) {
-                _loginUiState.value = LoginUiState.Error("IOException", LoginErrorCode.UNKNOWN_ERROR)
+                _loginUiState.value = LoginUiState.Error(LoginErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
-                _loginUiState.value = LoginUiState.Error("HttpException", LoginErrorCode.UNKNOWN_ERROR)
+                _loginUiState.value = LoginUiState.Error(LoginErrorCode.UNKNOWN_ERROR)
             } catch (e: Exception) {
-                _loginUiState.value = LoginUiState.Error("Exception", LoginErrorCode.UNKNOWN_ERROR)
+                _loginUiState.value = LoginUiState.Error(LoginErrorCode.UNKNOWN_ERROR)
             }
         }
     }

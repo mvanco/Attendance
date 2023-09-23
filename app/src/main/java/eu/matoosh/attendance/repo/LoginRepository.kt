@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 sealed interface RepoLoginResponse {
     data class Success(val token: String, val validity: String, val userId: Int) : RepoLoginResponse
-    data class Error(val message: String, val errorCode: RepoLoginErrorCode) : RepoLoginResponse
+    data class Error(val error: RepoLoginErrorCode) : RepoLoginResponse
 }
 
 enum class RepoLoginErrorCode(val serverField: String?) {
@@ -36,13 +36,11 @@ class LoginRepository @Inject constructor(
             if (response.token != null && response.validity != null && response.userId != null) {
                 RepoLoginResponse.Success(response.token, response.validity, response.userId)
             } else {
-                RepoLoginResponse.Error("Incompatible API version!",
-                    RepoLoginErrorCode.INCOMPATIBILITTY
-                )
+                RepoLoginResponse.Error(RepoLoginErrorCode.INCOMPATIBILITTY)
             }
         } else {
-            val errorCode = RepoLoginErrorCode.values().find { it.serverField == response.errorCode }
-            RepoLoginResponse.Error(response.error, errorCode ?: RepoLoginErrorCode.UNKNOWN)
+            val errorCode = RepoLoginErrorCode.values().find { it.serverField == response.error }
+            RepoLoginResponse.Error(errorCode ?: RepoLoginErrorCode.UNKNOWN)
         }
     }
 }

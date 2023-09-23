@@ -1,6 +1,7 @@
 package eu.matoosh.attendance.api
 
 import com.google.gson.annotations.SerializedName
+import eu.matoosh.attendance.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,7 +15,6 @@ data class ApiLoginResponse(
     @field:SerializedName("validity") val validity: String?,
     @field:SerializedName("user_id") val userId: Int?,
     @field:SerializedName("error") val error: String?,
-    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiUser(
@@ -27,20 +27,17 @@ data class ApiUser(
 data class ApiBookResponse(
     @field:SerializedName("unchecked_list") val uncheckedList: List<ApiUser>?,
     @field:SerializedName("error") val error: String?,
-    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiCheckResponse(
     @field:SerializedName("order") val order: Int?,
     @field:SerializedName("result") val result: String?,
     @field:SerializedName("error") val error: String?,
-    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiUncheckResponse(
     @field:SerializedName("result") val result: String?,
     @field:SerializedName("error") val error: String?,
-    @field:SerializedName("error_code") val errorCode: String?
 )
 
 data class ApiIssueAuthorizationResponse(
@@ -95,8 +92,6 @@ interface IceAppService {
     ): ApiAddCreditResponse
 
     companion object {
-        private const val BASE_URL = "https://matoosh.eu/"
-
         fun create(): IceAppService {
             val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
@@ -105,7 +100,7 @@ interface IceAppService {
                 .build()
 
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(BuildConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

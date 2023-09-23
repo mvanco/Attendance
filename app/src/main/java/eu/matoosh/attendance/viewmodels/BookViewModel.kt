@@ -30,7 +30,7 @@ enum class BookErrorCode() {
 
 sealed interface BookUiState {
     data class Idle(val users: List<User>) : BookUiState
-    data class Error(val message: String, val errorCode: BookErrorCode) : BookUiState
+    data class Error(val errorCode: BookErrorCode) : BookUiState
     data class Confirmation(val user: User) : BookUiState
     object Manual : BookUiState
     object Loading : BookUiState
@@ -71,7 +71,7 @@ class BookViewModel @Inject constructor(
             try {
                 if (token == null) {
                     _bookUiState.value =
-                        BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
+                        BookUiState.Error(BookErrorCode.TOKEN_EXPIRED)
                 }
                 bookRepo.uncheckedListWithUpdates(token!!).collect { response ->
                     when (response) {
@@ -80,21 +80,15 @@ class BookViewModel @Inject constructor(
                         }
 
                         is RepoBookResponse.Error -> {
-                            when (response.errorCode) {
+                            when (response.error) {
                                 RepoBookErrorCode.MISSING_RENTAL -> {
                                     _bookUiState.value =
-                                        BookUiState.Error(
-                                            response.message,
-                                            BookErrorCode.RENTAL_NOT_FOUND
-                                        )
+                                        BookUiState.Error(BookErrorCode.RENTAL_NOT_FOUND)
                                 }
 
                                 else -> {
                                     _bookUiState.value =
-                                        BookUiState.Error(
-                                            response.message,
-                                            BookErrorCode.UNKNOWN_ERROR
-                                        )
+                                        BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
                                 }
                             }
                         }
@@ -102,10 +96,10 @@ class BookViewModel @Inject constructor(
                 }
             } catch (e: IOException) {
                 _bookUiState.value =
-                    BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
+                    BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
                 _bookUiState.value =
-                    BookUiState.Error("HttpException", BookErrorCode.SERVER_UNAVAILABLE)
+                    BookUiState.Error(BookErrorCode.SERVER_UNAVAILABLE)
             }
         }
     }
@@ -119,7 +113,7 @@ class BookViewModel @Inject constructor(
             _bookUiState.value = BookUiState.Confirmation(foundUser!!)
         }
         else {
-            _bookUiState.value = BookUiState.Error("No user has been selected", BookErrorCode.APP_ERROR)
+            _bookUiState.value = BookUiState.Error(BookErrorCode.APP_ERROR)
         }
     }
 
@@ -128,7 +122,7 @@ class BookViewModel @Inject constructor(
             _bookUiState.value = BookUiState.Success
             try {
                 if (token == null) {
-                    _bookUiState.value = BookUiState.Error("Token already expired", BookErrorCode.TOKEN_EXPIRED)
+                    _bookUiState.value = BookUiState.Error(BookErrorCode.TOKEN_EXPIRED)
                     return@launch
                 }
                 val response = if (userId == null) {
@@ -143,9 +137,9 @@ class BookViewModel @Inject constructor(
                         _bookUiState.value = BookUiState.Idle(_users.value)
                     }
                     is RepoCheckResponse.Error -> {
-                        when(response.errorCode) {
+                        when(response.error) {
                             RepoBookErrorCode.MISSING_RENTAL -> {
-                                _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.RENTAL_NOT_FOUND)
+                                _bookUiState.value = BookUiState.Error(BookErrorCode.RENTAL_NOT_FOUND)
                             }
                             RepoBookErrorCode.DUPLICATE_CHECKIN -> {
                                 Log.d("security-check", "User with order ${response.order} is black passenger.")
@@ -153,15 +147,15 @@ class BookViewModel @Inject constructor(
                                 _bookUiState.value = BookUiState.Idle(_users.value)
                             }
                             else -> {
-                                _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
+                                _bookUiState.value = BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
                             }
                         }
                     }
                 }
             } catch (e: IOException) {
-                _bookUiState.value = BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
+                _bookUiState.value = BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
-                _bookUiState.value = BookUiState.Error("HttpException", BookErrorCode.SERVER_UNAVAILABLE)
+                _bookUiState.value = BookUiState.Error(BookErrorCode.SERVER_UNAVAILABLE)
             }
         }
     }
@@ -180,13 +174,13 @@ class BookViewModel @Inject constructor(
                         return@launch
                     }
                     is RepoLoginResponse.Error -> {
-                        _bookUiState.value = BookUiState.Error(response.message, BookErrorCode.UNKNOWN_ERROR)
+                        _bookUiState.value = BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
                     }
                 }
             } catch (e: IOException) {
-                _bookUiState.value = BookUiState.Error("IOException", BookErrorCode.UNKNOWN_ERROR)
+                _bookUiState.value = BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
             } catch (e: HttpException) {
-                _bookUiState.value = BookUiState.Error("HttpException", BookErrorCode.UNKNOWN_ERROR)
+                _bookUiState.value = BookUiState.Error(BookErrorCode.UNKNOWN_ERROR)
             }
         }
     }
