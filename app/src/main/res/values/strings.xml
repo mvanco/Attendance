@@ -15,6 +15,9 @@
     <string name="label_user">Uživatel</string>
     <string name="label_password">Heslo</string>
     <string name="label_credit">Kredit</string>
+    <string name="label_profile">Profil</string>
+    <string name="label_terms">Termíny</string>
+    <string name="label_scanner">Skener</string>
 
     <string name="text_checked_in">Hurá, na led!</string>
     <string name="text_credit">Aktuální zůstatek: %1$dKč</string>

@@ -1,8 +1,12 @@
 package eu.matoosh.attendance.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -14,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,6 +29,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -137,25 +144,76 @@ fun AppNavHost() {
                         )
                     }
                 ) { contentPadding ->
-                    val pagerState = rememberPagerState()
-                    if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
-                        VerticalPager(state = pagerState, pageCount = 1) { page ->
-                            when (page) {
-                                0 -> {
-                                    val adminCreditsViewModel = hiltViewModel<AdminCreditsViewModel>()
-                                    AdminCredits(
-                                        viewModel = adminCreditsViewModel
-                                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        val pagerState = rememberPagerState()
+                        if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
+                            HorizontalPager(
+                                state = pagerState,
+                                pageCount = 1,
+                                modifier = Modifier.weight(1f)
+                            ) { page ->
+                                when (page) {
+                                    0 -> {
+                                        val adminCreditsViewModel = hiltViewModel<AdminCreditsViewModel>()
+                                        AdminCredits(
+                                            viewModel = adminCreditsViewModel
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
-                    else {
-                        VerticalPager(state = pagerState, pageCount = 1) { page ->
-                            when (page) {
-                                0 -> {
-                                    val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
-                                    UserScanner(userScannerViewModel)
+                        else {
+                            HorizontalPager(
+                                state = pagerState,
+                                pageCount = USER_DESTINATIONS.size,
+                                modifier = Modifier
+                                    .weight(1f)
+                            ) { page ->
+                                when (page) {
+                                    0 -> {
+                                        Box(modifier = Modifier.fillMaxSize()) {
+                                            Text(text = "Profil", modifier = Modifier.align(Alignment.Center))
+                                        }
+                                    }
+                                    1 -> {
+                                        Box(modifier = Modifier.fillMaxSize()) {
+                                            Text(text = "Termíny", modifier = Modifier.align(Alignment.Center))
+                                        }
+                                    }
+                                    2 -> {
+                                        val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
+                                        UserScanner(userScannerViewModel)
+                                    }
+                                }
+                            }
+                        }
+                        val scope = rememberCoroutineScope()
+                        if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
+
+                        }
+                        else {
+                            NavigationBar(modifier = Modifier.fillMaxWidth()) {
+                                USER_DESTINATIONS.forEachIndexed { index, destination ->
+                                    NavigationBarItem(
+                                        selected = pagerState.currentPage == index,
+                                        onClick = {
+                                            scope.launch {
+                                                pagerState.scrollToPage(index)
+                                            }
+                                        },
+                                        icon = {
+                                            Icon(
+                                                imageVector = destination.icon!!,
+                                                contentDescription = stringResource(id = destination.titleId)
+                                            )
+                                        },
+                                        label = {
+                                            Text(text = stringResource(id = destination.titleId))
+                                        }
+                                    )
                                 }
                             }
                         }
