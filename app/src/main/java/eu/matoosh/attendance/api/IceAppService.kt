@@ -24,9 +24,28 @@ data class ApiUser(
     @field:SerializedName("username") val username: String?
 )
 
+data class ApiInterest(
+    @field:SerializedName("duration") val duration: Int?,
+    @field:SerializedName("price") val price: Int?,
+    @field:SerializedName("rental_id") val rentalId: Int?,
+    @field:SerializedName("start") val start: String?
+)
+
 data class ApiBookResponse(
     @field:SerializedName("unchecked_list") val uncheckedList: List<ApiUser>?,
     @field:SerializedName("error") val error: String?,
+)
+
+data class ApiProfileResponse(
+    @field:SerializedName("username") val username: String?,
+    @field:SerializedName("email") val email: String?,
+    @field:SerializedName("credit") val credit: Int?,
+    @field:SerializedName("error") val error: String?
+)
+
+data class ApiInterestsResponse(
+    @field:SerializedName("interests") val interests: List<ApiInterest>?,
+    @field:SerializedName("error") val error: String?
 )
 
 data class ApiCheckResponse(
@@ -90,6 +109,18 @@ interface IceAppService {
         @Field("token") token: String,
         @Field("auth_token") authToken: String
     ): ApiAddCreditResponse
+
+    @FormUrlEncoded
+    @POST("rest/ice/profile")
+    suspend fun profile(
+        @Field("token") token: String
+    ): ApiProfileResponse
+
+    @FormUrlEncoded
+    @POST("rest/ice/interests")
+    suspend fun interests(
+        @Field("token") token: String
+    ): ApiInterestsResponse
 
     companion object {
         fun create(): IceAppService {

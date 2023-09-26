@@ -28,6 +28,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +46,7 @@ import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
+import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 import kotlinx.coroutines.launch
 
@@ -174,9 +177,13 @@ fun AppNavHost() {
                             ) { page ->
                                 when (page) {
                                     0 -> {
-                                        Box(modifier = Modifier.fillMaxSize()) {
-                                            Text(text = "Profil", modifier = Modifier.align(Alignment.Center))
-                                        }
+                                        val userProfileViewModel = hiltViewModel<UserProfileViewModel>()
+                                        val userProfileUiState by userProfileViewModel.userProfileUiState.collectAsState()
+                                        UserProfileScreen(
+                                            userProfileUiState,
+                                            onFailure = {
+
+                                            })
                                     }
                                     1 -> {
                                         Box(modifier = Modifier.fillMaxSize()) {
