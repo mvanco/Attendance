@@ -43,7 +43,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.viewmodels.AppViewModel
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
@@ -99,7 +98,6 @@ fun AppNavHost() {
                 defaultValue = false
             })
         ) { backStackEntry ->
-            val appViewModel = hiltViewModel<AppViewModel>()
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             ModalNavigationDrawer(
                 drawerContent = {
