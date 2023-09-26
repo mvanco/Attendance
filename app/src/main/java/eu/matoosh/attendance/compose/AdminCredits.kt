@@ -41,7 +41,9 @@ fun AdminCredits(
             viewModel.showForm()
         },
         onTopUp = {
-            viewModel.showQr(it.toInt())
+            if (it.isNotEmpty()) {
+                viewModel.showQr(it.toInt())
+            }
         }
     )
 }
