@@ -11,6 +11,7 @@
     <string name="action_add_credit">Dobít kredit</string>
     <string name="action_done">Hotovo : %1$d</string>
     <string name="action_add_camera_permission">Požádat o přistup k fotoaparátu</string>
+    <string name="action_register_term">Zaregistruj termín</string>
 
     <string name="label_user">Uživatel</string>
     <string name="label_password">Heslo</string>
@@ -18,6 +19,8 @@
     <string name="label_profile">Profil</string>
     <string name="label_terms">Termíny</string>
     <string name="label_scanner">Skener</string>
+    <string name="label_my_terms">Zájem o termíny</string>
+    <string name="label_register">Registrace</string>
 
     <string name="text_checked_in">Hurá, na led!</string>
     <string name="text_credit">Aktuální zůstatek: %1$dKč</string>
@@ -33,7 +36,12 @@
     <string name="message_sheet_loading">Načítám...</string>
     <string name="message_sheet_error">Nastala chyba při načítání uživatelů. :(</string>
 
+    <string name="message_user_no_interest">Nemáte zatím zájem o žádné termíny.</string>
     <string name="message_user_added_credit">Kredit byl úspěšně přidán.</string>
-    <string name="message_user_profile_unknown">Nedokážu získat profilová data</string>
+    <string name="message_user_profile_unknown">Nedokážu získat profilová data.</string>
     <string name="message_user_loading">Načítavam uživatelské data...</string>
+    <string name="message_user_error_insufficient_credit">Nemáte dostatek kreditu.</string>
+    <string name="message_user_error">Nastala neznámá chyba</string>
+
+    <string name="content_description_register_term_fab">Tlačítko na registraci nového termínu</string>
 </resources>

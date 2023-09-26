@@ -28,7 +28,8 @@ data class ApiInterest(
     @field:SerializedName("duration") val duration: Int?,
     @field:SerializedName("price") val price: Int?,
     @field:SerializedName("rental_id") val rentalId: Int?,
-    @field:SerializedName("start") val start: String?
+    @field:SerializedName("start") val start: String?,
+    @field:SerializedName("registered") val registered: Int?
 )
 
 data class ApiBookResponse(
@@ -66,6 +67,10 @@ data class ApiIssueAuthorizationResponse(
 
 data class ApiAddCreditResponse(
     @field:SerializedName("result") val result: String
+)
+
+data class ApiRegisterTermResponse(
+    @field:SerializedName("error") val error: String?
 )
 
 interface IceAppService {
@@ -121,6 +126,13 @@ interface IceAppService {
     suspend fun interests(
         @Field("token") token: String
     ): ApiInterestsResponse
+
+    @FormUrlEncoded
+    @POST("rest/ice/register_term")
+    suspend fun registerTerm(
+        @Field("token") token: String,
+        @Field("rental_id") rentalId: Int
+    ): ApiRegisterTermResponse
 
     companion object {
         fun create(): IceAppService {

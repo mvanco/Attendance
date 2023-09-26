@@ -1,10 +1,11 @@
 package eu.matoosh.attendance.data
 
-import java.util.Date
+import java.time.ZonedDateTime
 
 data class Interest(
     val duration: Int,
     val price: Int,
     val rentalId: Int,
-    val start: Date
+    val start: ZonedDateTime,
+    val registered: Boolean
 )

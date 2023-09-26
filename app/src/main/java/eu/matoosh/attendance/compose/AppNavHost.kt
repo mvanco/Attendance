@@ -184,9 +184,7 @@ fun AppNavHost() {
                                             })
                                     }
                                     1 -> {
-                                        Box(modifier = Modifier.fillMaxSize()) {
-                                            Text(text = "Termíny", modifier = Modifier.align(Alignment.Center))
-                                        }
+                                        UserTerms()
                                     }
                                     2 -> {
                                         val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
