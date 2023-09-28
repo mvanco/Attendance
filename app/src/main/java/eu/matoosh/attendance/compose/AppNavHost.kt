@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -27,12 +29,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,6 @@ import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 import kotlinx.coroutines.launch
-import androidx.compose.ui.res.vectorResource
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -150,6 +150,11 @@ fun AppNavHost() {
                             .fillMaxSize()
                     ) {
                         val pagerState = rememberPagerState()
+                        val fling = PagerDefaults.flingBehavior(
+                            state = pagerState,
+                            pagerSnapDistance = PagerSnapDistance.atMost(1)
+                        )
+                        val scope = rememberCoroutineScope()
                         if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
                             HorizontalPager(
                                 state = pagerState,
@@ -170,30 +175,41 @@ fun AppNavHost() {
                             HorizontalPager(
                                 state = pagerState,
                                 pageCount = USER_DESTINATIONS.size,
+                                flingBehavior = fling,
                                 modifier = Modifier
                                     .weight(1f)
                             ) { page ->
                                 when (page) {
                                     0 -> {
                                         val userProfileViewModel = hiltViewModel<UserProfileViewModel>()
-                                        val userProfileUiState by userProfileViewModel.userProfileUiState.collectAsState()
                                         UserProfileScreen(
-                                            userProfileUiState,
-                                            onFailure = {
-
-                                            })
+                                            userProfileViewModel,
+                                            onFailure = {}
+                                        )
+                                        LaunchedEffect(page) {
+                                            userProfileViewModel.loadProfile()
+                                        }
                                     }
                                     1 -> {
                                         UserTerms()
                                     }
                                     2 -> {
                                         val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
-                                        UserScanner(userScannerViewModel)
+                                        UserScanner(
+                                            userScannerViewModel,
+                                            onSuccess = {
+                                                scope.launch {
+                                                    pagerState.scrollToPage(0)
+                                                }
+                                            }
+                                        )
+                                        LaunchedEffect(page) {
+                                            userScannerViewModel.initialize()
+                                        }
                                     }
                                 }
                             }
                         }
-                        val scope = rememberCoroutineScope()
                         if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
 
                         }

@@ -1,6 +1,5 @@
 package eu.matoosh.attendance.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,10 +43,6 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
     val loginUiState = _loginUiState.asStateFlow()
-
-    init {
-        Log.d("LoginViewModel", "LoginViewModel initiaized")
-    }
 
     fun login(username: String, password: String) {
         viewModelScope.launch {

@@ -10,15 +10,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
 import eu.matoosh.attendance.viewmodels.console.UserProfileUiState
+import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import kotlinx.coroutines.delay
+
+@Composable
+fun UserProfileScreen(
+    viewModel: UserProfileViewModel = hiltViewModel(),
+    onFailure: () -> Unit
+) {
+    val userProfilUiState by viewModel.userProfileUiState.collectAsState()
+
+    UserProfileScreen(
+        uiState = userProfilUiState,
+        onFailure  = onFailure
+    )
+}
 
 @Composable
 fun UserProfileScreen(

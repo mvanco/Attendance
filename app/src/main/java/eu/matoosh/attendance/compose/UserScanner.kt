@@ -1,10 +1,8 @@
 package eu.matoosh.attendance.compose
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,16 +19,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun UserScanner(
-    viewModel: UserScannerViewModel = hiltViewModel()
+    viewModel: UserScannerViewModel = hiltViewModel(),
+    onSuccess: () -> Unit
 ) {
     val userScannerUiState by viewModel.userScannerUiState.collectAsState()
 
@@ -37,14 +38,16 @@ fun UserScanner(
         userScannerUiState = userScannerUiState,
         onBarcodeFound = { credit ->
             viewModel.addCredit(credit)
-        }
+        },
+        onSuccess = onSuccess
     )
 }
 
 @Composable
 fun UserScanner(
     userScannerUiState: UserScannerUiState,
-    onBarcodeFound: (String) -> Unit
+    onBarcodeFound: (String) -> Unit,
+    onSuccess: () -> Unit
 ) {
     when (userScannerUiState) {
         is UserScannerUiState.Scanner -> {
@@ -80,6 +83,10 @@ fun UserScanner(
         }
         is UserScannerUiState.Success -> {
             Message(text = stringResource(id = R.string.message_user_added_credit))
+            LaunchedEffect(Unit) {
+                delay(LoginUiState.SUCCESS_STATE_DURATION)
+                onSuccess()
+            }
         }
     }
 }

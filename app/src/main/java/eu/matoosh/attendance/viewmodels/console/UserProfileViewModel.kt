@@ -31,7 +31,7 @@ class UserProfileViewModel @Inject constructor(
         MutableStateFlow<UserProfileUiState>(UserProfileUiState.Loading)
     val userProfileUiState = _userProfileUiState.asStateFlow()
 
-    init {
+    fun loadProfile() {
         viewModelScope.launch {
             when (val response = consoleRepo.profile(sessionManager.token!!)) {
                 is RepoProfileResponse.Success -> {
