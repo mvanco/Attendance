@@ -4,10 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -141,27 +145,40 @@ fun UserTerms(
             if (interests.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.label_my_terms),
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Text(
                     text = stringResource(id = R.string.message_user_no_interest),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
             else {
                 Text(
                     text = stringResource(id = R.string.label_my_terms),
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
-            repeat(interests.size) { i ->
-                Text(text =
-                interests[i].start.toFormattedString(frontendFormatter),
-                    style = MaterialTheme.typography.titleLarge
+            if (interests.isNotEmpty()) {
+                Divider(
+                    color = MaterialTheme.colorScheme.outline
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+                LazyColumn(
+                    modifier = Modifier.heightIn(max = 300.dp).padding(8.dp)
+                ) {
+                    items(interests) { interest ->
+                        Text(
+                            text =
+                            interest.start.toFormattedString(frontendFormatter),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                    }
+                }
+                Divider(
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     }
