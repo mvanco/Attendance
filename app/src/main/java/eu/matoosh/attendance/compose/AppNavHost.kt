@@ -1,14 +1,11 @@
 package eu.matoosh.attendance.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.PagerSnapDistance
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
@@ -29,7 +26,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -48,6 +47,8 @@ import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -149,61 +150,45 @@ fun AppNavHost() {
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        val pagerState = rememberPagerState()
-                        val fling = PagerDefaults.flingBehavior(
-                            state = pagerState,
-                            pagerSnapDistance = PagerSnapDistance.atMost(1)
-                        )
-                        val scope = rememberCoroutineScope()
+                        var route by rememberSaveable { mutableStateOf(USER_DESTINATIONS.first().route) }
                         if (backStackEntry.arguments?.getBoolean("isAdmin") == true) {
-                            HorizontalPager(
-                                state = pagerState,
-                                pageCount = 1,
-                                modifier = Modifier.weight(1f)
-                            ) { page ->
-                                when (page) {
-                                    0 -> {
-                                        val adminCreditsViewModel = hiltViewModel<AdminCreditsViewModel>()
-                                        AdminCredits(
-                                            viewModel = adminCreditsViewModel
-                                        )
-                                    }
-                                }
-                            }
+                            val adminCreditsViewModel = hiltViewModel<AdminCreditsViewModel>()
+                            AdminCredits(
+                                viewModel = adminCreditsViewModel
+                            )
                         }
                         else {
-                            HorizontalPager(
-                                state = pagerState,
-                                pageCount = USER_DESTINATIONS.size,
-                                flingBehavior = fling,
+                            Box(
                                 modifier = Modifier
                                     .weight(1f)
-                            ) { page ->
-                                when (page) {
-                                    0 -> {
-                                        val userProfileViewModel = hiltViewModel<UserProfileViewModel>()
+                            ) {
+                                when (route) {
+                                    UserRoute.PROFILE -> {
+                                        val userProfileViewModel =
+                                            hiltViewModel<UserProfileViewModel>()
                                         UserProfileScreen(
                                             userProfileViewModel,
                                             onFailure = {}
                                         )
-                                        LaunchedEffect(page) {
+                                        LaunchedEffect(route) {
                                             userProfileViewModel.loadProfile()
                                         }
                                     }
-                                    1 -> {
+
+                                    UserRoute.TERMS -> {
                                         UserTerms()
                                     }
-                                    2 -> {
-                                        val userScannerViewModel = hiltViewModel<UserScannerViewModel>()
+
+                                    UserRoute.SCANNER -> {
+                                        val userScannerViewModel =
+                                            hiltViewModel<UserScannerViewModel>()
                                         UserScanner(
                                             userScannerViewModel,
                                             onSuccess = {
-                                                scope.launch {
-                                                    pagerState.scrollToPage(0)
-                                                }
+                                                route = UserRoute.PROFILE
                                             }
                                         )
-                                        LaunchedEffect(page) {
+                                        LaunchedEffect(route) {
                                             userScannerViewModel.initialize()
                                         }
                                     }
@@ -215,13 +200,11 @@ fun AppNavHost() {
                         }
                         else {
                             NavigationBar(modifier = Modifier.fillMaxWidth()) {
-                                USER_DESTINATIONS.forEachIndexed { index, destination ->
+                                USER_DESTINATIONS.forEach { destination ->
                                     NavigationBarItem(
-                                        selected = pagerState.currentPage == index,
+                                        selected = destination.route == route,
                                         onClick = {
-                                            scope.launch {
-                                                pagerState.scrollToPage(index)
-                                            }
+                                            route = destination.route
                                         },
                                         icon = {
                                             when (destination.icon) {
