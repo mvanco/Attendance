@@ -1,7 +1,6 @@
 package eu.matoosh.attendance.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,8 +30,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +47,7 @@ import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.vectorResource
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -208,10 +208,22 @@ fun AppNavHost() {
                                             }
                                         },
                                         icon = {
-                                            Icon(
-                                                imageVector = destination.icon!!,
-                                                contentDescription = stringResource(id = destination.titleId)
-                                            )
+                                            when (destination.icon) {
+                                                is Icon.IconImageVector -> {
+                                                    Icon(
+                                                        imageVector = destination.icon.vector!!,
+                                                        contentDescription = stringResource(id = destination.titleId)
+                                                    )
+                                                }
+                                                is Icon.IconVectorAsset -> {
+                                                    Icon(
+                                                        imageVector = ImageVector.vectorResource(id = destination.icon.iconRes),
+                                                        contentDescription = stringResource(id = destination.titleId)
+                                                    )
+                                                }
+                                                else -> {}
+                                            }
+
                                         },
                                         label = {
                                             Text(text = stringResource(id = destination.titleId))
