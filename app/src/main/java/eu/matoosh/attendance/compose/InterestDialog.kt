@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -24,16 +28,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.data.Interest
+import eu.matoosh.attendance.theme.AttendanceTheme
+import java.time.ZonedDateTime
+import androidx.compose.foundation.lazy.items
 import eu.matoosh.attendance.utils.frontendFormatter
 import eu.matoosh.attendance.utils.toFormattedString
 
 @Composable
 fun InterestDialog(
-    interestToReg: List<Interest>,
+    interestsToReg: List<Interest>,
     onTermSelect: (Int) -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -59,15 +67,20 @@ fun InterestDialog(
                 Divider(
                     color = MaterialTheme.colorScheme.outline
                 )
-                interestToReg.forEach { interest ->
-                    InterestRow(
-                        selected = interest.rentalId == selectedTerm,
-                        onClick = {
-                            selectedTerm = interest.rentalId
-                        },
-                        text = interest.start.toFormattedString(frontendFormatter),
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                val scrollState = rememberScrollState()
+                LazyColumn(
+                    modifier = Modifier.verticalScroll(scrollState).heightIn(max = 250.dp)
+                ) {
+                    items(interestsToReg) { interest ->
+                        InterestRow(
+                            selected = interest.rentalId == selectedTerm,
+                            onClick = {
+                                selectedTerm = interest.rentalId
+                            },
+                            text = interest.start.toFormattedString(frontendFormatter),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
                 Divider(
                     color = MaterialTheme.colorScheme.outline
@@ -125,5 +138,20 @@ fun InterestRow(
             style = MaterialTheme.typography.titleLarge
         )
     }
+}
 
+@Preview
+@Composable
+private fun InterestDialogPreview() {
+    AttendanceTheme {
+        var interestsToReg = mutableListOf<Interest>()
+        repeat(6) {
+            interestsToReg.add(Interest(60, 500, 1, ZonedDateTime.now(), false))
+        }
+        InterestDialog(
+            interestsToReg = interestsToReg,
+            onTermSelect = {},
+            onDismissRequest = {},
+        )
+    }
 }
