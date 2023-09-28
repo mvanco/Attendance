@@ -23,6 +23,7 @@
     <string name="label_register">Registrace</string>
 
     <string name="text_checked_in">Hurá, na led!</string>
+    <string name="text_email">Email: %1$s</string>
     <string name="text_credit">Aktuální zůstatek: %1$dKč</string>
 
     <string name="message_logging_loading">Přihlašuji...</string>

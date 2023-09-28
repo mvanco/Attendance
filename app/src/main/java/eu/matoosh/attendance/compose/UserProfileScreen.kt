@@ -51,7 +51,13 @@ fun UserProfileScreen(
                     text = user.username,
                     style = MaterialTheme.typography.headlineLarge,
                 )
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = user.email,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.size(32.dp))
                 Text(
                     text = stringResource(id = R.string.text_credit, user.credit),
                     style = MaterialTheme.typography.titleLarge,
