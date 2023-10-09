@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import eu.matoosh.attendance.compose.SheetScreen
+import eu.matoosh.attendance.compose.screen.SheetScreen
 
 const val AttendanceSheetRoute = "attendance_sheet"
 

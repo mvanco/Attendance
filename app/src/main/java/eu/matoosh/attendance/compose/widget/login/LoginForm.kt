@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.widget.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

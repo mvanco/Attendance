@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen.page.user
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
 import eu.matoosh.attendance.viewmodels.console.UserProfileUiState

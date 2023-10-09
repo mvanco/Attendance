@@ -9,7 +9,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import eu.matoosh.attendance.compose.LoginScreen
+import eu.matoosh.attendance.compose.screen.LoginScreen
 import eu.matoosh.attendance.viewmodels.LoginViewModel
 
 const val LoginRoute = "login"

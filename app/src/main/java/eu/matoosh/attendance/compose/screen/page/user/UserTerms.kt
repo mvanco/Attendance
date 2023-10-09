@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen.page.user
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.InterestDialog
+import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.data.Interest
 import eu.matoosh.attendance.theme.AttendanceTheme
 import eu.matoosh.attendance.utils.frontendFormatter

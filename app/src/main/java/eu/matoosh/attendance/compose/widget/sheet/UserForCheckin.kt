@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.widget.sheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

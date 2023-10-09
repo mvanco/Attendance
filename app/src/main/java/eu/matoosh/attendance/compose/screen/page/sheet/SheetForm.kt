@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen.page.sheet
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -10,9 +10,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.widget.sheet.UserForCheckin
 import eu.matoosh.attendance.data.User
-import eu.matoosh.attendance.viewmodels.BookUiState
-import eu.matoosh.attendance.viewmodels.BookViewModel
 
 @Composable
 fun SheetForm(

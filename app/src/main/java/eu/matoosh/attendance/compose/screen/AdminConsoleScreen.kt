@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,11 +33,11 @@ import eu.matoosh.attendance.viewmodels.console.AdminCreditsUiState
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 
 @Composable
-fun AdminCredits(
+fun AdminConsoleScreen(
     viewModel: AdminCreditsViewModel = hiltViewModel(),
 ) {
     val adminCreditsUiState by viewModel.adminCreditsUiState.collectAsState()
-    AdminCredits(
+    AdminConsoleScreen(
         adminCreditsUiState = adminCreditsUiState,
         onQrDone = {
             viewModel.showForm()
@@ -51,7 +51,7 @@ fun AdminCredits(
 }
 
 @Composable
-fun AdminCredits(
+fun AdminConsoleScreen(
     adminCreditsUiState: AdminCreditsUiState,
     onQrDone: () -> Unit,
     onTopUp: (String) -> Unit

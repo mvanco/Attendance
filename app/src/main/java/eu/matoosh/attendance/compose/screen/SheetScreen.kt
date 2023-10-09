@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -6,6 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.screen.page.sheet.Confirmation
+import eu.matoosh.attendance.compose.widget.login.LoginForm
+import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.screen.page.sheet.SheetForm
+import eu.matoosh.attendance.compose.screen.page.sheet.Success
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState

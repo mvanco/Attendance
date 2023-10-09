@@ -8,7 +8,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import eu.matoosh.attendance.compose.ConsoleScreen
+import eu.matoosh.attendance.compose.ConsoleLayout
 
 const val ConsoleRoute = "console"
 private const val isAdminArg = "isAdmin"
@@ -28,7 +28,7 @@ fun NavGraphBuilder.consoleScreen(
         )
     ) { dest ->
         val args = ConsoleArgs(dest.arguments)
-        ConsoleScreen(
+        ConsoleLayout(
             isAdmin = args.isAdmin,
             onNavigateAdminToLogin = onNavigateAdminToLogin,
             onNavigateUserToLogin = onNavigateUserToLogin

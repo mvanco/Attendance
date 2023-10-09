@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen.page.user
 
 import android.Manifest
 import android.content.Context
@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.widget.user.Scanner
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel

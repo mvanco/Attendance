@@ -1,7 +1,6 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -10,6 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.widget.login.LoginForm
+import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.viewmodels.LoginErrorCode
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
