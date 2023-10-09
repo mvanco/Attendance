@@ -21,7 +21,19 @@ android {
             useSupportLibrary = true
         }
     }
-
+    flavorDimensions += listOf("backend")
+    productFlavors {
+        create("prod") {
+            dimension = "backend"
+            applicationIdSuffix = ".prod"
+            buildConfigField("String", "BASE_URL", "\"https://matoosh.eu/\"")
+        }
+        create("stg") {
+            dimension = "backend"
+            applicationIdSuffix = ".stg"
+            buildConfigField("String", "BASE_URL", "\"http://192.168.1.166:8000/\"")
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -29,11 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://matoosh.eu/\"")
-        }
 
-        debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.166:8000/\"")
         }
     }
     compileOptions {
