@@ -2,6 +2,7 @@ package eu.matoosh.attendance.compose.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import eu.matoosh.attendance.compose.SheetScreen
 
@@ -13,6 +14,6 @@ fun NavGraphBuilder.attendanceSheetScreen() {
     }
 }
 
-fun NavController.navigateModeSelectionToAttendanceSheet() {
-    navigate(AttendanceSheetRoute)
+fun NavController.navigateToAttendanceSheet(builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(AttendanceSheetRoute, builder)
 }

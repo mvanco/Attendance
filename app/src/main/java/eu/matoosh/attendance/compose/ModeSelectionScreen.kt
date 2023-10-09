@@ -25,7 +25,7 @@ enum class Mode {
 }
 
 @Composable
-fun ModeSelection(
+fun ModeSelectionScreen(
     onSelected: (Mode) -> Unit
 ) {
     Column(
@@ -67,7 +67,7 @@ fun ModeSelection(
 @Composable
 private fun ModeSelectionPreview() {
     AttendanceTheme {
-        ModeSelection { mode ->
+        ModeSelectionScreen { mode ->
 
         }
     }

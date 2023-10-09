@@ -1,6 +1,7 @@
 package eu.matoosh.attendance.viewmodels
 
 import androidx.compose.runtime.Stable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +27,8 @@ enum class LoginErrorCode() {
 sealed interface LoginUiState {
     data class Error(val errorCode: LoginErrorCode) : LoginUiState
     data class Success(val username: String) : LoginUiState
-    object Loading : LoginUiState
     object Idle : LoginUiState
+    object Loading : LoginUiState
 
     companion object {
         const val SUCCESS_STATE_DURATION = 1000L
@@ -39,10 +40,26 @@ sealed interface LoginUiState {
 class LoginViewModel @Inject constructor(
     private val repo: LoginRepository,
     private val sessionManager: SessionManager,
-    private val device: Device
+    private val device: Device,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val username = MutableStateFlow("")
+    val password = MutableStateFlow("")
+
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
     val loginUiState = _loginUiState.asStateFlow()
+
+    init {
+        username.value = sessionManager.username ?: ""
+    }
+
+    fun initialize(newUsername: String, newPassword: String) {
+        sessionManager.token = ""
+        sessionManager.validity = ""
+        username.value = newUsername
+        password.value = newPassword
+        _loginUiState.value = LoginUiState.Idle
+    }
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -72,11 +89,5 @@ class LoginViewModel @Inject constructor(
                 _loginUiState.value = LoginUiState.Error(LoginErrorCode.UNKNOWN_ERROR)
             }
         }
-    }
-
-    fun logout() {
-        sessionManager.token = ""
-        sessionManager.validity = ""
-        _loginUiState.value = LoginUiState.Idle
     }
 }

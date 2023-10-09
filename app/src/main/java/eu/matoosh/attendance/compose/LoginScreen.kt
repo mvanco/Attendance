@@ -1,8 +1,10 @@
 package eu.matoosh.attendance.compose
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -23,15 +25,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun LoginScreen(
     onSuccess: (String) -> Unit,
+    onFailure: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
-    val loginUiState by loginViewModel.loginUiState.collectAsState()
     LoginScreen(
-        loginUiState,
+        loginViewModel,
         onSuccess = onSuccess,
-        onFailure = {
-                    loginViewModel.logout()
-        },
+        onFailure = onFailure,
         onLoginClick = {
                 username, password -> loginViewModel.login(username, password)
         }
@@ -41,14 +41,15 @@ fun LoginScreen(
 @SuppressLint("DefaultLocale")
 @Composable
 fun LoginScreen(
-    loginUiState: LoginUiState,
+    loginViewModel: LoginViewModel,
     onLoginClick: (String, String) -> Unit,
     onSuccess: (String) -> Unit,
     onFailure: () -> Unit
 ) {
-    when (loginUiState) {
+    val uiState by loginViewModel.loginUiState.collectAsState()
+    when (uiState) {
         is LoginUiState.Error -> {
-            when(loginUiState.errorCode) {
+            when((uiState as LoginUiState.Error).errorCode) {
                 LoginErrorCode.INCORRECT_USERNAME -> {
                     Message(stringResource(R.string.message_logging_error_incorrect_username))
                 }
@@ -65,16 +66,22 @@ fun LoginScreen(
             }
         }
         is LoginUiState.Idle -> {
-            LoginForm(onLoginClick)
+            val userState = loginViewModel.username.collectAsState() as MutableState
+            val passState = loginViewModel.password.collectAsState() as MutableState
+            LoginForm(
+                onLoginClick,
+                userState,
+                passState
+            )
         }
         is LoginUiState.Loading -> {
             Message(stringResource(id = R.string.message_logging_loading))
         }
         is LoginUiState.Success -> {
-            Message(stringResource(R.string.message_logging_success, loginUiState.username.capitalize()))
+            Message(stringResource(R.string.message_logging_success, (uiState as LoginUiState.Success).username.capitalize()))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
-                onSuccess(loginUiState.username)
+                onSuccess((uiState as LoginUiState.Success).username)
             }
         }
     }

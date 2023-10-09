@@ -16,6 +16,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,12 +36,15 @@ import eu.matoosh.attendance.theme.AttendanceTheme
 @Composable
 fun LoginForm(
     onClick: (String, String) -> Unit,
+    username: MutableState<String> = rememberSaveable {
+        mutableStateOf("")
+    },
+    password: MutableState<String> = rememberSaveable {
+        mutableStateOf("")
+    },
     showCancelButton: Boolean = false,
     onCancel: () -> Unit = {}
 ) {
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,8 +53,8 @@ fun LoginForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            value = username,
-            onValueChange = { username = it },
+            value = username.value,
+            onValueChange = { username.value = it },
             label = { Text(stringResource(R.string.label_user)) },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
@@ -59,8 +64,8 @@ fun LoginForm(
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = password,
-            onValueChange = { password = it },
+            value = password.value,
+            onValueChange = { password.value = it },
             label = { Text(stringResource(R.string.label_password)) },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
@@ -68,7 +73,7 @@ fun LoginForm(
             maxLines = 1,
             keyboardActions = KeyboardActions(
                 onDone = {
-                    onClick(username, password)
+                    onClick(username.value, password.value)
                 }
             ),
             modifier = Modifier
@@ -88,7 +93,7 @@ fun LoginForm(
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Button(
-                onClick = { onClick(username, password) },
+                onClick = { onClick(username.value, password.value) },
                 modifier = Modifier
                     .weight(1f)
             ) {
@@ -102,6 +107,6 @@ fun LoginForm(
 @Composable
 private fun LoginFormPreview() {
     AttendanceTheme {
-        LoginForm(onClick = { _, _ -> }, showCancelButton = true)
+        //LoginForm(onClick = { _, _ -> }, showCancelButton = true)
     }
 }

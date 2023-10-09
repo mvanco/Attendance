@@ -4,15 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.compose.navigation.LoginRoute
+import eu.matoosh.attendance.compose.navigation.ModeSelectionRoute
 import eu.matoosh.attendance.compose.navigation.attendanceSheetScreen
-import eu.matoosh.attendance.compose.navigation.consoleNavigateToLogin
 import eu.matoosh.attendance.compose.navigation.consoleScreen
 import eu.matoosh.attendance.compose.navigation.loginScreen
 import eu.matoosh.attendance.compose.navigation.modeSelectionScreen
-import eu.matoosh.attendance.compose.navigation.navigateLoginToConsole
-import eu.matoosh.attendance.compose.navigation.navigateModeSelectionToConsole
-import eu.matoosh.attendance.compose.navigation.navigateModeSelectionToAttendanceSheet
-import eu.matoosh.attendance.compose.navigation.navigateLoginToModeSelection
+import eu.matoosh.attendance.compose.navigation.navigateToAttendanceSheet
+import eu.matoosh.attendance.compose.navigation.navigateToConsole
+import eu.matoosh.attendance.compose.navigation.navigateToLogin
+import eu.matoosh.attendance.compose.navigation.navigateToModeSelection
 
 @Composable
 fun AppNavHost() {
@@ -21,24 +21,43 @@ fun AppNavHost() {
     NavHost(navController = navController, startDestination = LoginRoute) {
         loginScreen(
             onNavigateToConsoleScreen = {
-                navController.navigateLoginToConsole()
+                navController.navigateToConsole {
+                    popUpTo(LoginRoute) {
+                        inclusive = true
+                    }
+                }
             },
             onNavigateToModeSelection = {
-                navController.navigateLoginToModeSelection()
+                navController.popBackStack()
+                navController.popBackStack()
+                navController.navigateToLogin()
+                navController.navigateToModeSelection()
             }
         )
         modeSelectionScreen(
             onNavigateToAttendanceSheet = {
-                navController.navigateModeSelectionToAttendanceSheet()
+                navController.navigateToAttendanceSheet() {
+                    popUpTo(ModeSelectionRoute) {
+                        inclusive = true
+                    }
+                }
             },
             onNavigateToAdminConsole = {
-                navController.navigateModeSelectionToConsole(true)
+                navController.navigateToConsole(true)
             }
         )
         attendanceSheetScreen()
         consoleScreen(
-            onNavigateToLogin = {
-                navController.consoleNavigateToLogin()
+            onNavigateAdminToLogin = {
+                navController.navigateToLogin {
+                    popUpTo(LoginRoute) {
+                        inclusive = true
+                    }
+                }
+            },
+            onNavigateUserToLogin = {
+                navController.popBackStack()
+                navController.navigateToLogin()
             }
         )
     }
