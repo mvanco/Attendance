@@ -21,7 +21,7 @@ fun NavGraphBuilder.loginScreen(
 ) {
     composable(
         LoginRoute
-    ) { dest ->
+    ) {
         val viewModel: LoginViewModel = hiltViewModel()
         LoginScreen(
             onSuccess = { username ->
