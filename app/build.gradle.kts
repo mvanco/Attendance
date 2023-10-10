@@ -13,8 +13,8 @@ android {
         applicationId = "eu.matoosh.attendance"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 10001
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -25,7 +25,6 @@ android {
     productFlavors {
         create("prod") {
             dimension = "backend"
-            applicationIdSuffix = ".prod"
             buildConfigField("String", "BASE_URL", "\"https://matoosh.eu/\"")
         }
         create("stg") {
@@ -93,6 +92,7 @@ dependencies {
     implementation(libs.barcode.scanning)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.constraintlayout.compose)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
 
