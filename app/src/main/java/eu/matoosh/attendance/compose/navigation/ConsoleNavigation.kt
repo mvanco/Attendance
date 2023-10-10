@@ -13,7 +13,6 @@ import eu.matoosh.attendance.compose.ConsoleLayout
 const val ConsoleRoute = "console"
 private const val isAdminArg = "isAdmin"
 
-@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.consoleScreen(
     onNavigateAdminToLogin: () -> Unit,
     onNavigateUserToLogin: () -> Unit

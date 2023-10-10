@@ -45,4 +45,5 @@
     <string name="message_user_error">Nastala neznámá chyba</string>
 
     <string name="content_description_register_term_fab">Tlačítko na registraci nového termínu</string>
+    <string name="content_description_background_image">Pozadí aplikace</string>
 </resources>

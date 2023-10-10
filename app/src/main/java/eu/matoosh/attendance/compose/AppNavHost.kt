@@ -1,8 +1,17 @@
 package eu.matoosh.attendance.compose
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.navigation.LoginRoute
 import eu.matoosh.attendance.compose.navigation.ModeSelectionRoute
 import eu.matoosh.attendance.compose.navigation.attendanceSheetScreen
@@ -13,52 +22,73 @@ import eu.matoosh.attendance.compose.navigation.navigateToAttendanceSheet
 import eu.matoosh.attendance.compose.navigation.navigateToConsole
 import eu.matoosh.attendance.compose.navigation.navigateToLogin
 import eu.matoosh.attendance.compose.navigation.navigateToModeSelection
+import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(
+    startDestination: String = LoginRoute
+) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = LoginRoute) {
-        loginScreen(
-            onNavigateToConsoleScreen = {
-                navController.navigateToConsole {
-                    popUpTo(LoginRoute) {
-                        inclusive = true
-                    }
-                }
-            },
-            onNavigateToModeSelection = {
-                navController.popBackStack()
-                navController.popBackStack()
-                navController.navigateToLogin()
-                navController.navigateToModeSelection()
-            }
+    Box {
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = stringResource(id = R.string.content_description_background_image),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
-        modeSelectionScreen(
-            onNavigateToAttendanceSheet = {
-                navController.navigateToAttendanceSheet() {
-                    popUpTo(ModeSelectionRoute) {
-                        inclusive = true
+        NavHost(navController = navController, startDestination = startDestination) {
+            loginScreen(
+                onNavigateToConsoleScreen = {
+                    navController.navigateToConsole {
+                        popUpTo(LoginRoute) {
+                            inclusive = true
+                        }
                     }
+                },
+                onNavigateToModeSelection = {
+                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.navigateToLogin()
+                    navController.navigateToModeSelection()
                 }
-            },
-            onNavigateToAdminConsole = {
-                navController.navigateToConsole(true)
-            }
-        )
-        attendanceSheetScreen()
-        consoleScreen(
-            onNavigateAdminToLogin = {
-                navController.navigateToLogin {
-                    popUpTo(LoginRoute) {
-                        inclusive = true
+            )
+            modeSelectionScreen(
+                onNavigateToAttendanceSheet = {
+                    navController.navigateToAttendanceSheet() {
+                        popUpTo(ModeSelectionRoute) {
+                            inclusive = true
+                        }
                     }
+                },
+                onNavigateToAdminConsole = {
+                    navController.navigateToConsole(true)
                 }
-            },
-            onNavigateUserToLogin = {
-                navController.popBackStack()
-                navController.navigateToLogin()
-            }
+            )
+            attendanceSheetScreen()
+            consoleScreen(
+                onNavigateAdminToLogin = {
+                    navController.navigateToLogin {
+                        popUpTo(LoginRoute) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateUserToLogin = {
+                    navController.popBackStack()
+                    navController.navigateToLogin()
+                }
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun AppNavHostPreview() {
+    AttendanceTheme {
+        AppNavHost(
+            startDestination = ModeSelectionRoute
         )
     }
 }
