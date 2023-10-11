@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -22,6 +23,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -70,10 +72,11 @@ fun LoginForm(
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .widthIn(max = dimensionResource(id = R.dimen.max_screen_width))
                 .padding(16.dp)
                 .constrainAs(form) {
                     linkTo(parent.top, parent.bottom, bias = 0.6f)
+                    linkTo(parent.start, parent.end)
                 }
         ) {
             TextField(

@@ -1,5 +1,9 @@
 package eu.matoosh.attendance.compose.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -14,16 +18,21 @@ fun NavGraphBuilder.modeSelectionScreen(
     onNavigateToAdminConsole: () -> Unit
 ) {
     composable(ModeSelectionRoute) {
-        ModeSelectionScreen ( onSelected = { mode ->
-            when (mode) {
-                Mode.ATTENDANCE -> {
-                    onNavigateToAttendanceSheet()
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            ModeSelectionScreen ( onSelected = { mode ->
+                when (mode) {
+                    Mode.ATTENDANCE -> {
+                        onNavigateToAttendanceSheet()
+                    }
+                    Mode.CONSOLE -> {
+                        onNavigateToAdminConsole()
+                    }
                 }
-                Mode.CONSOLE -> {
-                    onNavigateToAdminConsole()
-                }
-            }
-        })
+            })
+        }
     }
 }
 
