@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.compose
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -98,41 +101,48 @@ fun ConsoleLayout(
                 )
             }
         ) { contentPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                if (isAdmin) {
-                    val adminCreditsViewModel: AdminCreditsViewModel = hiltViewModel()
-                    AdminConsoleScreen(
-                        viewModel = adminCreditsViewModel
-                    )
-                }
-                else {
-                    val userNavController: NavHostController = rememberNavController()
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                    ) {
-                        UserNavHost(
-                            userNavController = userNavController
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.background),
+                    contentDescription = stringResource(id = R.string.content_description_background_image),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+
+                ) {
+                    if (isAdmin) {
+                        val adminCreditsViewModel: AdminCreditsViewModel = hiltViewModel()
+                        AdminConsoleScreen(
+                            viewModel = adminCreditsViewModel
+                        )
+                    } else {
+                        val userNavController: NavHostController = rememberNavController()
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            UserNavHost(
+                                userNavController = userNavController
+                            )
+                        }
+                        val dest = userNavController.currentBackStackEntryAsState()
+                        UserNavigationBar(
+                            selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
+                            onUserDestinationSelected = { route ->
+                                userNavController.navigate(route) {
+                                    popUpTo(route) {
+                                        this.inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                }
+                            }
                         )
                     }
-                    val dest = userNavController.currentBackStackEntryAsState()
-                    UserNavigationBar(
-                        selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
-                        onUserDestinationSelected = { route ->
-                            userNavController.navigate(route) {
-                                popUpTo(route) {
-                                    this.inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                        }
-                    )
                 }
             }
         }
-
     }
 }
