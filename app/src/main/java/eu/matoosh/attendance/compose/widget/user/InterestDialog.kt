@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,10 +35,9 @@ import androidx.compose.ui.window.Dialog
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.data.Interest
 import eu.matoosh.attendance.theme.AttendanceTheme
-import java.time.ZonedDateTime
-import androidx.compose.foundation.lazy.items
 import eu.matoosh.attendance.utils.frontendFormatter
 import eu.matoosh.attendance.utils.toFormattedString
+import java.time.ZonedDateTime
 
 @Composable
 fun InterestDialog(
@@ -62,14 +62,16 @@ fun InterestDialog(
                     modifier = Modifier
                         .padding(horizontal = 32.dp, vertical = 24.dp)
                         .fillMaxWidth(),
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Divider(
                     color = MaterialTheme.colorScheme.outline
                 )
                 val scrollState = rememberScrollState()
                 LazyColumn(
-                    modifier = Modifier.verticalScroll(scrollState).heightIn(max = 250.dp)
+                    modifier = Modifier
+                        .verticalScroll(scrollState)
+                        .heightIn(max = 250.dp)
                 ) {
                     items(interestsToReg) { interest ->
                         InterestRow(
@@ -97,7 +99,7 @@ fun InterestDialog(
                     ) {
                         Text(stringResource(id = R.string.action_cancel))
                     }
-                    Spacer(modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.size(32.dp))
                     OutlinedButton(
                         onClick = { selectedTerm?.let { onTermSelect(it) } },
                         modifier = Modifier.padding(8.dp),
@@ -130,12 +132,9 @@ fun InterestRow(
             onClick = onClick,
             modifier = Modifier.padding(0.dp)
         )
-        Spacer(
-            modifier = Modifier.size(16.dp)
-        )
         Text(
             text = text,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleMedium
         )
     }
 }
