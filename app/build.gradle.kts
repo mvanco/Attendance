@@ -13,8 +13,8 @@ android {
         applicationId = "eu.matoosh.attendance"
         minSdk = 26
         targetSdk = 33
-        versionCode = 10004
-        versionName = "1.0.4"
+        versionCode = 10005
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
