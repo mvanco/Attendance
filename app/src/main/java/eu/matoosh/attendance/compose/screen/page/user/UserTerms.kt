@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -141,60 +142,53 @@ fun UserTerms(
                     }
                 )
             }
-        }
+        },
+        containerColor = Color.Transparent
     ) { paddingValues ->
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.background),
-                contentDescription = stringResource(id = R.string.content_description_background_image),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = R.color.background_overlay))
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (interests.isEmpty()) {
-                    Text(
-                        text = stringResource(id = R.string.label_my_terms),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Text(
-                        text = stringResource(id = R.string.message_user_no_interest),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                } else {
-                    Text(
-                        text = stringResource(id = R.string.label_my_terms),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                }
-                if (interests.isNotEmpty()) {
-                    Divider(
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                    LazyColumn(
-                        modifier = Modifier.heightIn(max = 300.dp).padding(8.dp)
-                    ) {
-                        items(interests) { interest ->
-                            Text(
-                                text =
-                                interest.start.toFormattedString(frontendFormatter),
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Spacer(modifier = Modifier.size(8.dp))
-                        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (interests.isEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.label_my_terms),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    text = stringResource(id = R.string.message_user_no_interest),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            } else {
+                Text(
+                    text = stringResource(id = R.string.label_my_terms),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+            if (interests.isNotEmpty()) {
+                Divider(
+                    color = MaterialTheme.colorScheme.outline
+                )
+                LazyColumn(
+                    modifier = Modifier.heightIn(max = 300.dp).padding(8.dp)
+                ) {
+                    items(interests) { interest ->
+                        Text(
+                            text =
+                            interest.start.toFormattedString(frontendFormatter),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
                     }
-                    Divider(
-                        color = MaterialTheme.colorScheme.outline
-                    )
                 }
+                Divider(
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     }

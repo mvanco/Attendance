@@ -1,7 +1,6 @@
 package eu.matoosh.attendance.compose.navigation
 
 import android.os.Bundle
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder

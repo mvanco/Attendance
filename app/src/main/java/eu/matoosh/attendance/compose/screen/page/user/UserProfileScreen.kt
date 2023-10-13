@@ -63,7 +63,6 @@ fun UserProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(id = R.color.background_overlay))
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
