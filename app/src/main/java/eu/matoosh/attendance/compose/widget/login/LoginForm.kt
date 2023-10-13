@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.compose.widget.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.theme.AttendanceTheme
@@ -50,13 +53,18 @@ fun LoginForm(
         modifier = Modifier.fillMaxSize()
     ) {
         val (form, title) = createRefs()
+        createVerticalChain(title, form, chainStyle = ChainStyle.Packed)
         Row(
             modifier = Modifier
                 .constrainAs(title) {
-                    linkTo(parent.top, form.top, bias = 0.4f)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                },
+                    top.linkTo(parent.top)
+                    bottom.linkTo(form.top)
+                }
+                .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
+                .padding(32.dp)
 
         ) {
             Icon(
@@ -67,16 +75,17 @@ fun LoginForm(
             Spacer(Modifier.size(16.dp))
             Text(
                 text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.displayLarge
+                style = MaterialTheme.typography.displayMedium
             )
         }
         Column(
             modifier = Modifier
                 .widthIn(max = dimensionResource(id = R.dimen.max_screen_width))
-                .padding(16.dp)
+                .padding(vertical = 32.dp, horizontal = 16.dp)
                 .constrainAs(form) {
-                    linkTo(parent.top, parent.bottom, bias = 0.6f)
                     linkTo(parent.start, parent.end)
+                    top.linkTo(title.bottom)
+                    bottom.linkTo(parent.bottom)
                 }
         ) {
             TextField(
