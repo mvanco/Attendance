@@ -1,6 +1,5 @@
 package eu.matoosh.attendance.compose.screen.page.user
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +14,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.FabState
+import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
@@ -33,6 +33,10 @@ fun UserProfileScreen(
     onFailure: () -> Unit
 ) {
     val userProfilUiState by viewModel.userProfileUiState.collectAsState()
+
+    LocalOnFabStateChange.current.onChange(
+        FabState(false)
+    )
 
     UserProfileScreen(
         uiState = userProfilUiState,

@@ -25,7 +25,7 @@ enum class UserTermsErrorCode() {
 @Stable
 sealed interface UserTermsUiState {
     object Loading: UserTermsUiState
-    data class Idle(val interests: List<Interest>, val registrationEnabled: Boolean): UserTermsUiState
+    data class Idle(val interests: List<Interest>): UserTermsUiState
     data class Error(val errorCode: UserTermsErrorCode): UserTermsUiState
     data class NewInterest(val interests: List<Interest>, val interestsToReg: List<Interest>): UserTermsUiState
 }
@@ -39,15 +39,18 @@ class UserTermsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UserTermsUiState>(UserTermsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    private val _registrationEnabled = MutableStateFlow(false)
+    val registrationEnabled = _registrationEnabled.asStateFlow()
+
     private val terms = MutableStateFlow<List<Interest>>(emptyList())
 
     init {
         viewModelScope.launch {
             loadTerms()
             _uiState.value = UserTermsUiState.Idle(
-                terms.value.filter { it.registered },
-                terms.value.any { !it.registered }
+                terms.value.filter { it.registered }
             )
+            _registrationEnabled.value = terms.value.any { !it.registered }
         }
     }
 
@@ -73,9 +76,9 @@ class UserTermsViewModel @Inject constructor(
 
     fun dismiss() {
         _uiState.value = UserTermsUiState.Idle(
-            terms.value.filter { it.registered },
-            terms.value.any { !it.registered }
+            terms.value.filter { it.registered }
         )
+        _registrationEnabled.value = terms.value.any { !it.registered }
     }
 
     fun register(id: Int) {
@@ -85,9 +88,9 @@ class UserTermsViewModel @Inject constructor(
                 is RepoRegisterTermResponse.Success -> {
                     loadTerms()
                     _uiState.value = UserTermsUiState.Idle(
-                        terms.value.filter { it.registered },
-                        terms.value.any { !it.registered }
+                        terms.value.filter { it.registered }
                     )
+                    _registrationEnabled.value = terms.value.any { !it.registered }
                 }
                 is RepoRegisterTermResponse.Error -> {
                     when (result.error) {
