@@ -22,7 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.FabState
+import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.compose.widget.user.Scanner
@@ -40,6 +42,10 @@ fun UserScanner(
 
     LocalOnFabStateChange.current.onChange(
         FabState(false)
+    )
+
+    LocalOnAppBarActionsChange.current.onChange(
+        AppBarActions(emptyList())
     )
 
     UserScanner(

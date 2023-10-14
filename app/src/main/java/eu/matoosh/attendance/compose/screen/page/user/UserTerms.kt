@@ -20,12 +20,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.AppBarAction
+import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.FabState
+import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.compose.widget.user.InterestDialog
@@ -57,6 +62,10 @@ fun UserTerms(
             iconDescriptionn = stringResource(id = R.string.content_description_register_term_fab),
             text = stringResource(id = R.string.action_register_term)
         )
+    )
+
+    LocalOnAppBarActionsChange.current.onChange(
+        AppBarActions(emptyList())
     )
 
     UserTerms(

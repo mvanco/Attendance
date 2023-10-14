@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.widget.user
+package eu.matoosh.attendance.compose.widget.global
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.AppBarActions
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,6 +24,7 @@ fun AttendanceAppBar(
     canNavigateUp: Boolean,
     navigateUp: () -> Unit,
     drawerState: DrawerState,
+    appBarActions: AppBarActions,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -59,6 +61,17 @@ fun AttendanceAppBar(
                         imageVector = Icons.Default.Menu,
                         contentDescription = stringResource(R.string.content_description_home_button),
                         tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        },
+        actions = {
+            appBarActions.actions.forEach { appBarAction ->
+                IconButton(onClick = appBarAction.onClickListener) {
+                    Icon(
+                        imageVector = appBarAction.icon,
+                        appBarAction.iconDescription,
+                        tint = MaterialTheme.colorScheme.surface
                     )
                 }
             }

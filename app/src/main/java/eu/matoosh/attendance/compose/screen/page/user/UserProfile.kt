@@ -14,11 +14,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.AppBarAction
+import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.FabState
+import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.viewmodels.LoginUiState
@@ -28,7 +33,7 @@ import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun UserProfileScreen(
+fun UserProfile(
     viewModel: UserProfileViewModel = hiltViewModel(),
     onFailure: () -> Unit
 ) {
@@ -38,14 +43,24 @@ fun UserProfileScreen(
         FabState(false)
     )
 
-    UserProfileScreen(
+    LocalOnAppBarActionsChange.current.onChange(
+        AppBarActions(listOf(
+            AppBarAction(
+                onClickListener = {},
+                icon = ImageVector.vectorResource(R.drawable.ic_world),
+                iconDescription = ""
+            )
+        ))
+    )
+
+    UserProfile(
         uiState = userProfilUiState,
         onFailure  = onFailure
     )
 }
 
 @Composable
-fun UserProfileScreen(
+fun UserProfile(
     uiState: UserProfileUiState,
     onFailure: () -> Unit
 ) {

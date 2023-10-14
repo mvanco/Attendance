@@ -38,7 +38,7 @@ import eu.matoosh.attendance.compose.screen.AdminConsoleScreen
 import eu.matoosh.attendance.compose.screen.USER_DESTINATIONS
 import eu.matoosh.attendance.compose.screen.UserConsoleScreen
 import eu.matoosh.attendance.compose.screen.findDest
-import eu.matoosh.attendance.compose.widget.user.AttendanceAppBar
+import eu.matoosh.attendance.compose.widget.global.AttendanceAppBar
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 
 data class FabState(
@@ -54,6 +54,22 @@ data class OnFabStateChange(
 )
 
 val LocalOnFabStateChange = compositionLocalOf { OnFabStateChange {} }
+
+data class AppBarAction(
+    val onClickListener: () -> Unit = {},
+    val icon: ImageVector = Icons.Filled.AddCircle,
+    val iconDescription: String = ""
+)
+
+data class AppBarActions(
+    val actions: List<AppBarAction> = emptyList()
+)
+
+data class OnAppBarActionsChange(
+    val onChange: (AppBarActions) -> Unit
+)
+
+val LocalOnAppBarActionsChange = compositionLocalOf { OnAppBarActionsChange {} }
 
 @Composable
 fun ConsoleLayout(
@@ -86,12 +102,14 @@ fun ConsoleLayout(
         val userNavController: NavHostController = rememberNavController()
         val dest = userNavController.currentBackStackEntryAsState()
         var fabState by remember { mutableStateOf(FabState()) }
+        var appBarActions by remember { mutableStateOf(AppBarActions()) }
         Scaffold(
             topBar = {
                 AttendanceAppBar(
                     title = stringResource(USER_DESTINATIONS.findDest(dest.value?.destination?.route)?.titleId ?: R.string.app_name),
                     canNavigateUp = userNavController.previousBackStackEntry != null,
                     navigateUp = { userNavController.navigateUp() },
+                    appBarActions = appBarActions,
                     drawerState = drawerState
                 )
 
@@ -122,7 +140,10 @@ fun ConsoleLayout(
                         viewModel = adminCreditsViewModel
                     )
                 } else {
-                    CompositionLocalProvider(LocalOnFabStateChange provides OnFabStateChange { fabState = it }) {
+                    CompositionLocalProvider(
+                        LocalOnFabStateChange provides OnFabStateChange { fabState = it },
+                        LocalOnAppBarActionsChange provides OnAppBarActionsChange { appBarActions = it }
+                    ) {
                         UserConsoleScreen(
                             userNavController
                         )
