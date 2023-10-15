@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_MS
 import eu.matoosh.attendance.data.Interest
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.ConsoleRepository
@@ -11,7 +12,10 @@ import eu.matoosh.attendance.repo.RepoConsoleErrorCode
 import eu.matoosh.attendance.repo.RepoInterestsResponse
 import eu.matoosh.attendance.repo.RepoRegisterTermResponse
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +41,11 @@ class UserTermsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<UserTermsUiState>(UserTermsUiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow().debounce(UI_DEBOUNCE_TIMEOUT_MS).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        UserTermsUiState.Loading
+    )
 
     private val _registrationEnabled = MutableStateFlow(false)
     val registrationEnabled = _registrationEnabled.asStateFlow()

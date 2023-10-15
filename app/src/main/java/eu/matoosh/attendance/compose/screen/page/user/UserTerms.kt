@@ -1,5 +1,8 @@
 package eu.matoosh.attendance.compose.screen.page.user
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,9 +21,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +36,7 @@ import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.compose.widget.user.InterestDialog
+import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.data.Interest
 import eu.matoosh.attendance.theme.AttendanceTheme
 import eu.matoosh.attendance.utils.frontendFormatter
@@ -52,21 +55,35 @@ fun UserTerms(
     val userTermsUiState by userTermsViewModel.uiState.collectAsState()
     val registrationEnabled by userTermsViewModel.registrationEnabled.collectAsState()
 
-    LocalOnFabStateChange.current.onChange(
-        FabState(
+    val onAppBarActionsChanged = LocalOnAppBarActionsChange.current.onChange
+    val ctx = LocalContext.current
+    LaunchedEffect(key1 = Unit) {
+        onAppBarActionsChanged(
+            AppBarActions(listOf(
+                AppBarAction(
+                    onClickListener = {
+                        val webpage: Uri = Uri.parse(WEB_APP_URL)
+                        val intent = Intent(Intent.ACTION_VIEW, webpage)
+                        ctx.startActivity(intent)
+                    },
+                    icon = R.drawable.ic_world
+                )
+            ))
+        )
+    }
+
+    val onFabStateChange = LocalOnFabStateChange.current.onChange
+    LaunchedEffect(key1 = registrationEnabled) {
+        onFabStateChange(FabState(
             isVisible = registrationEnabled,
             onClickListener = {
                 userTermsViewModel.selectTerm()
             },
-            icon = Icons.Filled.Create,
-            iconDescriptionn = stringResource(id = R.string.content_description_register_term_fab),
-            text = stringResource(id = R.string.action_register_term)
+            icon = R.drawable.ic_create,
+            iconDescriptionn = R.string.content_description_register_term_fab,
+            text = R.string.action_register_term)
         )
-    )
-
-    LocalOnAppBarActionsChange.current.onChange(
-        AppBarActions(emptyList())
-    )
+    }
 
     UserTerms(
         userTermsUiState = userTermsUiState,
@@ -128,8 +145,9 @@ fun UserTerms(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(colorResource(id = R.color.background_overlay)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -60,7 +60,7 @@ fun InterestDialog(
                 Text(
                     text = stringResource(id = R.string.label_register),
                     modifier = Modifier
-                        .padding(horizontal = 32.dp, vertical = 24.dp)
+                        .padding(horizontal = 20.dp, vertical = 16.dp)
                         .fillMaxWidth(),
                     style = MaterialTheme.typography.headlineSmall
                 )
@@ -89,20 +89,20 @@ fun InterestDialog(
                 )
                 Row(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(
                         onClick = { onDismissRequest() },
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(4.dp),
                     ) {
                         Text(stringResource(id = R.string.action_cancel))
                     }
-                    Spacer(modifier = Modifier.size(32.dp))
                     OutlinedButton(
                         onClick = { selectedTerm?.let { onTermSelect(it) } },
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(4.dp),
                     ) {
                         Text(stringResource(id = R.string.action_confirm))
                     }
@@ -125,13 +125,15 @@ fun InterestRow(
             .clickable {
                 onClick()
             }
-            .padding(4.dp)
+            .padding(horizontal = 4.dp)
     ) {
+        Spacer(modifier = Modifier.width(4.dp))
         RadioButton(
             selected = selected,
             onClick = onClick,
             modifier = Modifier.padding(0.dp)
         )
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium

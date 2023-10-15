@@ -1,5 +1,8 @@
 package eu.matoosh.attendance.compose.screen.page.user
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,18 +17,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.AppBarAction
 import eu.matoosh.attendance.compose.AppBarActions
-import eu.matoosh.attendance.compose.FabState
 import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
-import eu.matoosh.attendance.compose.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
 import eu.matoosh.attendance.viewmodels.console.UserProfileUiState
@@ -39,19 +42,22 @@ fun UserProfile(
 ) {
     val userProfilUiState by viewModel.userProfileUiState.collectAsState()
 
-    LocalOnFabStateChange.current.onChange(
-        FabState(false)
-    )
-
-    LocalOnAppBarActionsChange.current.onChange(
-        AppBarActions(listOf(
-            AppBarAction(
-                onClickListener = {},
-                icon = ImageVector.vectorResource(R.drawable.ic_world),
-                iconDescription = ""
-            )
-        ))
-    )
+    val onAppBarActionsChanged = LocalOnAppBarActionsChange.current.onChange
+    val ctx = LocalContext.current
+    LaunchedEffect(key1 = Unit) {
+        onAppBarActionsChanged(
+            AppBarActions(listOf(
+                AppBarAction(
+                    onClickListener = {
+                        val webpage: Uri = Uri.parse(WEB_APP_URL)
+                        val intent = Intent(Intent.ACTION_VIEW, webpage)
+                        ctx.startActivity(intent)
+                    },
+                    icon = R.drawable.ic_world
+                )
+            ))
+        )
+    }
 
     UserProfile(
         uiState = userProfilUiState,
@@ -82,7 +88,9 @@ fun UserProfile(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(colorResource(id = R.color.background_overlay)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

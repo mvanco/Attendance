@@ -13,7 +13,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.AppBarActions
 import kotlinx.coroutines.launch
@@ -69,8 +71,8 @@ fun AttendanceAppBar(
             appBarActions.actions.forEach { appBarAction ->
                 IconButton(onClick = appBarAction.onClickListener) {
                     Icon(
-                        imageVector = appBarAction.icon,
-                        appBarAction.iconDescription,
+                        imageVector = ImageVector.vectorResource(id = appBarAction.icon),
+                        contentDescription = stringResource(id = appBarAction.iconDescription),
                         tint = MaterialTheme.colorScheme.surface
                     )
                 }

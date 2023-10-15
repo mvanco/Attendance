@@ -1,13 +1,11 @@
 package eu.matoosh.attendance.compose.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -48,9 +46,7 @@ fun UserConsoleScreen(
 ) {
     val dest = userNavController.currentBackStackEntryAsState()
 
-    Column(
-        modifier = Modifier.background(colorResource(id = R.color.background_overlay))
-    ) {
+    Column {
         UserNavHost(
             userNavController = userNavController,
             modifier = Modifier.weight(1f)
@@ -58,11 +54,13 @@ fun UserConsoleScreen(
         UserNavigationBar(
             selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
             onUserDestinationSelected = { route ->
-                userNavController.navigate(route) {
-                    popUpTo(route) {
-                        this.inclusive = true
+                if (route != dest.value?.destination?.route) {
+                    userNavController.navigate(route) {
+                        popUpTo(route) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
                     }
-                    launchSingleTop = true
                 }
             }
         )
