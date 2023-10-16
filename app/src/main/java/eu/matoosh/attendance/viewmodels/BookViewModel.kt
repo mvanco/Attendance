@@ -52,15 +52,13 @@ class BookViewModel @Inject constructor(
         get() = sessionManager.token
 
     private var selectedUser: Int? = null
-    private var firstRun = true
 
     init {
         bindUsers()
         viewModelScope.launch {
             _users.collect { userList ->
-                if (_bookUiState.value is BookUiState.Idle || firstRun) {
+                if (userList.isNotEmpty() && _bookUiState.value is BookUiState.Idle) {
                     _bookUiState.value = BookUiState.Idle(userList)
-                    firstRun = false
                 }
             }
         }

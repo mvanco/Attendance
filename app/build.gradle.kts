@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "eu.matoosh.attendance"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "eu.matoosh.attendance"

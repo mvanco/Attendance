@@ -1,6 +1,9 @@
 package eu.matoosh.attendance.compose.navigation
 
 import android.os.Bundle
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -11,6 +14,12 @@ import eu.matoosh.attendance.compose.ConsoleLayout
 
 const val ConsoleRoute = "console"
 private const val isAdminArg = "isAdmin"
+
+data class MainNavigationDestination(
+    val owner: ViewModelStoreOwner? = null
+)
+
+val LocalMainNavigationDestination = compositionLocalOf { MainNavigationDestination() }
 
 fun NavGraphBuilder.consoleScreen(
     onNavigateAdminToLogin: () -> Unit,
@@ -26,11 +35,15 @@ fun NavGraphBuilder.consoleScreen(
         )
     ) { dest ->
         val args = ConsoleArgs(dest.arguments)
-        ConsoleLayout(
-            isAdmin = args.isAdmin,
-            onNavigateAdminToLogin = onNavigateAdminToLogin,
-            onNavigateUserToLogin = onNavigateUserToLogin
-        )
+        CompositionLocalProvider(
+            LocalMainNavigationDestination provides MainNavigationDestination(dest)
+        ) {
+            ConsoleLayout(
+                isAdmin = args.isAdmin,
+                onNavigateAdminToLogin = onNavigateAdminToLogin,
+                onNavigateUserToLogin = onNavigateUserToLogin
+            )
+        }
     }
 }
 

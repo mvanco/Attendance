@@ -29,9 +29,10 @@ data class UserDestination(
 @Composable
 fun UserNavigationBar(
     selectedRoute: String,
-    onUserDestinationSelected: (String) -> Unit
+    onUserDestinationSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    NavigationBar(modifier = Modifier.fillMaxWidth()) {
+    NavigationBar(modifier = modifier.fillMaxWidth()) {
         USER_DESTINATIONS.forEach { destination ->
             NavigationBarItem(
                 selected = selectedRoute == destination.route,

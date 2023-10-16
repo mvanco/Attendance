@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
 import eu.matoosh.attendance.compose.widget.sheet.UserForCheckin
 import eu.matoosh.attendance.data.User
 
@@ -21,7 +21,7 @@ fun SheetForm(
     onUserClick: (User) -> Unit
 ) {
     if (users.isEmpty()) {
-        Message(text = stringResource(id = R.string.message_sheet_success))
+        FullScreenMessage(text = stringResource(id = R.string.message_sheet_success))
     }
     else {
         val addManually = User(-1, stringResource(id = R.string.action_add_manually), "", 0)

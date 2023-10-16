@@ -1,11 +1,19 @@
 package eu.matoosh.attendance.compose.screen
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -46,22 +54,65 @@ fun UserConsoleScreen(
 ) {
     val dest = userNavController.currentBackStackEntryAsState()
 
-    Column {
+    ConstraintLayout {
+        val (background, overlay, navHost, navBar) = createRefs()
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = stringResource(id = R.string.content_description_background_image),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.constrainAs(background) {
+            }
+        )
+        Box(
+            modifier = Modifier
+                .constrainAs(overlay) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(navBar.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                }
+                .background(colorResource(id = R.color.background_overlay))
+        )
+
+        UserNavigationBar(
+            modifier = Modifier.constrainAs(navBar) {
+                width = Dimension.matchParent
+                linkTo(parent.start, parent.end)
+                bottom.linkTo(parent.bottom)
+            },
+            selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
+            onUserDestinationSelected = { newRoute ->
+                val oldRoute = dest.value?.destination?.route
+                if (newRoute != oldRoute) {
+                    if (oldRoute == ScannerRoute) {
+                        userNavController.navigate(newRoute) {
+                            popUpTo(oldRoute) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                    else {
+                        userNavController.navigate(newRoute) {
+                            popUpTo(newRoute) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+
+                }
+            }
+        )
         UserNavHost(
             userNavController = userNavController,
-            modifier = Modifier.weight(1f)
-        )
-        UserNavigationBar(
-            selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
-            onUserDestinationSelected = { route ->
-                if (route != dest.value?.destination?.route) {
-                    userNavController.navigate(route) {
-                        popUpTo(route) {
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                    }
-                }
+            modifier = Modifier.constrainAs(navHost) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                linkTo(parent.start, parent.end)
+                linkTo(parent.top, navBar.top)
             }
         )
     }

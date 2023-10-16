@@ -1,6 +1,7 @@
 package eu.matoosh.attendance.repo
 
 import eu.matoosh.attendance.api.IceAppService
+import eu.matoosh.attendance.config.ATTENDANCE_SHEET_UPDATE_INTERVAL
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -87,7 +88,7 @@ class BookRepository @Inject constructor(
                 emit(error)
                 shouldFinish = true
             }
-            delay(2000)
+            delay(ATTENDANCE_SHEET_UPDATE_INTERVAL)
         }
     }.flowOn(defaultDispatcher)
 

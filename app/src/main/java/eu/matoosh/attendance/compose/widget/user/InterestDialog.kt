@@ -79,7 +79,8 @@ fun InterestDialog(
                             onClick = {
                                 selectedTerm = interest.rentalId
                             },
-                            text = interest.start.toFormattedString(frontendFormatter),
+                            text = "${interest.start.toFormattedString(frontendFormatter)}" +
+                                    ", ${interest.price}Kč / ${interest.duration}m",
                             modifier = Modifier.fillMaxWidth()
                         )
                     }

@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
 import eu.matoosh.attendance.compose.widget.user.Scanner
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.UserScannerUiState
@@ -84,7 +84,7 @@ fun UserScanner(
 
         }
         is UserScannerUiState.Success -> {
-            Message(text = stringResource(id = R.string.message_user_added_credit))
+            FullScreenMessage(text = stringResource(id = R.string.message_user_added_credit))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess()

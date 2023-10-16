@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
+import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
 import eu.matoosh.attendance.compose.widget.login.LoginForm
 import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.viewmodels.LoginErrorCode
@@ -60,13 +61,13 @@ fun LoginScreen(
         is LoginUiState.Error -> {
             when((uiState as LoginUiState.Error).errorCode) {
                 LoginErrorCode.INCORRECT_USERNAME -> {
-                    Message(stringResource(R.string.message_logging_error_incorrect_username))
+                    FullScreenMessage(stringResource(R.string.message_logging_error_incorrect_username))
                 }
                 LoginErrorCode.INCORRECT_PASSWORD -> {
-                    Message(stringResource(R.string.message_logging_error_incorrect_password))
+                    FullScreenMessage(stringResource(R.string.message_logging_error_incorrect_password))
                 }
                 LoginErrorCode.UNKNOWN_ERROR -> {
-                    Message(stringResource(R.string.message_logging_error))
+                    FullScreenMessage(stringResource(R.string.message_logging_error))
                 }
             }
             LaunchedEffect(Unit) {
@@ -84,10 +85,10 @@ fun LoginScreen(
             )
         }
         is LoginUiState.Loading -> {
-            Message(stringResource(id = R.string.message_logging_loading))
+            FullScreenMessage(stringResource(id = R.string.message_logging_loading))
         }
         is LoginUiState.Success -> {
-            Message(stringResource(R.string.message_logging_success, (uiState as LoginUiState.Success).username.capitalize()))
+            FullScreenMessage(stringResource(R.string.message_logging_success, (uiState as LoginUiState.Success).username.capitalize()))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess((uiState as LoginUiState.Success).username)

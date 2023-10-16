@@ -34,7 +34,9 @@ import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.FabState
 import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
+import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
 import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.screen.page.PlainMessage
 import eu.matoosh.attendance.compose.widget.user.InterestDialog
 import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.data.Interest
@@ -60,6 +62,10 @@ fun UserTerms(
     LaunchedEffect(key1 = Unit) {
         onAppBarActionsChanged(
             AppBarActions(listOf(
+                AppBarAction(
+                    onClickListener = { userTermsViewModel.loadTerms(useLoader = true) },
+                    icon = R.drawable.ic_refresh
+                ),
                 AppBarAction(
                     onClickListener = {
                         val webpage: Uri = Uri.parse(WEB_APP_URL)
@@ -121,19 +127,19 @@ fun UserTerms(
         is UserTermsUiState.Error -> {
             when (userTermsUiState.errorCode) {
                 UserTermsErrorCode.INSUFFICIENT_CREDIT -> {
-                    Message(stringResource(id = R.string.message_user_error_insufficient_credit))
+                    PlainMessage(stringResource(id = R.string.message_user_error_insufficient_credit))
                     LaunchedEffect(Unit) {
                         delay(LoginUiState.FAILURE_STATE_DURATION)
                         onError()
                     }
                 }
                 UserTermsErrorCode.UNKNOWN_ERROR, UserTermsErrorCode.INVALID_TOKEN  -> {
-                    Message(stringResource(id = R.string.message_user_error))
+                    PlainMessage(stringResource(id = R.string.message_user_error))
                 }
             }
         }
         is UserTermsUiState.Loading -> {
-            Message(stringResource(id = R.string.message_user_loading))
+            PlainMessage(stringResource(id = R.string.message_user_loading))
         }
     }
 }
@@ -145,9 +151,7 @@ fun UserTerms(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .background(colorResource(id = R.color.background_overlay)),
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

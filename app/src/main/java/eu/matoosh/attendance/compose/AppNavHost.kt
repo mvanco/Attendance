@@ -1,5 +1,10 @@
 package eu.matoosh.attendance.compose
 
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +42,30 @@ fun AppNavHost(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        NavHost(navController = navController, startDestination = startDestination) {
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(150, delayMillis = 150, easing = EaseOut)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(150, easing = EaseIn)
+                )
+            },
+            popEnterTransition = {
+                fadeIn(
+                    animationSpec = tween(150, delayMillis = 150, easing = EaseIn)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(150, easing = EaseOut)
+                )
+            }
+        ) {
             loginScreen(
                 onNavigateToConsoleScreen = {
                     navController.navigateToConsole {

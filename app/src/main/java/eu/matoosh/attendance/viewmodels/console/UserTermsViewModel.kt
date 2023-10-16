@@ -4,18 +4,16 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_MS
+import eu.matoosh.attendance.config.FORCED_LOADING_TIMOUT_MS
 import eu.matoosh.attendance.data.Interest
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.ConsoleRepository
 import eu.matoosh.attendance.repo.RepoConsoleErrorCode
 import eu.matoosh.attendance.repo.RepoInterestsResponse
 import eu.matoosh.attendance.repo.RepoRegisterTermResponse
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,11 +39,8 @@ class UserTermsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<UserTermsUiState>(UserTermsUiState.Loading)
-    val uiState = _uiState.asStateFlow().debounce(UI_DEBOUNCE_TIMEOUT_MS).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        UserTermsUiState.Loading
-    )
+    private val _uiStateImmediate = MutableStateFlow<UserTermsUiState>(UserTermsUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _registrationEnabled = MutableStateFlow(false)
     val registrationEnabled = _registrationEnabled.asStateFlow()
@@ -53,8 +48,16 @@ class UserTermsViewModel @Inject constructor(
     private val terms = MutableStateFlow<List<Interest>>(emptyList())
 
     init {
+        loadTerms()
+    }
+
+    fun loadTerms(useLoader: Boolean = false) {
         viewModelScope.launch {
-            loadTerms()
+            if (useLoader) {
+                _uiState.value = UserTermsUiState.Loading
+                delay(FORCED_LOADING_TIMOUT_MS)
+            }
+            _loadTerms()
             _uiState.value = UserTermsUiState.Idle(
                 terms.value.filter { it.registered }
             )
@@ -62,7 +65,7 @@ class UserTermsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadTerms() {
+    private suspend fun _loadTerms() {
         val result = consoleRepo.interests(sessionManager.token!!)
         when (result) {
             is RepoInterestsResponse.Success -> {
@@ -94,7 +97,7 @@ class UserTermsViewModel @Inject constructor(
             val result = consoleRepo.registeTerm(sessionManager.token!!, id)
             when (result) {
                 is RepoRegisterTermResponse.Success -> {
-                    loadTerms()
+                    _loadTerms()
                     _uiState.value = UserTermsUiState.Idle(
                         terms.value.filter { it.registered }
                     )

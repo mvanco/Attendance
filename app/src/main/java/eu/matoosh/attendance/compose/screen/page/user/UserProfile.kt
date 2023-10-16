@@ -2,7 +2,6 @@ package eu.matoosh.attendance.compose.screen.page.user
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,9 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,7 +24,7 @@ import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.AppBarAction
 import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
-import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.screen.page.PlainMessage
 import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
@@ -47,6 +44,10 @@ fun UserProfile(
     LaunchedEffect(key1 = Unit) {
         onAppBarActionsChanged(
             AppBarActions(listOf(
+                AppBarAction(
+                    onClickListener = { viewModel.loadProfile(useLoader = true) },
+                    icon = R.drawable.ic_refresh
+                ),
                 AppBarAction(
                     onClickListener = {
                         val webpage: Uri = Uri.parse(WEB_APP_URL)
@@ -74,7 +75,7 @@ fun UserProfile(
         is UserProfileUiState.Error -> {
             when (uiState.errorCode) {
                 ProfileErrorCode.UNKNOWN_ERROR -> {
-                    Message(stringResource(R.string.message_user_profile_unknown))
+                    PlainMessage(stringResource(R.string.message_user_profile_unknown))
                 }
             }
             LaunchedEffect(Unit) {
@@ -88,9 +89,7 @@ fun UserProfile(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(colorResource(id = R.color.background_overlay)),
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -113,7 +112,7 @@ fun UserProfile(
         }
 
         is UserProfileUiState.Loading -> {
-            Message(stringResource(id = R.string.message_user_loading))
+            PlainMessage(stringResource(id = R.string.message_user_loading))
         }
     }
 }

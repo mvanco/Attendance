@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_MS
+import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_SHORT_MS
 import eu.matoosh.attendance.data.SessionManager
 import eu.matoosh.attendance.repo.CreditRepository
 import kotlinx.coroutines.FlowPreview
@@ -29,7 +29,7 @@ class UserScannerViewModel @Inject constructor(
 ) : ViewModel() {
     private val _userScannerUiState =
         MutableStateFlow<UserScannerUiState>(UserScannerUiState.Scanner)
-    val userScannerUiState = _userScannerUiState.debounce(UI_DEBOUNCE_TIMEOUT_MS).stateIn(
+    val userScannerUiState = _userScannerUiState.debounce(UI_DEBOUNCE_TIMEOUT_SHORT_MS).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),
         UserScannerUiState.Scanner

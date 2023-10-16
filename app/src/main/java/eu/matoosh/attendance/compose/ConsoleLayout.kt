@@ -43,7 +43,7 @@ import eu.matoosh.attendance.compose.screen.UserConsoleScreen
 import eu.matoosh.attendance.compose.screen.findDest
 import eu.matoosh.attendance.compose.widget.global.AttendanceAppBar
 import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_LONG_MS
-import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_MS
+import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_SHORT_MS
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import kotlinx.coroutines.flow.debounce
 
@@ -113,7 +113,7 @@ fun ConsoleLayout(
         var appBarActionsDebounced by remember { mutableStateOf(AppBarActions()) }
 
         LaunchedEffect(Unit) {
-            snapshotFlow { fabState }.debounce(UI_DEBOUNCE_TIMEOUT_MS).collect {
+            snapshotFlow { fabState }.debounce(UI_DEBOUNCE_TIMEOUT_SHORT_MS).collect {
                 fabStateDebounced = it
             }
         }
@@ -156,7 +156,6 @@ fun ConsoleLayout(
                             Text(text = stringResource(fabStateDebounced.text))
                         },
                         modifier = Modifier.offset(
-                            x = dimensionResource(id = R.dimen.fab_end_margin),
                             y = dimensionResource(id = R.dimen.fab_bottom_margin)
                         )
                     )
