@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import eu.matoosh.attendance.compose.navigation.user.ProfileRoute
+import eu.matoosh.attendance.compose.navigation.user.ScannerRoute
+import eu.matoosh.attendance.compose.navigation.user.navigateToProfile
 import eu.matoosh.attendance.compose.navigation.user.profilePage
 import eu.matoosh.attendance.compose.navigation.user.scannerPage
 import eu.matoosh.attendance.compose.navigation.user.termsPage
@@ -56,7 +58,12 @@ fun UserNavHost(
         termsPage()
         scannerPage(
             onNavigateToProfile = {
-                userNavController.popBackStack()
+                userNavController.navigateToProfile(true) {
+                    popUpTo(ScannerRoute) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
             }
         )
     }

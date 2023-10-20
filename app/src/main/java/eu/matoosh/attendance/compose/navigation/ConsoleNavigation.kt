@@ -13,7 +13,7 @@ import androidx.navigation.navArgument
 import eu.matoosh.attendance.compose.ConsoleLayout
 
 const val ConsoleRoute = "console"
-private const val isAdminArg = "isAdmin"
+private const val isAdminArg = "is_admin"
 
 data class MainNavigationDestination(
     val owner: ViewModelStoreOwner? = null
@@ -48,8 +48,7 @@ fun NavGraphBuilder.consoleScreen(
 }
 
 fun NavController.navigateToConsole(isAdmin: Boolean = false, builder: NavOptionsBuilder.() -> Unit = {}) {
-    val arg = if (isAdmin) "true" else "false"
-    this.navigate("$ConsoleRoute?$isAdminArg=$arg", builder)
+    this.navigate("$ConsoleRoute?$isAdminArg=$isAdmin", builder)
 }
 
 internal class ConsoleArgs(val isAdmin: Boolean) {

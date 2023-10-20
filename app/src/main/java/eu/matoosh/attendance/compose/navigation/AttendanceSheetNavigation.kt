@@ -9,7 +9,7 @@ import eu.matoosh.attendance.compose.screen.SheetScreen
 const val AttendanceSheetRoute = "attendance_sheet"
 
 fun NavGraphBuilder.attendanceSheetScreen() {
-    composable("attendance_sheet") {
+    composable(AttendanceSheetRoute) {
         SheetScreen()
     }
 }

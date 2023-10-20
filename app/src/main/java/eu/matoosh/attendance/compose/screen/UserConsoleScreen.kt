@@ -84,11 +84,11 @@ fun UserConsoleScreen(
             },
             selectedRoute = dest.value?.destination?.route ?: ProfileRoute,
             onUserDestinationSelected = { newRoute ->
-                val oldRoute = dest.value?.destination?.route
+                val oldRoute = dest.value?.destination?.route?.takeWhile { it != '?' }
                 if (newRoute != oldRoute) {
                     if (oldRoute == ScannerRoute) {
                         userNavController.navigate(newRoute) {
-                            popUpTo(oldRoute) {
+                            popUpTo(ScannerRoute) {
                                 inclusive = true
                             }
                             launchSingleTop = true
@@ -102,7 +102,6 @@ fun UserConsoleScreen(
                             launchSingleTop = true
                         }
                     }
-
                 }
             }
         )

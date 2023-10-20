@@ -39,13 +39,9 @@ fun NavGraphBuilder.loginScreen(
     }
 
     composable(
-        "login?username={username}&password={password}",
+        "login?$usernameArg={$usernameArg}",
         listOf(
-            navArgument("username") {
-                type = NavType.StringType
-                defaultValue = ""
-            },
-            navArgument("password") {
+            navArgument(usernameArg) {
                 type = NavType.StringType
                 defaultValue = ""
             }

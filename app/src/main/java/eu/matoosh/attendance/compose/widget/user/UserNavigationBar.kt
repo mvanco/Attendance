@@ -35,7 +35,7 @@ fun UserNavigationBar(
     NavigationBar(modifier = modifier.fillMaxWidth()) {
         USER_DESTINATIONS.forEach { destination ->
             NavigationBarItem(
-                selected = selectedRoute == destination.route,
+                selected = selectedRoute.takeWhile { it != '?' } == destination.route,
                 onClick = {
                     onUserDestinationSelected(destination.route)
                 },
