@@ -35,6 +35,7 @@ fun NavGraphBuilder.profilePage() {
         LaunchedEffect(scanningSuccessful.value) {
             if (scanningSuccessful.value == true) {
                 viewModel.loadProfile(true)
+                savedStateHandle[SCANNING_SUCCESSFUL] = false
             }
         }
         UserProfile(
