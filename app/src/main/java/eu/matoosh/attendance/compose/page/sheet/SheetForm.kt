@@ -15,7 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.widget.global.Message
-import eu.matoosh.attendance.compose.widget.sheet.UserForCheckin
+import eu.matoosh.attendance.compose.widget.global.UserForCheckin
 import eu.matoosh.attendance.data.User
 
 @Composable

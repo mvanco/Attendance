@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.widget.login
+package eu.matoosh.attendance.compose.widget.global
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

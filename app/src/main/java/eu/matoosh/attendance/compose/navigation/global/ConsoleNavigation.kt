@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.navigation
+package eu.matoosh.attendance.compose.navigation.global
 
 import android.os.Bundle
 import androidx.compose.runtime.CompositionLocalProvider
@@ -10,7 +10,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import eu.matoosh.attendance.compose.ConsoleLayout
+import eu.matoosh.attendance.compose.widget.global.ConsoleLayout
 
 const val ConsoleRoute = "console"
 private const val isAdminArg = "is_admin"

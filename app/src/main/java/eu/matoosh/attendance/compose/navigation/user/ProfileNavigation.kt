@@ -10,7 +10,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import eu.matoosh.attendance.compose.navigation.LocalMainNavigationDestination
+import eu.matoosh.attendance.compose.navigation.global.LocalMainNavigationDestination
 import eu.matoosh.attendance.compose.page.user.UserProfile
 import eu.matoosh.attendance.viewmodels.console.UserProfileViewModel
 

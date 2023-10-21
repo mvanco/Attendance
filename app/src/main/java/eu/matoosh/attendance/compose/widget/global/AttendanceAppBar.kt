@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.AppBarActions
 import kotlinx.coroutines.launch
 
 @Composable

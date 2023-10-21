@@ -21,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.AppBarAction
-import eu.matoosh.attendance.compose.AppBarActions
-import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
+import eu.matoosh.attendance.compose.widget.global.AppBarAction
+import eu.matoosh.attendance.compose.widget.global.AppBarActions
+import eu.matoosh.attendance.compose.widget.global.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.widget.global.Message
 import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.viewmodels.LoginUiState

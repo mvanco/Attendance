@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.navigation
+package eu.matoosh.attendance.compose.navigation.global
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

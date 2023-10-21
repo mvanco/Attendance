@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.navigation.graph
 
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
@@ -19,16 +19,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.navigation.LoginRoute
-import eu.matoosh.attendance.compose.navigation.ModeSelectionRoute
-import eu.matoosh.attendance.compose.navigation.sheetScreen
-import eu.matoosh.attendance.compose.navigation.consoleScreen
-import eu.matoosh.attendance.compose.navigation.loginScreen
-import eu.matoosh.attendance.compose.navigation.selectionScreen
-import eu.matoosh.attendance.compose.navigation.navigateToSheet
-import eu.matoosh.attendance.compose.navigation.navigateToConsole
-import eu.matoosh.attendance.compose.navigation.navigateToLogin
-import eu.matoosh.attendance.compose.navigation.navigateToSelection
+import eu.matoosh.attendance.compose.navigation.global.LoginRoute
+import eu.matoosh.attendance.compose.navigation.global.ModeSelectionRoute
+import eu.matoosh.attendance.compose.navigation.global.sheetScreen
+import eu.matoosh.attendance.compose.navigation.global.consoleScreen
+import eu.matoosh.attendance.compose.navigation.global.loginScreen
+import eu.matoosh.attendance.compose.navigation.global.selectionScreen
+import eu.matoosh.attendance.compose.navigation.global.navigateToSheet
+import eu.matoosh.attendance.compose.navigation.global.navigateToConsole
+import eu.matoosh.attendance.compose.navigation.global.navigateToLogin
+import eu.matoosh.attendance.compose.navigation.global.navigateToSelection
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable

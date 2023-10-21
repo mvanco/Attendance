@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.navigation
+package eu.matoosh.attendance.compose.navigation.global
 
 import android.os.Bundle
 import androidx.compose.runtime.LaunchedEffect

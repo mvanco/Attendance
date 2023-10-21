@@ -18,7 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.UserNavHost
+import eu.matoosh.attendance.compose.navigation.graph.UserNavHost
 import eu.matoosh.attendance.compose.navigation.user.ProfileRoute
 import eu.matoosh.attendance.compose.navigation.user.ScannerRoute
 import eu.matoosh.attendance.compose.navigation.user.TermsRoute

@@ -26,11 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.AppBarAction
-import eu.matoosh.attendance.compose.AppBarActions
-import eu.matoosh.attendance.compose.FabState
-import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
-import eu.matoosh.attendance.compose.LocalOnFabStateChange
+import eu.matoosh.attendance.compose.widget.global.AppBarAction
+import eu.matoosh.attendance.compose.widget.global.AppBarActions
+import eu.matoosh.attendance.compose.widget.global.FabState
+import eu.matoosh.attendance.compose.widget.global.LocalOnAppBarActionsChange
+import eu.matoosh.attendance.compose.widget.global.LocalOnFabStateChange
 import eu.matoosh.attendance.compose.widget.global.Message
 import eu.matoosh.attendance.compose.widget.user.InterestDialog
 import eu.matoosh.attendance.config.WEB_APP_URL
@@ -75,7 +75,8 @@ fun UserTerms(
 
     val onFabStateChange = LocalOnFabStateChange.current.onChange
     LaunchedEffect(key1 = registrationEnabled) {
-        onFabStateChange(FabState(
+        onFabStateChange(
+            FabState(
             isVisible = registrationEnabled,
             onClickListener = {
                 userTermsViewModel.selectTerm()

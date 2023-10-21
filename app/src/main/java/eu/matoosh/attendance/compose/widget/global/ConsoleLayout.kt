@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose
+package eu.matoosh.attendance.compose.widget.global
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -41,7 +41,6 @@ import eu.matoosh.attendance.compose.screen.AdminConsoleScreen
 import eu.matoosh.attendance.compose.screen.USER_DESTINATIONS
 import eu.matoosh.attendance.compose.screen.UserConsoleScreen
 import eu.matoosh.attendance.compose.screen.findDest
-import eu.matoosh.attendance.compose.widget.global.AttendanceAppBar
 import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_LONG_MS
 import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_SHORT_MS
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel

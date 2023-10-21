@@ -10,7 +10,7 @@ import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
 import eu.matoosh.attendance.compose.page.sheet.Confirmation
 import eu.matoosh.attendance.compose.page.sheet.SheetForm
 import eu.matoosh.attendance.compose.page.sheet.Success
-import eu.matoosh.attendance.compose.widget.login.LoginForm
+import eu.matoosh.attendance.compose.widget.global.LoginForm
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode
 import eu.matoosh.attendance.viewmodels.BookUiState
