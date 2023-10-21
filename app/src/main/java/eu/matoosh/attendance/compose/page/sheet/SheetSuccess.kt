@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.screen.page.sheet
+package eu.matoosh.attendance.compose.page.sheet
 
 import android.media.MediaPlayer
 import androidx.compose.foundation.background

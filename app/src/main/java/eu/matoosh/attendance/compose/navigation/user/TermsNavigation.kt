@@ -4,7 +4,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import eu.matoosh.attendance.compose.navigation.LocalMainNavigationDestination
-import eu.matoosh.attendance.compose.screen.page.user.UserTerms
+import eu.matoosh.attendance.compose.page.user.UserTerms
 
 const val TermsRoute = "terms"
 

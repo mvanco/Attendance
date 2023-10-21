@@ -13,7 +13,7 @@ import eu.matoosh.attendance.compose.screen.ModeSelectionScreen
 
 const val ModeSelectionRoute = "mode_selection"
 
-fun NavGraphBuilder.modeSelectionScreen(
+fun NavGraphBuilder.selectionScreen(
     onNavigateToAttendanceSheet: () -> Unit,
     onNavigateToAdminConsole: () -> Unit
 ) {
@@ -36,6 +36,6 @@ fun NavGraphBuilder.modeSelectionScreen(
     }
 }
 
-fun NavController.navigateToModeSelection(builder: NavOptionsBuilder.() -> Unit = {}) {
+fun NavController.navigateToSelection(builder: NavOptionsBuilder.() -> Unit = {}) {
     navigate(ModeSelectionRoute, builder)
 }

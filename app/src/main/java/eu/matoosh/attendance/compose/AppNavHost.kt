@@ -21,14 +21,14 @@ import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.navigation.LoginRoute
 import eu.matoosh.attendance.compose.navigation.ModeSelectionRoute
-import eu.matoosh.attendance.compose.navigation.attendanceSheetScreen
+import eu.matoosh.attendance.compose.navigation.sheetScreen
 import eu.matoosh.attendance.compose.navigation.consoleScreen
 import eu.matoosh.attendance.compose.navigation.loginScreen
-import eu.matoosh.attendance.compose.navigation.modeSelectionScreen
-import eu.matoosh.attendance.compose.navigation.navigateToAttendanceSheet
+import eu.matoosh.attendance.compose.navigation.selectionScreen
+import eu.matoosh.attendance.compose.navigation.navigateToSheet
 import eu.matoosh.attendance.compose.navigation.navigateToConsole
 import eu.matoosh.attendance.compose.navigation.navigateToLogin
-import eu.matoosh.attendance.compose.navigation.navigateToModeSelection
+import eu.matoosh.attendance.compose.navigation.navigateToSelection
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable
@@ -81,12 +81,12 @@ fun AppNavHost(
                     navController.popBackStack()
                     navController.popBackStack()
                     navController.navigateToLogin()
-                    navController.navigateToModeSelection()
+                    navController.navigateToSelection()
                 }
             )
-            modeSelectionScreen(
+            selectionScreen(
                 onNavigateToAttendanceSheet = {
-                    navController.navigateToAttendanceSheet() {
+                    navController.navigateToSheet() {
                         popUpTo(ModeSelectionRoute) {
                             inclusive = true
                         }
@@ -96,7 +96,7 @@ fun AppNavHost(
                     navController.navigateToConsole(true)
                 }
             )
-            attendanceSheetScreen()
+            sheetScreen()
             consoleScreen(
                 onNavigateAdminToLogin = {
                     navController.navigateToLogin {

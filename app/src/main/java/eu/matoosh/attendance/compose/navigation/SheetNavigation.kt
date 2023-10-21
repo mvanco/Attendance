@@ -6,14 +6,14 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import eu.matoosh.attendance.compose.screen.SheetScreen
 
-const val AttendanceSheetRoute = "attendance_sheet"
+const val SheetRoute = "attendance_sheet"
 
-fun NavGraphBuilder.attendanceSheetScreen() {
-    composable(AttendanceSheetRoute) {
+fun NavGraphBuilder.sheetScreen() {
+    composable(SheetRoute) {
         SheetScreen()
     }
 }
 
-fun NavController.navigateToAttendanceSheet(builder: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(AttendanceSheetRoute, builder)
+fun NavController.navigateToSheet(builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(SheetRoute, builder)
 }

@@ -6,10 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
-import eu.matoosh.attendance.compose.screen.page.sheet.Confirmation
-import eu.matoosh.attendance.compose.screen.page.sheet.SheetForm
-import eu.matoosh.attendance.compose.screen.page.sheet.Success
+import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
+import eu.matoosh.attendance.compose.page.sheet.Confirmation
+import eu.matoosh.attendance.compose.page.sheet.SheetForm
+import eu.matoosh.attendance.compose.page.sheet.Success
 import eu.matoosh.attendance.compose.widget.login.LoginForm
 import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.viewmodels.BookErrorCode

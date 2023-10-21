@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.screen.page
+package eu.matoosh.attendance.compose.widget.global
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

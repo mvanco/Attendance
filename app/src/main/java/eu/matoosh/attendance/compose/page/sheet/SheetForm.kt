@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.compose.screen.page.sheet
+package eu.matoosh.attendance.compose.page.sheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.widget.global.Message
 import eu.matoosh.attendance.compose.widget.sheet.UserForCheckin
 import eu.matoosh.attendance.data.User
 
