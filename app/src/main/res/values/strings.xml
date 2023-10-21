@@ -48,4 +48,6 @@
     <string name="content_description_background_image">Pozadí aplikace</string>
     <string name="content_description_home_button">Tlačítko na otevření bočného menu</string>
     <string name="content_description_back_button">Tlačítko na vrácení na předchozí obrazovku</string>
+
+    <string translatable="false" name="preferences_file_key">eu.matoosh.attendance.PREFERENCES</string>
 </resources>

@@ -50,7 +50,13 @@ class LoginViewModel @Inject constructor(
     val loginUiState = _loginUiState.asStateFlow()
 
     init {
+        sessionManager.restoreSession()
         username.value = sessionManager.username ?: ""
+        if (sessionManager.token != null) {
+            if (!sessionManager.isAdmin()) {
+                _loginUiState.value = LoginUiState.Success(sessionManager.username!!)
+            }
+        }
     }
 
     fun initialize(newUsername: String, newPassword: String) {
@@ -70,6 +76,7 @@ class LoginViewModel @Inject constructor(
                         sessionManager.username = username
                         sessionManager.token = response.token
                         sessionManager.validity = response.validity
+                        sessionManager.saveSession()
                         _loginUiState.value = LoginUiState.Success(username)
                     }
                     is RepoLoginResponse.Error -> {

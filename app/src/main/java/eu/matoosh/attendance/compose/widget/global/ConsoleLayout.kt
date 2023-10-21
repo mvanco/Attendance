@@ -43,6 +43,7 @@ import eu.matoosh.attendance.compose.screen.UserConsoleScreen
 import eu.matoosh.attendance.compose.screen.findDest
 import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_LONG_MS
 import eu.matoosh.attendance.config.UI_DEBOUNCE_TIMEOUT_SHORT_MS
+import eu.matoosh.attendance.viewmodels.ConsoleViewModel
 import eu.matoosh.attendance.viewmodels.console.AdminCreditsViewModel
 import kotlinx.coroutines.flow.debounce
 
@@ -82,6 +83,7 @@ fun ConsoleLayout(
     onNavigateAdminToLogin: () -> Unit,
     onNavigateUserToLogin: () -> Unit
 ) {
+    val consoleViewModel = hiltViewModel<ConsoleViewModel>()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     ModalNavigationDrawer(
         drawerContent = {
@@ -96,6 +98,7 @@ fun ConsoleLayout(
                             onNavigateAdminToLogin()
                         }
                         else {
+                            consoleViewModel.logout()
                             onNavigateUserToLogin()
                         }
                     }
