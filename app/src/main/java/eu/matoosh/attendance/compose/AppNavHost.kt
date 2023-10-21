@@ -6,11 +6,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +47,7 @@ fun AppNavHost(
         NavHost(
             navController = navController,
             startDestination = startDestination,
+            modifier = Modifier.background(colorResource(id = R.color.background_overlay)),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(150, delayMillis = 150, easing = EaseOut)

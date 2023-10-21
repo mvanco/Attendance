@@ -1,25 +1,16 @@
 package eu.matoosh.attendance.compose.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
-import eu.matoosh.attendance.compose.widget.login.LoginForm
 import eu.matoosh.attendance.compose.screen.page.Message
+import eu.matoosh.attendance.compose.widget.login.LoginForm
 import eu.matoosh.attendance.viewmodels.LoginErrorCode
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.LoginViewModel
@@ -61,13 +52,13 @@ fun LoginScreen(
         is LoginUiState.Error -> {
             when((uiState as LoginUiState.Error).errorCode) {
                 LoginErrorCode.INCORRECT_USERNAME -> {
-                    FullScreenMessage(stringResource(R.string.message_logging_error_incorrect_username))
+                    Message(stringResource(R.string.message_logging_error_incorrect_username))
                 }
                 LoginErrorCode.INCORRECT_PASSWORD -> {
-                    FullScreenMessage(stringResource(R.string.message_logging_error_incorrect_password))
+                    Message(stringResource(R.string.message_logging_error_incorrect_password))
                 }
                 LoginErrorCode.UNKNOWN_ERROR -> {
-                    FullScreenMessage(stringResource(R.string.message_logging_error))
+                    Message(stringResource(R.string.message_logging_error))
                 }
             }
             LaunchedEffect(Unit) {
@@ -85,10 +76,10 @@ fun LoginScreen(
             )
         }
         is LoginUiState.Loading -> {
-            FullScreenMessage(stringResource(id = R.string.message_logging_loading))
+            Message(stringResource(id = R.string.message_logging_loading))
         }
         is LoginUiState.Success -> {
-            FullScreenMessage(stringResource(R.string.message_logging_success, (uiState as LoginUiState.Success).username.capitalize()))
+            Message(stringResource(R.string.message_logging_success, (uiState as LoginUiState.Success).username.capitalize()))
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess((uiState as LoginUiState.Success).username)

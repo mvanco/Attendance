@@ -2,7 +2,6 @@ package eu.matoosh.attendance.compose.screen.page.user
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,9 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,9 +31,7 @@ import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.FabState
 import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
 import eu.matoosh.attendance.compose.LocalOnFabStateChange
-import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
 import eu.matoosh.attendance.compose.screen.page.Message
-import eu.matoosh.attendance.compose.screen.page.PlainMessage
 import eu.matoosh.attendance.compose.widget.user.InterestDialog
 import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.data.Interest
@@ -127,19 +122,19 @@ fun UserTerms(
         is UserTermsUiState.Error -> {
             when (userTermsUiState.errorCode) {
                 UserTermsErrorCode.INSUFFICIENT_CREDIT -> {
-                    PlainMessage(stringResource(id = R.string.message_user_error_insufficient_credit))
+                    Message(stringResource(id = R.string.message_user_error_insufficient_credit))
                     LaunchedEffect(Unit) {
                         delay(LoginUiState.FAILURE_STATE_DURATION)
                         onError()
                     }
                 }
                 UserTermsErrorCode.UNKNOWN_ERROR, UserTermsErrorCode.INVALID_TOKEN  -> {
-                    PlainMessage(stringResource(id = R.string.message_user_error))
+                    Message(stringResource(id = R.string.message_user_error))
                 }
             }
         }
         is UserTermsUiState.Loading -> {
-            PlainMessage(stringResource(id = R.string.message_user_loading))
+            Message(stringResource(id = R.string.message_user_loading))
         }
     }
 }

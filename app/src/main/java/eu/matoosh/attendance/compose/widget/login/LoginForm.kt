@@ -49,7 +49,6 @@ fun LoginForm(
 ) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
-            .background(colorResource(id = R.color.background_overlay_login))
     ) {
         val (form, title) = createRefs()
         createVerticalChain(title, form, chainStyle = ChainStyle.Packed)

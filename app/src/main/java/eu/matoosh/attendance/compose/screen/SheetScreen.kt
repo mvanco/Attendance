@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.screen.page.FullScreenMessage
+import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.compose.screen.page.sheet.Confirmation
 import eu.matoosh.attendance.compose.screen.page.sheet.SheetForm
 import eu.matoosh.attendance.compose.screen.page.sheet.Success
@@ -81,14 +81,14 @@ fun SheetScreen(
         }
         is BookUiState.Error -> {
             if (bookUiState.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
-                FullScreenMessage(stringResource(id = R.string.message_sheet_missing))
+                Message(stringResource(id = R.string.message_sheet_missing))
             }
             else {
-                FullScreenMessage(stringResource(id = R.string.message_sheet_error))
+                Message(stringResource(id = R.string.message_sheet_error))
             }
         }
         BookUiState.Loading -> {
-            FullScreenMessage(stringResource(id = R.string.message_sheet_loading))
+            Message(stringResource(id = R.string.message_sheet_loading))
         }
         BookUiState.Success -> {
             Success()

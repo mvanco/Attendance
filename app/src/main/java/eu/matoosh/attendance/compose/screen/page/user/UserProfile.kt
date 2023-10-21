@@ -24,7 +24,7 @@ import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.AppBarAction
 import eu.matoosh.attendance.compose.AppBarActions
 import eu.matoosh.attendance.compose.LocalOnAppBarActionsChange
-import eu.matoosh.attendance.compose.screen.page.PlainMessage
+import eu.matoosh.attendance.compose.screen.page.Message
 import eu.matoosh.attendance.config.WEB_APP_URL
 import eu.matoosh.attendance.viewmodels.LoginUiState
 import eu.matoosh.attendance.viewmodels.console.ProfileErrorCode
@@ -75,7 +75,7 @@ fun UserProfile(
         is UserProfileUiState.Error -> {
             when (uiState.errorCode) {
                 ProfileErrorCode.UNKNOWN_ERROR -> {
-                    PlainMessage(stringResource(R.string.message_user_profile_unknown))
+                    Message(stringResource(R.string.message_user_profile_unknown))
                 }
             }
             LaunchedEffect(Unit) {
@@ -112,7 +112,7 @@ fun UserProfile(
         }
 
         is UserProfileUiState.Loading -> {
-            PlainMessage(stringResource(id = R.string.message_user_loading))
+            Message(stringResource(id = R.string.message_user_loading))
         }
     }
 }
