@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import eu.matoosh.attendance.compose.navigation.user.ProfileRoute
+import eu.matoosh.attendance.compose.navigation.user.SCANNING_SUCCESSFUL
 import eu.matoosh.attendance.compose.navigation.user.ScannerRoute
 import eu.matoosh.attendance.compose.navigation.user.navigateToProfile
 import eu.matoosh.attendance.compose.navigation.user.profilePage
@@ -38,14 +39,14 @@ fun UserNavHost(
             )
         },
         exitTransition = {
-                         fadeOut(
-                             animationSpec = tween(50, easing = EaseOut)
-                         )
+            fadeOut(
+                animationSpec = tween(50, easing = EaseOut)
+            )
         },
         popEnterTransition = {
-                             fadeIn(
-                                 animationSpec = tween(50, delayMillis = 250, easing = EaseIn)
-                             )
+            fadeIn(
+                animationSpec = tween(50, delayMillis = 250, easing = EaseIn)
+            )
         },
         popExitTransition = {
             slideOutOfContainer(
@@ -58,12 +59,12 @@ fun UserNavHost(
         termsPage()
         scannerPage(
             onNavigateToProfile = {
-                userNavController.navigateToProfile(true) {
-                    popUpTo(ScannerRoute) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
+                userNavController.popBackStack(ProfileRoute, inclusive = false)
+            },
+            onSetSuccessful = { successful ->
+                val savedStateHandle =
+                    userNavController.getBackStackEntry(ProfileRoute).savedStateHandle
+                savedStateHandle[SCANNING_SUCCESSFUL] = successful
             }
         )
     }

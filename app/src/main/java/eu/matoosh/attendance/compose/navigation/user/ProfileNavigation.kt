@@ -2,6 +2,7 @@ package eu.matoosh.attendance.compose.navigation.user
 
 import android.os.Bundle
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -29,8 +30,10 @@ fun NavGraphBuilder.profilePage() {
         val args = ProfileArgs(dest.arguments)
         val mainDest = LocalMainNavigationDestination.current
         val viewModel = hiltViewModel<UserProfileViewModel>(mainDest.owner!!)
-        LaunchedEffect(args.shouldReload) {
-            if (args.shouldReload) {
+        val savedStateHandle = dest.savedStateHandle
+        val scanningSuccessful = savedStateHandle.getLiveData<Boolean>(SCANNING_SUCCESSFUL).observeAsState()
+        LaunchedEffect(scanningSuccessful.value) {
+            if (scanningSuccessful.value == true) {
                 viewModel.loadProfile(true)
             }
         }
@@ -49,8 +52,7 @@ internal class ProfileArgs(val shouldReload: Boolean) {
 }
 
 fun NavController.navigateToProfile(
-    shouldReload: Boolean = false,
     builder: NavOptionsBuilder.() -> Unit = {}
 ) {
-    navigate("$ProfileRoute?$shouldReloadArg=$shouldReload", builder)
+    navigate(ProfileRoute, builder)
 }

@@ -10,9 +10,11 @@ import eu.matoosh.attendance.compose.screen.page.user.UserScanner
 import eu.matoosh.attendance.viewmodels.console.UserScannerViewModel
 
 const val ScannerRoute = "scanner"
+const val SCANNING_SUCCESSFUL = "scanning_successful"
 
 fun NavGraphBuilder.scannerPage(
-    onNavigateToProfile: () -> Unit
+    onNavigateToProfile: () -> Unit,
+    onSetSuccessful: (Boolean) -> Unit
 ) {
     composable(
         ScannerRoute,
@@ -33,11 +35,13 @@ fun NavGraphBuilder.scannerPage(
         UserScanner(
             userScannerViewModel,
             onSuccess = {
+                onSetSuccessful(true)
                 onNavigateToProfile()
             }
         )
         LaunchedEffect(route) {
             userScannerViewModel.initialize()
+            onSetSuccessful(false)
         }
     }
 }
