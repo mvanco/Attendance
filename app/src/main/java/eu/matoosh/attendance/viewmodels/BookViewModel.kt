@@ -57,7 +57,7 @@ class BookViewModel @Inject constructor(
         bindUsers()
         viewModelScope.launch {
             _users.collect { userList ->
-                if (userList.isNotEmpty() && _bookUiState.value is BookUiState.Idle) {
+                if (_bookUiState.value is BookUiState.Idle || _bookUiState.value is BookUiState.Loading) {
                     _bookUiState.value = BookUiState.Idle(userList)
                 }
             }
@@ -103,9 +103,7 @@ class BookViewModel @Inject constructor(
     }
 
     fun selectUser(username: String) {
-        val users = (_bookUiState.value as? BookUiState.Idle)?.users ?: emptyList()
-
-        val foundUser = users.firstOrNull { it.username == username }
+        val foundUser = _users.value.firstOrNull { it.username == username }
         selectedUser = foundUser?.id
         if (selectedUser != null) {
             _bookUiState.value = BookUiState.Confirmation(foundUser!!)

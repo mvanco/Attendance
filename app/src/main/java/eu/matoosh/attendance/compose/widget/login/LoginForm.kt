@@ -48,7 +48,9 @@ fun LoginForm(
     onCancel: () -> Unit = {},
 ) {
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.background_overlay_light))
     ) {
         val (form, title) = createRefs()
         createVerticalChain(title, form, chainStyle = ChainStyle.Packed)

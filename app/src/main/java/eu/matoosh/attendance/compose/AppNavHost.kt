@@ -43,11 +43,11 @@ fun AppNavHost(
             contentDescription = stringResource(id = R.string.content_description_background_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
+                .background(colorResource(id = R.color.background_overlay))
         )
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.background(colorResource(id = R.color.background_overlay)),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(150, delayMillis = 150, easing = EaseOut)

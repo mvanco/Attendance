@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.compose.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +35,7 @@ fun ModeSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxHeight()
+            .background(colorResource(id = R.color.background_overlay_light))
             .widthIn(max = dimensionResource(id = R.dimen.max_screen_width))
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
