@@ -8,16 +8,22 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import eu.matoosh.attendance.compose.navigation.user.ProfileRoute
 import eu.matoosh.attendance.compose.navigation.user.SCANNING_SUCCESSFUL
-import eu.matoosh.attendance.compose.navigation.user.ScannerRoute
-import eu.matoosh.attendance.compose.navigation.user.navigateToProfile
 import eu.matoosh.attendance.compose.navigation.user.profilePage
 import eu.matoosh.attendance.compose.navigation.user.scannerPage
 import eu.matoosh.attendance.compose.navigation.user.termsPage
+
+data class UserNavigationDestination(
+    val dest: NavBackStackEntry? = null
+)
+
+val LocalUserNavigationDestination = compositionLocalOf { UserNavigationDestination() }
 
 @Composable
 fun UserNavHost(

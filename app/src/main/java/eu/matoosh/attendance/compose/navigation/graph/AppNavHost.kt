@@ -10,12 +10,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
@@ -30,6 +32,12 @@ import eu.matoosh.attendance.compose.navigation.global.navigateToConsole
 import eu.matoosh.attendance.compose.navigation.global.navigateToLogin
 import eu.matoosh.attendance.compose.navigation.global.navigateToSelection
 import eu.matoosh.attendance.theme.AttendanceTheme
+
+data class MainNavigationDestination(
+    val owner: ViewModelStoreOwner? = null
+)
+
+val LocalMainNavigationDestination = compositionLocalOf { MainNavigationDestination() }
 
 @Composable
 fun AppNavHost(

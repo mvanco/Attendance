@@ -3,7 +3,7 @@ package eu.matoosh.attendance.compose.navigation.user
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import eu.matoosh.attendance.compose.navigation.global.LocalMainNavigationDestination
+import eu.matoosh.attendance.compose.navigation.graph.LocalMainNavigationDestination
 import eu.matoosh.attendance.compose.page.user.UserTerms
 
 const val TermsRoute = "terms"

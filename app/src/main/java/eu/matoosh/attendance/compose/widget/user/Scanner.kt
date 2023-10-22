@@ -1,7 +1,6 @@
 package eu.matoosh.attendance.compose.widget.user
 
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import eu.matoosh.attendance.compose.navigation.graph.LocalUserNavigationDestination
 import eu.matoosh.attendance.utils.BarcodeAnalyser
 import java.util.concurrent.Executors
 
@@ -20,6 +20,7 @@ import java.util.concurrent.Executors
 fun Scanner(
     onBarcodeFound: (String) -> Unit
 ) {
+    val userDest = LocalUserNavigationDestination.current
     AndroidView(
         { context ->
             val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -52,7 +53,7 @@ fun Scanner(
 
                     // Bind use cases to camera
                     cameraProvider.bindToLifecycle(
-                        context as ComponentActivity,
+                        userDest.dest!!,
                         cameraSelector,
                         preview,
                         imageCapture,
