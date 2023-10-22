@@ -6,9 +6,9 @@ import eu.matoosh.attendance.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val USERNAME_KEY = "username"
-private const val TOKEN_KEY = "token"
-private const val VALIDITY_KEY = "validity"
+const val USERNAME_KEY = "username"
+const val TOKEN_KEY = "token"
+const val VALIDITY_KEY = "validity"
 
 @Singleton
 class SessionManager @Inject constructor(
