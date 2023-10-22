@@ -104,7 +104,15 @@ fun AppNavHost(
                     navController.navigateToConsole(true)
                 }
             )
-            sheetScreen()
+            sheetScreen(
+                onNavigateToLogin = {
+                    navController.navigateToLogin {
+                        popUpTo(LoginRoute) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
             consoleScreen(
                 onNavigateAdminToLogin = {
                     navController.navigateToLogin {

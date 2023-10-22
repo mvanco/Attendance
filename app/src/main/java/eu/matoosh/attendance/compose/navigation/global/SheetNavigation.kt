@@ -8,9 +8,13 @@ import eu.matoosh.attendance.compose.screen.SheetScreen
 
 const val SheetRoute = "attendance_sheet"
 
-fun NavGraphBuilder.sheetScreen() {
+fun NavGraphBuilder.sheetScreen(
+    onNavigateToLogin: () -> Unit
+) {
     composable(SheetRoute) {
-        SheetScreen()
+        SheetScreen(
+            onNavigateToLogin = onNavigateToLogin
+        )
     }
 }
 

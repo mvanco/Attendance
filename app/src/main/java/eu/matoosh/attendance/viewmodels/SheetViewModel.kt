@@ -70,6 +70,7 @@ class BookViewModel @Inject constructor(
                 if (token == null) {
                     _bookUiState.value =
                         BookUiState.Error(BookErrorCode.TOKEN_EXPIRED)
+                    return@launch
                 }
                 bookRepo.uncheckedListWithUpdates(token!!).collect { response ->
                     when (response) {

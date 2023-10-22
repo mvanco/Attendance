@@ -1,6 +1,7 @@
 package eu.matoosh.attendance.compose.screen
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -18,7 +19,8 @@ import eu.matoosh.attendance.viewmodels.BookViewModel
 
 @Composable
 fun SheetScreen(
-    bookViewModel: BookViewModel = hiltViewModel()
+    bookViewModel: BookViewModel = hiltViewModel(),
+    onNavigateToLogin: () -> Unit
 ) {
     val bookUiState by bookViewModel.bookUiState.collectAsState()
     SheetScreen(
@@ -40,7 +42,8 @@ fun SheetScreen(
         },
         onConfirmationCancelled = {
             bookViewModel.cancel()
-        }
+        },
+        onNavigateToLogin = onNavigateToLogin
     )
 }
 
@@ -52,7 +55,8 @@ fun SheetScreen(
     onCheckUnknownUser: () -> Unit,
     onManualCancelled: () -> Unit,
     onConfirmationCancelled: () -> Unit,
-    onCheckSelectedUser: () -> Unit
+    onCheckSelectedUser: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     when (bookUiState) {
         is BookUiState.Idle -> {
@@ -80,11 +84,18 @@ fun SheetScreen(
             )
         }
         is BookUiState.Error -> {
-            if (bookUiState.errorCode == BookErrorCode.RENTAL_NOT_FOUND) {
-                FullScreenMessage(stringResource(id = R.string.message_sheet_missing))
-            }
-            else {
-                FullScreenMessage(stringResource(id = R.string.message_sheet_error))
+            when(bookUiState.errorCode) {
+                BookErrorCode.RENTAL_NOT_FOUND -> {
+                    FullScreenMessage(stringResource(id = R.string.message_sheet_missing))
+                }
+                BookErrorCode.TOKEN_EXPIRED -> {
+                    LaunchedEffect(Unit) {
+                        onNavigateToLogin()
+                    }
+                }
+                else -> {
+                    FullScreenMessage(stringResource(id = R.string.message_sheet_error))
+                }
             }
         }
         BookUiState.Loading -> {

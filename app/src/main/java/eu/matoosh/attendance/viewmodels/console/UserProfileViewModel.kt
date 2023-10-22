@@ -32,33 +32,14 @@ sealed interface UserProfileUiState {
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val consoleRepo: ConsoleRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val consoleRepo: ConsoleRepository
 ) : ViewModel() {
     private val _userProfileUiState =
         MutableStateFlow<UserProfileUiState>(UserProfileUiState.Loading)
     val userProfileUiState = _userProfileUiState.asStateFlow()
 
     init {
-        if (sessionManager.token == null) {
-            restoreState()
-        }
-        else {
-            saveState()
-        }
         loadProfile()
-    }
-
-    private fun saveState() {
-        savedStateHandle[USERNAME_KEY] = sessionManager.username
-        savedStateHandle[TOKEN_KEY] = sessionManager.token
-        savedStateHandle[VALIDITY_KEY] = sessionManager.validity
-    }
-
-    private fun restoreState() {
-        sessionManager.username = savedStateHandle[USERNAME_KEY]
-        sessionManager.token = savedStateHandle[TOKEN_KEY]
-        sessionManager.validity = savedStateHandle[VALIDITY_KEY]
     }
 
     fun loadProfile(useLoader: Boolean = false) {
