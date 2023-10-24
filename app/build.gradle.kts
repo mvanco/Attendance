@@ -13,8 +13,8 @@ android {
         applicationId = "eu.matoosh.attendance"
         minSdk = 26
         targetSdk = 33
-        versionCode = 10014
-        versionName = "1.0.14"
+        versionCode = 10015
+        versionName = "1.0.15"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -26,11 +26,13 @@ android {
         create("prod") {
             dimension = "backend"
             buildConfigField("String", "BASE_URL", "\"https://matoosh.eu/\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
         create("stg") {
             dimension = "backend"
             applicationIdSuffix = ".stg"
             buildConfigField("String", "BASE_URL", "\"http://192.168.1.166:8000/\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     buildTypes {
