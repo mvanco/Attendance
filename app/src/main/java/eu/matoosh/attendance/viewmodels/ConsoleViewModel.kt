@@ -20,6 +20,9 @@ class ConsoleViewModel @Inject constructor(
             restoreState()
         }
         else {
+            if (
+                sessionManager.username != "admin"
+                && sessionManager.username?.startsWith("admin_") == false)
             saveState()
         }
     }

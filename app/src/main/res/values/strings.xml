@@ -39,6 +39,7 @@
 
     <string name="message_user_no_interest">Nemáte zatím zájem o žádné termíny.</string>
     <string name="message_user_added_credit">Kredit byl úspěšně přidán.</string>
+    <string name="message_user_wrong_user">Uživatel je zaregistrován na jiném stadionu.</string>
     <string name="message_user_profile_unknown">Nedokážu získat profilová data.</string>
     <string name="message_user_loading">Načítám uživatelské data...</string>
     <string name="message_user_error_insufficient_credit">Nemáte dostatek kreditu.</string>

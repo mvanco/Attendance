@@ -43,6 +43,9 @@ fun NavGraphBuilder.scannerPage(
                 onSuccess = {
                     onSetSuccessful(true)
                     onNavigateToProfile()
+                },
+                onError = {
+                    onNavigateToProfile()
                 }
             )
         }

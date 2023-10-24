@@ -57,7 +57,7 @@ data class ApiCheckResponse(
 
 data class ApiUncheckResponse(
     @field:SerializedName("result") val result: String?,
-    @field:SerializedName("error") val error: String?,
+    @field:SerializedName("error") val error: String?
 )
 
 data class ApiIssueAuthorizationResponse(
@@ -66,7 +66,7 @@ data class ApiIssueAuthorizationResponse(
 )
 
 data class ApiAddCreditResponse(
-    @field:SerializedName("result") val result: String
+    @field:SerializedName("error") val error: String?
 )
 
 data class ApiRegisterTermResponse(

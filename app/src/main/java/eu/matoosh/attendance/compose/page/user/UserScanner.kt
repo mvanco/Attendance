@@ -32,7 +32,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun UserScanner(
     viewModel: UserScannerViewModel = hiltViewModel(),
-    onSuccess: () -> Unit
+    onSuccess: () -> Unit,
+    onError: () -> Unit
 ) {
     val userScannerUiState by viewModel.userScannerUiState.collectAsState()
 
@@ -41,7 +42,8 @@ fun UserScanner(
         onBarcodeFound = { credit ->
             viewModel.addCredit(credit)
         },
-        onSuccess = onSuccess
+        onSuccess = onSuccess,
+        onError = onError
     )
 }
 
@@ -49,7 +51,8 @@ fun UserScanner(
 fun UserScanner(
     userScannerUiState: UserScannerUiState,
     onBarcodeFound: (String) -> Unit,
-    onSuccess: () -> Unit
+    onSuccess: () -> Unit,
+    onError: () -> Unit
 ) {
     when (userScannerUiState) {
         is UserScannerUiState.Scanner -> {
@@ -88,6 +91,13 @@ fun UserScanner(
             LaunchedEffect(Unit) {
                 delay(LoginUiState.SUCCESS_STATE_DURATION)
                 onSuccess()
+            }
+        }
+        is UserScannerUiState.Error -> {
+            Message(text = stringResource(id = R.string.message_user_wrong_user))
+            LaunchedEffect(Unit) {
+                delay(LoginUiState.SUCCESS_STATE_DURATION)
+                onError()
             }
         }
     }

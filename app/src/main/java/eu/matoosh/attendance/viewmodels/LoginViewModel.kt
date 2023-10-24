@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
         sessionManager.restoreSession()
         username.value = sessionManager.username ?: ""
         if (sessionManager.token != null) {
-            if (!sessionManager.isAdmin()) {
+            if (sessionManager.isAdmin() == false) {
                 _loginUiState.value = LoginUiState.Success(sessionManager.username!!)
             }
         }

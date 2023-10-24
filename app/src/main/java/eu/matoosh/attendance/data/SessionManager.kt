@@ -40,5 +40,5 @@ class SessionManager @Inject constructor(
         validity = prefs.getString(VALIDITY_KEY, null)
     }
 
-    fun isAdmin() = username == "admin"
+    fun isAdmin() = username?.startsWith("admin_")
 }

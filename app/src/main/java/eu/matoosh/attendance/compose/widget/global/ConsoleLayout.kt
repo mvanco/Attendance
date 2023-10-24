@@ -94,11 +94,11 @@ fun ConsoleLayout(
                     label = { Text(text = stringResource(R.string.action_logout)) },
                     selected = false,
                     onClick = {
+                        consoleViewModel.logout()
                         if (isAdmin) {
                             onNavigateAdminToLogin()
                         }
                         else {
-                            consoleViewModel.logout()
                             onNavigateUserToLogin()
                         }
                     }

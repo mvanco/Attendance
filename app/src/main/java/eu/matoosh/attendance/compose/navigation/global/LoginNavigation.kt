@@ -25,7 +25,7 @@ fun NavGraphBuilder.loginScreen(
         val viewModel: LoginViewModel = hiltViewModel()
         LoginScreen(
             onSuccess = { username ->
-                if (username == "admin") {
+                if (username.startsWith("admin_")) {
                     onNavigateToModeSelection()
                 } else {
                     onNavigateToConsoleScreen()
