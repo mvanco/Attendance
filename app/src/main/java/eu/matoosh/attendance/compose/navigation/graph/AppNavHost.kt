@@ -23,14 +23,14 @@ import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.navigation.global.LoginRoute
 import eu.matoosh.attendance.compose.navigation.global.ModeSelectionRoute
-import eu.matoosh.attendance.compose.navigation.global.sheetScreen
 import eu.matoosh.attendance.compose.navigation.global.consoleScreen
 import eu.matoosh.attendance.compose.navigation.global.loginScreen
-import eu.matoosh.attendance.compose.navigation.global.selectionScreen
-import eu.matoosh.attendance.compose.navigation.global.navigateToSheet
 import eu.matoosh.attendance.compose.navigation.global.navigateToConsole
 import eu.matoosh.attendance.compose.navigation.global.navigateToLogin
 import eu.matoosh.attendance.compose.navigation.global.navigateToSelection
+import eu.matoosh.attendance.compose.navigation.global.navigateToSheet
+import eu.matoosh.attendance.compose.navigation.global.selectionScreen
+import eu.matoosh.attendance.compose.navigation.global.sheetScreen
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 data class MainNavigationDestination(
@@ -50,7 +50,8 @@ fun AppNavHost(
             painter = painterResource(id = R.drawable.background),
             contentDescription = stringResource(id = R.string.content_description_background_image),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(colorResource(id = R.color.background_overlay))
         )
         NavHost(

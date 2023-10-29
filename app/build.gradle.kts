@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "eu.matoosh.attendance"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 10015
         versionName = "1.0.15"
 
