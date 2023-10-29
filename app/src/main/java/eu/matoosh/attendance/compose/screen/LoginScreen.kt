@@ -3,11 +3,11 @@ package eu.matoosh.attendance.compose.screen
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
 import eu.matoosh.attendance.compose.widget.global.LoginForm
@@ -67,12 +67,14 @@ fun LoginScreen(
             }
         }
         is LoginUiState.Idle -> {
-            val userState = loginViewModel.username.collectAsState() as MutableState
-            val passState = loginViewModel.password.collectAsState() as MutableState
+            val userState = loginViewModel.username.collectAsStateWithLifecycle()
+            val passState = loginViewModel.password.collectAsStateWithLifecycle()
             LoginForm(
                 onLoginClick,
-                userState,
-                passState
+                userState.value,
+                { loginViewModel.username.value = it },
+                passState.value,
+                { loginViewModel.password.value = it }
             )
         }
         is LoginUiState.Loading -> {
