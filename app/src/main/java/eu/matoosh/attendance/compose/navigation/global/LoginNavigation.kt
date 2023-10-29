@@ -54,7 +54,7 @@ fun NavGraphBuilder.loginScreen(
         }
         LoginScreen(
             onSuccess = { username ->
-                if (username == "admin") {
+                if (username.startsWith("admin")) {
                     onNavigateToModeSelection()
                 } else {
                     onNavigateToConsoleScreen()
