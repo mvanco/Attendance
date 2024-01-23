@@ -4,25 +4,30 @@ import eu.matoosh.attendance.di.IoDispatcher
 import eu.matoosh.attendance.seznam.api.SeznamService
 import eu.matoosh.attendance.seznam.data.Book
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-sealed interface RepoBookResponse {
-    data class Success(val books: List<Book>) : RepoBookResponse
-    data class Error(val code: Int) : RepoBookResponse
+sealed interface RepoBooksResponse {
+    data class Success(val books: List<Book>) : RepoBooksResponse
+    data class Error(val code: Int) : RepoBooksResponse
+}
+
+sealed interface RepoBookDetailResponse {
+    data class Success(val bookDetail: Book) : RepoBookDetailResponse
+    data class Error(val code: Int) : RepoBookDetailResponse
 }
 
 class BookRepository @Inject constructor(
     private val service: SeznamService,
     @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getBooks(author: String) = flow {
+    suspend fun getBooks(author: String): RepoBooksResponse = withContext(defaultDispatcher) {
         val response = service.getBooks("inauthor:$author")
         if (response.error != null) {
-            emit(RepoBookResponse.Error(response.error.code ?: 500))
+            RepoBooksResponse.Error(response.error.code ?: 500)
         } else {
             if (response.items != null) {
-                val books: List<Book> = response.items.map {
+                val books: List<Book> = response.items.mapNotNull {
                     if (it.id != null && it.volumeInfo?.title != null
                         && it.volumeInfo.authors?.isNotEmpty() == true
                         && it.volumeInfo.publishedDate != null
@@ -38,14 +43,40 @@ class BookRepository @Inject constructor(
                             googlePlayLink = it.volumeInfo.accessInfo?.webReaderLink
                         )
                     } else {
-                        emit(RepoBookResponse.Error(500))
-                        Book("", "", "", "")
+                        null
                     }
                 }
-                emit(RepoBookResponse.Success(books))
+                RepoBooksResponse.Success(books)
             }
             else {
-                emit(RepoBookResponse.Error(500))
+                RepoBooksResponse.Error(500)
+            }
+        }
+    }
+
+    suspend fun getBookDetail(id: String): RepoBookDetailResponse = withContext(defaultDispatcher) {
+        val response = service.getBookDetail(id)
+        if (response.error != null) {
+            RepoBookDetailResponse.Error(response.error.code ?: 500)
+        }
+        else {
+            if (response.id != null && response.volumeInfo?.title != null
+                && response.volumeInfo.authors?.isNotEmpty() == true
+                && response.volumeInfo.publishedDate != null
+            ) {
+                val book = Book(
+                    id = response.id,
+                    title = response.volumeInfo.title,
+                    author = response.volumeInfo.authors[0],
+                    publishedDate = response.volumeInfo.publishedDate,
+                    description = response.volumeInfo.description,
+                    thumbnailUrl = response.volumeInfo.imageLinks?.thumbnail,
+                    imageUrl = response.volumeInfo.imageLinks?.medium,
+                    googlePlayLink = response.volumeInfo.accessInfo?.webReaderLink
+                )
+                RepoBookDetailResponse.Success(book)
+            } else {
+                RepoBookDetailResponse.Error(500)
             }
         }
     }
