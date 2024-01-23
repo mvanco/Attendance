@@ -10,6 +10,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+data class ApiErrorResponse(
+    @field:SerializedName("code") val code: Int?,
+    @field:SerializedName("message") val message: String?
+)
 
 data class ApiImageLinksResponse(
     @field:SerializedName("thumbnail") val thumbnail: String?,
@@ -32,13 +36,15 @@ data class ApiVolumeInfoResponse(
 
 data class ApiBookDetailResponse(
     @field:SerializedName("id") val id: String?,
-    @field:SerializedName("volumeInfo") val volumeInfo: ApiVolumeInfoResponse?
+    @field:SerializedName("volumeInfo") val volumeInfo: ApiVolumeInfoResponse?,
+    @field:SerializedName("error") val error: ApiErrorResponse?
 )
 
 data class ApiBooksResponse(
     @field:SerializedName("kind") val token: String?,
     @field:SerializedName("totalItems") val totalItems: Int?,
-    @field:SerializedName("items") val userId: List<ApiBookDetailResponse>?
+    @field:SerializedName("items") val items: List<ApiBookDetailResponse>?,
+    @field:SerializedName("error") val error: ApiErrorResponse?
 )
 
 interface SeznamService {
