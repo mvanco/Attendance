@@ -25,13 +25,13 @@ android {
     productFlavors {
         create("prod") {
             dimension = "backend"
-            buildConfigField("String", "BASE_URL", "\"https://matoosh.eu/\"")
+            buildConfigField("String", "BASE_URL", "\"https://www.googleapis.com/\"")
             signingConfig = signingConfigs.getByName("debug")
         }
         create("stg") {
             dimension = "backend"
             applicationIdSuffix = ".stg"
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.166:8000/\"")
+            buildConfigField("String", "BASE_URL", "\"https://www.googleapis.com/\"")
             signingConfig = signingConfigs.getByName("debug")
         }
     }
