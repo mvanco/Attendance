@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "eu.matoosh.attendance"
+    namespace = "eu.matoosh.miniseznam"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "eu.matoosh.attendance"
+        applicationId = "eu.matoosh.miniseznam"
         minSdk = 26
         targetSdk = 34
         versionCode = 10016
