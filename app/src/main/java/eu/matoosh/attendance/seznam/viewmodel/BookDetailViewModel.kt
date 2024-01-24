@@ -1,21 +1,15 @@
 package eu.matoosh.attendance.seznam.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.matoosh.attendance.config.AUTO_QUERY_MIN_CHAR
-import eu.matoosh.attendance.config.QUERY_TIMEOUT
 import eu.matoosh.attendance.seznam.data.Book
 import eu.matoosh.attendance.seznam.repo.BookRepository
 import eu.matoosh.attendance.seznam.repo.RepoBookDetailResponse
-import eu.matoosh.attendance.seznam.repo.RepoBooksResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

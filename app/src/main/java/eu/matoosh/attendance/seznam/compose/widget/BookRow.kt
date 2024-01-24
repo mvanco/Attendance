@@ -1,12 +1,17 @@
 package eu.matoosh.attendance.seznam.compose.widget
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -27,8 +32,10 @@ fun BookRow(
                 onClick = onClick
             )
             .padding(
-                horizontal = 16.dp
+                horizontal = 16.dp,
+                vertical = 8.dp
             )
+            .fillMaxWidth()
     ) {
         val (image, title, author) = createRefs()
         GlideImage(
@@ -48,11 +55,12 @@ fun BookRow(
             modifier = Modifier
                 .constrainAs(title) {
                     start.linkTo(image.end)
-                    top.linkTo(parent.top)
+                    top.linkTo(parent.top, margin = 8.dp)
                 }
-                .padding(
-                    top = 8.dp
-                )
+                .width(300.dp),
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = book.author,
@@ -61,6 +69,10 @@ fun BookRow(
                     start.linkTo(image.end)
                     top.linkTo(title.bottom)
                 }
+                .width(300.dp),
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
