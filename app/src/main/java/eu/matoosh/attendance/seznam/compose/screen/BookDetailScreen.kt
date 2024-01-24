@@ -1,13 +1,13 @@
 package eu.matoosh.attendance.seznam.compose.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,11 +28,15 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
 import eu.matoosh.attendance.seznam.data.Book
 import eu.matoosh.attendance.seznam.viewmodel.BookDetailUiState
 import eu.matoosh.attendance.seznam.viewmodel.BookDetailViewModel
+import com.bumptech.glide.integration.compose.placeholder
 
 @Composable
 fun BookDetailScreen(
@@ -59,6 +63,7 @@ fun BookDetailScreen(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun BookDetailScreen(
     book: Book
@@ -70,19 +75,35 @@ fun BookDetailScreen(
             .padding(32.dp)
     ) {
 
-        Text(
-            text = book.title,
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = Bold,
-            color = Color.Red
-        )
+        Row() {
+            GlideImage(
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(
+                        end = 16.dp
+                    ),
+                model = book.imageUrl,
+                contentDescription = stringResource(id = R.string.content_description_book_thumbnail),
+                failure = placeholder(R.drawable.ic_image_placeholder),
+                loading = placeholder(R.drawable.ic_image_placeholder)
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Column {
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = Bold,
+                    color = Color.Red
+                )
 
-        Text(
-            text = "${book.author}, ${book.publishedDate}",
-            style = MaterialTheme.typography.headlineMedium
-        )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "${book.author}, ${book.publishedDate}",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

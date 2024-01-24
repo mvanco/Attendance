@@ -1,40 +1,47 @@
 package eu.matoosh.attendance.seznam.compose.widget
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.AsyncImage
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import eu.matoosh.attendance.R
 import eu.matoosh.attendance.seznam.data.Book
+import com.bumptech.glide.integration.compose.placeholder
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun BookRow(
     book: Book,
     onClick: () -> Unit
 ) {
     ConstraintLayout(
-        modifier = Modifier.clickable(
-            onClick = onClick
-        )
+        modifier = Modifier
+            .clickable(
+                onClick = onClick
+            )
+            .padding(
+                horizontal = 16.dp
+            )
     ) {
         val (image, title, author) = createRefs()
-        AsyncImage(
-            model = book.thumbnailUrl,
-            contentDescription = stringResource(id = R.string.content_description_book_thumbnail),
+        GlideImage(
             modifier = Modifier
+                .size(64.dp)
                 .constrainAs(image) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                .height(64.dp)
-                .width(64.dp)
+            },
+            model = book.thumbnailUrl,
+            contentDescription = stringResource(id = R.string.content_description_book_thumbnail),
+            failure = placeholder(R.drawable.ic_image_placeholder),
+            loading = placeholder(R.drawable.ic_image_placeholder)
         )
         Text(
             text = book.title,
@@ -43,6 +50,9 @@ fun BookRow(
                     start.linkTo(image.end)
                     top.linkTo(parent.top)
                 }
+                .padding(
+                    top = 8.dp
+                )
         )
         Text(
             text = book.author,

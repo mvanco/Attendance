@@ -43,7 +43,6 @@ class BookDetailViewModel @Inject constructor(
             try {
                 when (val response = repo.getBookDetail(id)) {
                     is RepoBookDetailResponse.Success -> {
-                        Log.d("brobro", response.bookDetail.googlePlayLink ?: "ejha")
                         _bookUiState.value = BookDetailUiState.Idle(response.bookDetail)
                     }
                     is RepoBookDetailResponse.Error -> {

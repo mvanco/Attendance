@@ -1,6 +1,5 @@
 package eu.matoosh.attendance.seznam.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
