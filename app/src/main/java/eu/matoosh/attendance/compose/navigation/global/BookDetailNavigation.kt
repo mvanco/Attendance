@@ -1,12 +1,11 @@
-package eu.matoosh.attendance.seznam.compose.navigation.global
+package eu.matoosh.attendance.compose.navigation.global
 
 import android.os.Bundle
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import eu.matoosh.attendance.seznam.compose.screen.BookDetailScreen
+import eu.matoosh.attendance.compose.screen.BookDetailScreen
 
 const val BookDetailRoute = "book_detail"
 private const val BOOK_ID = "book_id"

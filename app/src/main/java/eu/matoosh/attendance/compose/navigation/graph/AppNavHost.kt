@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.compose.navigation.graph
 
+import android.util.Log
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
@@ -10,38 +11,24 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.navigation.global.LoginRoute
-import eu.matoosh.attendance.compose.navigation.global.ModeSelectionRoute
-import eu.matoosh.attendance.compose.navigation.global.consoleScreen
-import eu.matoosh.attendance.compose.navigation.global.loginScreen
-import eu.matoosh.attendance.compose.navigation.global.navigateToConsole
-import eu.matoosh.attendance.compose.navigation.global.navigateToLogin
-import eu.matoosh.attendance.compose.navigation.global.navigateToSelection
-import eu.matoosh.attendance.compose.navigation.global.navigateToSheet
-import eu.matoosh.attendance.compose.navigation.global.selectionScreen
-import eu.matoosh.attendance.compose.navigation.global.sheetScreen
+import eu.matoosh.attendance.compose.navigation.global.BookListRoute
+import eu.matoosh.attendance.compose.navigation.global.bookDetailScreen
+import eu.matoosh.attendance.compose.navigation.global.bookListScreen
+import eu.matoosh.attendance.compose.navigation.global.navigateToBookDetail
 import eu.matoosh.attendance.theme.AttendanceTheme
-
-data class MainNavigationDestination(
-    val owner: ViewModelStoreOwner? = null
-)
-
-val LocalMainNavigationDestination = compositionLocalOf { MainNavigationDestination() }
 
 @Composable
 fun AppNavHost(
-    startDestination: String = LoginRoute
+    startDestination: String = BookListRoute
 ) {
     val navController = rememberNavController()
 
@@ -78,55 +65,14 @@ fun AppNavHost(
                 )
             }
         ) {
-            loginScreen(
-                onNavigateToConsoleScreen = {
-                    navController.navigateToConsole {
-                        popUpTo(LoginRoute) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onNavigateToModeSelection = {
-                    navController.popBackStack()
-                    navController.popBackStack()
-                    navController.navigateToLogin()
-                    navController.navigateToSelection()
+            bookListScreen(
+                onNavigateToBookDetail = { bookId ->
+                    Log.d("malytest", bookId)
+                    navController.navigateToBookDetail(bookId)
                 }
             )
-            selectionScreen(
-                onNavigateToAttendanceSheet = {
-                    navController.navigateToSheet() {
-                        popUpTo(ModeSelectionRoute) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onNavigateToAdminConsole = {
-                    navController.navigateToConsole(true)
-                }
-            )
-            sheetScreen(
-                onNavigateToLogin = {
-                    navController.navigateToLogin {
-                        popUpTo(LoginRoute) {
-                            inclusive = true
-                        }
-                    }
-                }
-            )
-            consoleScreen(
-                onNavigateAdminToLogin = {
-                    navController.navigateToLogin {
-                        popUpTo(LoginRoute) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onNavigateUserToLogin = {
-                    navController.popBackStack()
-                    navController.navigateToLogin()
-                }
-            )
+
+            bookDetailScreen()
         }
     }
 }
@@ -136,7 +82,7 @@ fun AppNavHost(
 private fun AppNavHostPreview() {
     AttendanceTheme {
         AppNavHost(
-            startDestination = ModeSelectionRoute
+            startDestination = BookListRoute
         )
     }
 }

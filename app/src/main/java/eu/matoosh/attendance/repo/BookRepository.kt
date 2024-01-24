@@ -1,109 +1,86 @@
 package eu.matoosh.attendance.repo
 
-import eu.matoosh.attendance.api.IceAppService
-import eu.matoosh.attendance.config.ATTENDANCE_SHEET_UPDATE_INTERVAL
-import eu.matoosh.attendance.data.User
 import eu.matoosh.attendance.di.IoDispatcher
+import eu.matoosh.attendance.api.SeznamService
+import eu.matoosh.attendance.data.Book
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-enum class RepoBookErrorCode(val serverField: String?) {
-    INCOMPATIBLE_VERSIONS(null),
-    MISSING_RENTAL("missing-rental"),
-    DUPLICATE_CHECKIN("duplicate-checkin"),
-    UNKNOWN_ERROR(null)
+sealed interface RepoBooksResponse {
+    data class Success(val books: List<Book>) : RepoBooksResponse
+    data class Error(val code: Int) : RepoBooksResponse
 }
 
-sealed interface RepoBookResponse {
-    data class Success(val users: List<User>) : RepoBookResponse
-    data class Error(val error: RepoBookErrorCode) : RepoBookResponse
-}
-
-sealed interface RepoCheckResponse {
-    data class Success(val order: Int) : RepoCheckResponse
-    data class Error(val error: RepoBookErrorCode, val order: Int? = null) : RepoCheckResponse
-}
-
-sealed interface RepoUncheckResponse {
-    object Success : RepoUncheckResponse
-    data class Error(val error: RepoBookErrorCode) : RepoUncheckResponse
+sealed interface RepoBookDetailResponse {
+    data class Success(val bookDetail: Book) : RepoBookDetailResponse
+    data class Error(val code: Int) : RepoBookDetailResponse
 }
 
 class BookRepository @Inject constructor(
-    private val service: IceAppService,
+    private val service: SeznamService,
     @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
-    suspend fun uncheckedList(token: String): RepoBookResponse = withContext(defaultDispatcher) {
-        val response = service.uncheckedList(token)
-        if (response.error == null) {
-            if (response.uncheckedList != null) {
-                RepoBookResponse.Success(response.uncheckedList.map {
-                    if (it.id != null && it.username != null && it.email != null && it.credit != null) {
-                        User(it.id, it.username, it.email, it.credit)
-                    } else {
-                        return@withContext RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
-                    }
-                })
-            } else {
-                RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
-            }
+    suspend fun getBooks(author: String): RepoBooksResponse = withContext(defaultDispatcher) {
+        val response = service.getBooks("inauthor:$author")
+        if (response.error != null) {
+            RepoBooksResponse.Error(response.error.code ?: 500)
         } else {
-            val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
-            RepoBookResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR)
+            if (response.items != null) {
+                val books: List<Book> = response.items.mapNotNull {
+                    if (it.id != null && it.volumeInfo?.title != null
+                        && it.volumeInfo.authors?.isNotEmpty() == true
+                        && it.volumeInfo.publishedDate != null
+                        && it.volumeInfo.language == "cs"
+                    ) {
+                        Book(
+                            id = it.id,
+                            title = it.volumeInfo.title,
+                            author = it.volumeInfo.authors[0],
+                            publishedDate = it.volumeInfo.publishedDate,
+                            description = it.volumeInfo.description,
+                            thumbnailUrl = it.volumeInfo.imageLinks?.thumbnail,
+                            imageUrl = it.volumeInfo.imageLinks?.medium,
+                            googlePlayLink = it.volumeInfo.infoLink,
+                            webReaderLink = it.accessInfo?.webReaderLink
+                        )
+                    } else {
+                        null
+                    }
+                }
+                RepoBooksResponse.Success(books)
+            }
+            else {
+                RepoBooksResponse.Error(500)
+            }
         }
     }
 
-    fun uncheckedListWithUpdates(token: String) = flow {
-        var shouldFinish = false
-        while(!shouldFinish) {
-            val response = service.uncheckedList(token)
-            if (response.error == null) {
-                if (response.uncheckedList != null) {
-                    val users = response.uncheckedList.map {
-                        if (it.id != null && it.username != null && it.email != null && it.credit != null) {
-                            User(it.id, it.username, it.email, it.credit)
-                        }
-                        else {
-                            val error = RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
-                            emit(error)
-                            shouldFinish = true
-                            User(-1, "", "", 0)
-                        }
-                    }
-                    if (!shouldFinish) {
-                        emit(RepoBookResponse.Success(users))
-                    }
-                } else {
-                    val error = RepoBookResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
-                    emit(error)
-                    shouldFinish = true
-                }
-            } else {
-                val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
-                val error = RepoBookResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR)
-                emit(error)
-                shouldFinish = true
-            }
-            delay(ATTENDANCE_SHEET_UPDATE_INTERVAL)
+    suspend fun getBookDetail(id: String): RepoBookDetailResponse = withContext(defaultDispatcher) {
+        val response = service.getBookDetail(id)
+        if (response.error != null) {
+            RepoBookDetailResponse.Error(response.error.code ?: 500)
         }
-    }.flowOn(defaultDispatcher)
-
-
-    suspend fun check(token: String, userId: Int): RepoCheckResponse = withContext(defaultDispatcher) {
-        val response = service.check(token, userId.toString())
-        if (response.error == null) {
-            if (response.order != null) {
-                RepoCheckResponse.Success(response.order)
+        else {
+            if (response.id != null && response.volumeInfo?.title != null
+                && response.volumeInfo.authors?.isNotEmpty() == true
+                && response.volumeInfo.publishedDate != null
+            ) {
+                val book = Book(
+                    id = response.id,
+                    title = response.volumeInfo.title,
+                    author = response.volumeInfo.authors[0],
+                    publishedDate = response.volumeInfo.publishedDate,
+                    description = response.volumeInfo.description,
+                    thumbnailUrl = response.volumeInfo.imageLinks?.thumbnail,
+                    imageUrl = response.volumeInfo.imageLinks?.medium,
+                    googlePlayLink = response.volumeInfo.infoLink,
+                    webReaderLink = response.accessInfo?.webReaderLink
+                )
+                RepoBookDetailResponse.Success(book)
             } else {
-                RepoCheckResponse.Error(RepoBookErrorCode.INCOMPATIBLE_VERSIONS)
+                RepoBookDetailResponse.Error(500)
             }
-        } else {
-            val errorCode = RepoBookErrorCode.values().find { it.serverField == response.error }
-            RepoCheckResponse.Error(errorCode ?: RepoBookErrorCode.UNKNOWN_ERROR, response.order)
         }
     }
 }

@@ -1,11 +1,10 @@
-package eu.matoosh.attendance.seznam.compose.screen
+package eu.matoosh.attendance.compose.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -13,15 +12,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -35,11 +30,11 @@ import androidx.compose.material3.Button
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
-import eu.matoosh.attendance.seznam.compose.widget.BookRow
-import eu.matoosh.attendance.seznam.data.Book
-import eu.matoosh.attendance.seznam.viewmodel.BookListUiState
-import eu.matoosh.attendance.seznam.viewmodel.BookListViewModel
+import eu.matoosh.attendance.compose.widget.FullScreenMessage
+import eu.matoosh.attendance.compose.widget.BookRow
+import eu.matoosh.attendance.data.Book
+import eu.matoosh.attendance.viewmodel.BookListUiState
+import eu.matoosh.attendance.viewmodel.BookListViewModel
 
 @Composable
 fun BookListScreen(

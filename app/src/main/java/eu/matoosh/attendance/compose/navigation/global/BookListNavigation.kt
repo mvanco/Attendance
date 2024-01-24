@@ -1,10 +1,10 @@
-package eu.matoosh.attendance.seznam.compose.navigation.global
+package eu.matoosh.attendance.compose.navigation.global
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import eu.matoosh.attendance.seznam.compose.screen.BookListScreen
+import eu.matoosh.attendance.compose.screen.BookListScreen
 
 const val BookListRoute = "book_list"
 

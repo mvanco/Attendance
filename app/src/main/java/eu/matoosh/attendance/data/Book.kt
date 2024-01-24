@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.seznam.data
+package eu.matoosh.attendance.data
 
 data class Book(
     val id: String,

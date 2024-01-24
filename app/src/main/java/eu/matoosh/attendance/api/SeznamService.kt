@@ -1,4 +1,4 @@
-package eu.matoosh.attendance.seznam.api
+package eu.matoosh.attendance.api
 
 import com.google.gson.annotations.SerializedName
 import eu.matoosh.attendance.BuildConfig

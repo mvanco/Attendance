@@ -1,4 +1,5 @@
-package eu.matoosh.attendance.compose.widget.global
+
+package eu.matoosh.attendance.compose.widget
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,25 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import eu.matoosh.attendance.R
-
-@Composable
-fun Message(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.headlineMedium
-        )
-    }
-}
 
 @Composable
 fun FullScreenMessage(

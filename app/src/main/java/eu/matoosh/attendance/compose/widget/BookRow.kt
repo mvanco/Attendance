@@ -1,7 +1,6 @@
-package eu.matoosh.attendance.seznam.compose.widget
+package eu.matoosh.attendance.compose.widget
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +16,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.seznam.data.Book
+import eu.matoosh.attendance.data.Book
 import com.bumptech.glide.integration.compose.placeholder
 
 @OptIn(ExperimentalGlideComposeApi::class)

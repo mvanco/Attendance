@@ -1,7 +1,6 @@
-package eu.matoosh.attendance.seznam.compose.screen
+package eu.matoosh.attendance.compose.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,11 +35,10 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.widget.global.FullScreenMessage
-import eu.matoosh.attendance.seznam.data.Book
-import eu.matoosh.attendance.seznam.viewmodel.BookDetailUiState
-import eu.matoosh.attendance.seznam.viewmodel.BookDetailViewModel
-import com.bumptech.glide.integration.compose.placeholder
+import eu.matoosh.attendance.compose.widget.FullScreenMessage
+import eu.matoosh.attendance.data.Book
+import eu.matoosh.attendance.viewmodel.BookDetailUiState
+import eu.matoosh.attendance.viewmodel.BookDetailViewModel
 
 @Composable
 fun BookDetailScreen(
