@@ -1,5 +1,6 @@
 package eu.matoosh.attendance.seznam.repo
 
+import android.util.Log
 import eu.matoosh.attendance.di.IoDispatcher
 import eu.matoosh.attendance.seznam.api.SeznamService
 import eu.matoosh.attendance.seznam.data.Book
@@ -31,6 +32,7 @@ class BookRepository @Inject constructor(
                     if (it.id != null && it.volumeInfo?.title != null
                         && it.volumeInfo.authors?.isNotEmpty() == true
                         && it.volumeInfo.publishedDate != null
+                        && it.volumeInfo.language == "cs"
                     ) {
                         Book(
                             id = it.id,
@@ -40,7 +42,8 @@ class BookRepository @Inject constructor(
                             description = it.volumeInfo.description,
                             thumbnailUrl = it.volumeInfo.imageLinks?.thumbnail,
                             imageUrl = it.volumeInfo.imageLinks?.medium,
-                            googlePlayLink = it.volumeInfo.accessInfo?.webReaderLink
+                            googlePlayLink = it.volumeInfo.infoLink,
+                            webReaderLink = it.accessInfo?.webReaderLink
                         )
                     } else {
                         null
@@ -72,7 +75,8 @@ class BookRepository @Inject constructor(
                     description = response.volumeInfo.description,
                     thumbnailUrl = response.volumeInfo.imageLinks?.thumbnail,
                     imageUrl = response.volumeInfo.imageLinks?.medium,
-                    googlePlayLink = response.volumeInfo.accessInfo?.webReaderLink
+                    googlePlayLink = response.volumeInfo.infoLink,
+                    webReaderLink = response.accessInfo?.webReaderLink
                 )
                 RepoBookDetailResponse.Success(book)
             } else {

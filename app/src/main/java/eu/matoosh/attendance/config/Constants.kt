@@ -10,3 +10,6 @@ const val FORCED_LOADING_TIMOUT_MS = 200L
 const val ATTENDANCE_SHEET_UPDATE_INTERVAL = 2000L
 
 const val WEB_APP_URL = "http://ice.matoosh.eu"
+
+const val QUERY_TIMEOUT = 500L
+const val AUTO_QUERY_MIN_CHAR = 3

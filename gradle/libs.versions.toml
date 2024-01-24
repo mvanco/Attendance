@@ -7,6 +7,7 @@ appcompat = "1.6.1"
 barcodeScanning = "17.2.0"
 benchmark = "1.2.0"
 camera = "1.4.0-alpha02"
+coil = "2.5.0"
 # @keep
 compileSdk = "33"
 composeBom = "2023.10.01"
@@ -119,3 +120,4 @@ okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-intercept
 qrcode-renderer = { module = "com.lightspark:compose-qr-code", version.ref = "qrcode-renderer"}
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

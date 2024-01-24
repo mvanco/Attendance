@@ -31,12 +31,13 @@ data class ApiVolumeInfoResponse(
     @field:SerializedName("description") val description: String?,
     @field:SerializedName("imageLinks") val imageLinks: ApiImageLinksResponse?,
     @field:SerializedName("language") val language: String?,
-    @field:SerializedName("accessInfo") val accessInfo: ApiAccessInfo?
+    @field:SerializedName("infoLink") val infoLink: String?,
 )
 
 data class ApiBookDetailResponse(
     @field:SerializedName("id") val id: String?,
     @field:SerializedName("volumeInfo") val volumeInfo: ApiVolumeInfoResponse?,
+    @field:SerializedName("accessInfo") val accessInfo: ApiAccessInfo?,
     @field:SerializedName("error") val error: ApiErrorResponse?
 )
 

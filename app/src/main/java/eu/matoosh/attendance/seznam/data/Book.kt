@@ -8,5 +8,6 @@ data class Book(
     val description: String? = null,
     val thumbnailUrl: String? = null,
     val imageUrl: String? = null,
-    val googlePlayLink: String? = null
+    val googlePlayLink: String? = null,
+    val webReaderLink: String? = null
 )

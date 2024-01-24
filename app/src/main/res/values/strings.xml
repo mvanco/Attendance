@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">Attendance</string>
+    <string name="app_name">Mini Seznam</string>
 
     <string name="action_login">Přihlásit</string>
+    <string name="action_search">Vyhledat knížky</string>
     <string name="action_logout">Odhlásit</string>
     <string name="action_confirm">Potvrdit</string>
     <string name="action_cancel">Zrušit</string>
+    <string name="action_clear">Vymazat</string>
     <string name="action_sheet">Docházková kniha</string>
     <string name="action_console">Konzola</string>
     <string name="action_add_manually">Přihlásit</string>
@@ -14,6 +16,7 @@
     <string name="action_register_term">Zaregistruj termín</string>
 
     <string name="label_user">Uživatel</string>
+    <string name="label_author">Autor</string>
     <string name="label_password">Heslo</string>
     <string name="label_credit">Kredit</string>
     <string name="label_profile">Profil</string>
@@ -45,10 +48,13 @@
     <string name="message_user_error_insufficient_credit">Nemáte dostatek kreditu.</string>
     <string name="message_user_error">Nastala neznámá chyba</string>
 
+    <string name="message_booklist_loading">Načítám knížky...</string>
+
     <string name="content_description_register_term_fab">Tlačítko na registraci nového termínu</string>
     <string name="content_description_background_image">Pozadí aplikace</string>
     <string name="content_description_home_button">Tlačítko na otevření bočného menu</string>
     <string name="content_description_back_button">Tlačítko na vrácení na předchozí obrazovku</string>
+    <string name="content_description_book_thumbnail">Obrázek knížky</string>
 
     <string translatable="false" name="preferences_file_key">eu.matoosh.attendance.PREFERENCES</string>
 </resources>

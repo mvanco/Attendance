@@ -1,5 +1,6 @@
-package eu.matoosh.attendance.seznam.navigation.graph
+package eu.matoosh.attendance.seznam.compose.navigation.graph
 
+import android.util.Log
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
@@ -10,32 +11,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.matoosh.attendance.R
-import eu.matoosh.attendance.compose.navigation.global.LoginRoute
 import eu.matoosh.attendance.compose.navigation.global.ModeSelectionRoute
-import eu.matoosh.attendance.compose.navigation.global.consoleScreen
-import eu.matoosh.attendance.compose.navigation.global.loginScreen
-import eu.matoosh.attendance.compose.navigation.global.navigateToConsole
-import eu.matoosh.attendance.compose.navigation.global.navigateToLogin
-import eu.matoosh.attendance.compose.navigation.global.navigateToSelection
-import eu.matoosh.attendance.compose.navigation.global.navigateToSheet
-import eu.matoosh.attendance.compose.navigation.global.selectionScreen
-import eu.matoosh.attendance.compose.navigation.global.sheetScreen
-import eu.matoosh.attendance.seznam.navigation.global.BookListRoute
-import eu.matoosh.attendance.seznam.navigation.global.bookDetailScreen
-import eu.matoosh.attendance.seznam.navigation.global.bookListScreen
-import eu.matoosh.attendance.seznam.navigation.global.navigateToBookDetail
-import eu.matoosh.attendance.seznam.navigation.global.navigateToBookList
+import eu.matoosh.attendance.seznam.compose.navigation.global.BookListRoute
+import eu.matoosh.attendance.seznam.compose.navigation.global.bookDetailScreen
+import eu.matoosh.attendance.seznam.compose.navigation.global.bookListScreen
+import eu.matoosh.attendance.seznam.compose.navigation.global.navigateToBookDetail
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 @Composable
@@ -79,6 +68,7 @@ fun AppNavHost(
         ) {
             bookListScreen(
                 onNavigateToBookDetail = { bookId ->
+                    Log.d("malytest", bookId)
                     navController.navigateToBookDetail(bookId)
                 }
             )

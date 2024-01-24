@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import eu.matoosh.attendance.seznam.navigation.graph.AppNavHost
+import eu.matoosh.attendance.seznam.compose.navigation.graph.AppNavHost
 import eu.matoosh.attendance.theme.AttendanceTheme
 
 @AndroidEntryPoint
